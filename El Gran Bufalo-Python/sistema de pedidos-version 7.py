@@ -2,8 +2,8 @@ import streamlit as st
 from datetime import datetime
 import os
 import streamlit.components.v1 as components
-import pandas as pd  # Librería de analítica para estructurar las tablas de datos
-import altair as alt  # Motor gráfico premium para el Dashboard corporativo
+import pandas as pd  # Motor para estructurar la tabla del historial de ventas
+import altair as alt  # Motor gráfico premium para las estadísticas
 
 # =========================================================
 # CONFIGURACIÓN E INICIALIZACIÓN DE VARIABLES DE SESIÓN
@@ -36,7 +36,7 @@ if "numero_boleta" not in st.session_state:
 if "pantalla_actual" not in st.session_state:
     st.session_state.pantalla_actual = "bienvenida"
 
-# VARIABLES DEL PANEL DE CONTROL DE CAJA (Mantiene las finanzas en silencio)
+# VARIABLES DEL PANEL DE CONTROL DE CAJA
 if "caja_chica" not in st.session_state:
     st.session_state.caja_chica = 0.0
 if "total_ordenes" not in st.session_state:
@@ -48,12 +48,17 @@ if "productos_vendidos" not in st.session_state:
 if "ventas_por_metodo" not in st.session_state:
     st.session_state.ventas_por_metodo = {"Efectivo": 0.0, "Yape": 0.0, "Tarjeta": 0.0}
 
+# NUEVA MEJORA: Lista global que guardará la bitácora cronológica de transacciones
+if "historial_ordenes" not in st.session_state:
+    st.session_state.historial_ordenes = []
+
 MENU = {
     "Hamburguesa": {"precio": 18, "icono": "🍔"},
     "Carne a la parrilla": {"precio": 35, "icono": "🥩"},
     "Bebida": {"precio": 6, "icono": "🥤"},
     "Combo Buffalo": {"precio": 25, "icono": "🎁"}
 }
+
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -78,76 +83,44 @@ if es_admin:
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Generado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # KPIs Financieros Principales encajonados
+    # KPIs Financieros Superiores
     col_kpi1, col_kpi2 = st.columns(2)
     with col_kpi1:
-        st.markdown(
-            f"""
-            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
-                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL</p>
-                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{st.session_state.caja_chica:.2f}</h2>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{st.session_state.caja_chica:.2f}</h2></div>", unsafe_allow_html=True)
     with col_kpi2:
-        st.markdown(
-            f"""
-            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
-                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES PROCESADAS</p>
-                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{st.session_state.total_ordenes} Pedidos</h2>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES PROCESADAS</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{st.session_state.total_ordenes} Pedidos</h2></div>", unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE HOY")
     
-    # NUEVO MOTOR GRÁFICO PREMIUM (ALTAIR)
-    # Convertimos los datos guardados en una tabla estructurada de Pandas
+    # Gráfico Avanzado de Altair
     df_grafico = pd.DataFrame({
         'Producto': list(st.session_state.productos_vendidos.keys()),
         'Cantidad': list(st.session_state.productos_vendidos.values())
     })
-    
-    # Diseñamos las barras con bordes redondeados y degradado de color fuego-parrilla
-    barras = alt.Chart(df_grafico).mark_bar(
-        cornerRadiusTopLeft=6,
-        cornerRadiusTopRight=6
-    ).encode(
+    barras = alt.Chart(df_grafico).mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6).encode(
         x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(labelAngle=0, labelColor='#ffffff', titleColor='#f39c12')),
         y=alt.Y('Cantidad:Q', title='Unidades Vendidas', axis=alt.Axis(grid=True, gridColor='#2c2c2c', labelColor='#ffffff', titleColor='#f39c12')),
         color=alt.Color('Cantidad:Q', scale=alt.Scale(scheme='orangered'), legend=None)
     )
-    
-    # Añadimos las etiquetas numéricas flotantes encima de cada barra
-    texto_etiquetas = barras.mark_text(
-        align='center',
-        baseline='bottom',
-        dy=-5,
-        color='#ffffff',
-        fontSize=13,
-        fontWeight='bold'
-    ).encode(
-        text='Cantidad:Q'
-    )
-    
-    # Fusionamos barras y textos con un fondo transparente corporativo
-    grafico_final = (barras + texto_etiquetas).properties(
-        width=600, height=320
-    ).configure_view(
-        strokeWidth=0
-    ).configure_axis(
-        domainWidth=1, domainColor='#444444'
-    )
-    
-    # Mostramos el gráfico interactivo premium
+    texto_etiquetas = barras.mark_text(align='center', baseline='bottom', dy=-5, color='#ffffff', fontSize=13, fontWeight='bold').encode(text='Cantidad:Q')
+    grafico_final = (barras + texto_etiquetas).properties(width=600, height=320).configure_view(strokeWidth=0).configure_axis(domainWidth=1, domainColor='#444444')
     st.altair_chart(grafico_final, use_container_width=True)
+    
+    # NUEVA MEJORA: Registro de Auditoría en Tabla Formateada con Pandas
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 🕒 BITÁCORA: HISTORIAL CRONOLÓGICO DE COMPRAS")
+    if st.session_state.historial_ordenes:
+        # Cargamos los datos guardados en un DataFrame estilizado
+        df_historial = pd.DataFrame(st.session_state.historial_ordenes)
+        # Cambiamos los nombres de las columnas de la tabla para la exposición
+        df_historial.columns = ["🕒 FECHA Y HORA", "🧾 NRO. BOLETA", "📦 DETALLE ARTÍCULOS", "🛵 ENTREGA", "💳 MÉTODO PAGO", "💰 TOTAL"]
+        st.dataframe(df_historial, use_container_width=True, hide_index=True)
+    else:
+        st.caption("Aún no se han registrado transacciones en esta sesión.")
     
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 💳 AUDITORÍA: FLUJO POR MÉTODO DE PAGO")
-    
     col_ef, col_yp, col_tj = st.columns(3)
     with col_ef:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💵</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}</h4></div>", unsafe_allow_html=True)
@@ -157,7 +130,7 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE
+    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE PREMIUM
     if st.session_state.pantalla_actual == "bienvenida":
         st.markdown("<br><br>", unsafe_allow_html=True)
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
@@ -168,7 +141,7 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN 2 COLUMNAS
+    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN 2 COLUMNAS INDEPENDIENTES
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.text(f"Fecha y hora: {fecha_actual}\n")
@@ -201,7 +174,6 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
@@ -268,17 +240,41 @@ else:
                 st.balloons()
                 st.markdown("### 🧾 COMPROBANTE EMITIDO")
                 
-                # ACTUALIZACIÓN FINANCIERA AUTOMÁTICA DE AUDITORÍA
+                # 1. GENERACIÓN DEL CORRELATIVO SUNAT
+                correlativo_sunat = f"B001-{st.session_state.numero_boleta:06d}"
+                
+                # 2. CONSTRUCCIÓN DEL DETALLE DE ARTÍCULOS EN TEXTO
+                detalle_productos_txt = ""
+                items_resumen_lista = []
+                for item in st.session_state.carrito:
+                    detalle_productos_txt += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']}.00\n"
+                    items_resumen_lista.append(f"{item['cantidad']}x {item['producto']}")
+                
+                if tiene_delivery:
+                    detalle_productos_txt += f"1x Costo de Envío        S/6.00\n"
+                    items_resumen_lista.append("1x Delivery")
+                
+                resumen_articulos_linea = ", ".join(items_resumen_lista)
+                tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
+                
+                # 3. ACTUALIZACIÓN AUTOMÁTICA DEL HISTORIAL CRONOLÓGICO (MÓDULO DE AUDITORÍA)
+                st.session_state.historial_ordenes.append({
+                    "Fecha y Hora": fecha_actual,
+                    "Nro. Boleta": correlativo_sunat,
+                    "Detalle Artículos": resumen_articulos_linea,
+                    "Entrega": tipo_entrega_txt,
+                    "Método Pago": metodo_pago,
+                    "Total": f"S/{total_con_delivery:.2f}"
+                })
+                
+                # 4. ACTUALIZACIÓN DE LAS ESTADÍSTICAS GENERALES DE CAJA CHICA
                 st.session_state.caja_chica += total_con_delivery
                 st.session_state.total_ordenes += 1
                 st.session_state.ventas_por_metodo[metodo_pago] += total_con_delivery
                 for item in st.session_state.carrito:
                     st.session_state.productos_vendidos[item['producto']] += item['cantidad']
                 
-                correlativo_sunat = f"B001-{st.session_state.numero_boleta:06d}"
-                
-                tipo_entrega_txt = f"DELIVERY\nDir. Entrega: {direccion_delivery}" if tiene_delivery else "CONSUMO EN LOCAL"
-                
+                # 5. PREPARACIÓN DEL TEXTO DEL MÉTODO DE PAGO PARA LA RECOMPOSICIÓN DE LA BOLETA
                 if metodo_pago == "Tarjeta":
                     metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
@@ -286,13 +282,7 @@ else:
                 else:
                     metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
                 
-                detalle_productos_txt = ""
-                for item in st.session_state.carrito:
-                    detalle_productos_txt += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']}.00\n"
-                if tiene_delivery:
-                    detalle_productos_txt += f"1x Costo de Envío        S/6.00\n"
-                
-                # LEER LA PLANTILLA MODULAR HTML EXTERNA
+                # 6. ENLAZAR LA PLANTILLA MODULAR HTML EXTERNA
                 html_rutas = [
                     "El Gran Buffalo-Python/boleta_plantilla.html",
                     "El Gran Búfalo-Python/boleta_plantilla.html",
@@ -309,7 +299,6 @@ else:
                         break
                 
                 if plantilla_contenido:
-                    # Inyección limpia sustituyendo marcadores
                     html_final = plantilla_contenido
                     html_final = html_final.replace("{{ SERIE_BOLETA }}", correlativo_sunat)
                     html_final = html_final.replace("{{ FECHA_HORA }}", fecha_actual)
