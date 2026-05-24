@@ -84,7 +84,6 @@ def cargar_historial_desde_archivo():
         except:
             return []
     return []
-
 # =========================================================
 # LECTURA Y CARGA DE HOJAS DE ESTILOS Y ARCHIVOS CONFIG
 # =========================================================
@@ -135,9 +134,9 @@ for orden in st.session_state.historial_ordenes:
 
 st.session_state.numero_boleta = total_pedidos + 1
 
-# Enlace web panorámico de alta definición por defecto para la cabecera del local
-# Modifica la línea 103 con esta ruta dinámica para tu imagen local
+# Enlace de la ruta de la foto de tu restaurante para el fondo
 URL_BANNER_LOCAL = os.path.join(BASE_DIR, "Captura de pantalla 2026-05-24 090610.png")
+
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -196,7 +195,7 @@ if es_admin:
             else:
                 st.error("⚠️ Error: El nombre del producto no puede estar vacío.")
 
-    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (ACTUALIZADO: AHORA PERMITE CAMBIAR LA FOTO)
+    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (ACTUALIZADO: CAMBIA FOTO DE LOS QUE YA ESTÁN)
     st.markdown("### 📝 GESTIÓN DE PRECIOS, STOCK Y FOTOS")
     st.caption("Modifique los valores o suba una nueva foto para los productos existentes.")
     
@@ -211,7 +210,7 @@ if es_admin:
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
             
-            # NUEVO: Botón para actualizar la foto del producto de la izquierda
+            # Cargador multimedia para cambiar la foto del plato izquierdo actual
             foto_cambio_izq = st.file_uploader(f"Actualizar foto de {p_izq}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_izq}")
             
             if foto_cambio_izq is not None:
@@ -236,7 +235,7 @@ if es_admin:
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
                 
-                # NUEVO: Botón para actualizar la foto del producto de la derecha
+                # Cargador multimedia para cambiar la foto del plato derecho actual
                 foto_cambio_der = st.file_uploader(f"Actualizar foto de {p_der}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_der}")
                 
                 if foto_cambio_der is not None:
@@ -287,7 +286,6 @@ if es_admin:
     
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 🕒 BITÁCORA: CONTROL HISTÓRICO DE PEDIDOS")
-
     if st.session_state.historial_ordenes:
         df_historial = pd.DataFrame(st.session_state.historial_ordenes)
         df_historial.columns = ["🕒 FECHA Y HORA", "🧾 NRO. BOLETA", "📦 DETALLE ARTÍCULOS", "🛵 ENTREGA", "💳 MÉTODO PAGO", "💰 TOTAL"]
@@ -307,35 +305,35 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-# PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL
-        if st.session_state.pantalla_actual == "bienvenida":
-            # Transformación automática de tu foto local a formato web nativo
-            if os.path.exists(URL_BANNER_LOCAL):
-                with open(URL_BANNER_LOCAL, "rb") as image_file:
-                    encoded_string = base64.b64encode(image_file.read()).decode()
-                
-                st.markdown(f"""
-                    <style>
-                    .stApp {{
-                        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/png;base64,{encoded_string}");
-                        background-size: cover !important;
-                        background-position: center !important;
-                        background-repeat: no-repeat !important;
-                        background-attachment: fixed !important;
-                    }}
-                    </style>
-                """, unsafe_allow_html=True)
-                
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL EN FONDO COMPLETO
+    if st.session_state.pantalla_actual == "bienvenida":
+        # Transformación automática de tu foto local a formato web nativo estirado
+        if os.path.exists(URL_BANNER_LOCAL):
+            with open(URL_BANNER_LOCAL, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
             
-            st.markdown("<br><p style='text-align: center; font-size: 22px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
-            st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown(f"""
+                <style>
+                .stApp {{
+                    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/png;base64,{encoded_string}");
+                    background-size: cover !important;
+                    background-position: center !important;
+                    background-repeat: no-repeat !important;
+                    background-attachment: fixed !important;
+                }}
+                </style>
+            """, unsafe_allow_html=True)
             
-            if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
-                st.session_state.pantalla_actual = "catalogo"
-                st.rerun()
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+        
+        st.markdown("<br><p style='text-align: center; font-size: 22px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
+            st.session_state.pantalla_actual = "catalogo"
+            st.rerun()
             
     # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
@@ -374,7 +372,6 @@ else:
                 else:
                     st.markdown(f"""<div style="width:100%; height:180px; background-color:#222; border-radius:8px 8px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:40px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
                     st.markdown(f"<div style='background-color:#1c1c1c; padding:15px; border-radius:0px 0px 8px 8px; border:1px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
-
         st.markdown("---")
         
         if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
@@ -392,6 +389,7 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
+                
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
@@ -474,7 +472,6 @@ else:
                 resumen_articulos_linea = ", ".join(items_resumen_lista)
                 tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
                 
-                # PERSISTENCIA FIJA: Añadir el nuevo registro a la memoria local de la sesión
                 st.session_state.historial_ordenes.append({
                     "Fecha y Hora": fecha_actual,
                     "Nro. Boleta": correlativo_sunat,
@@ -484,10 +481,8 @@ else:
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
                 
-                # MULTI-PERSISTENCIA AUTOMÁTICA: Guardar toda la tabla actualizada en el archivo físico JSON del servidor
                 guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
-                # PREPARACIÓN DEL TEXTO PARA LA RECOMPOSICIÓN DE LA BOLETA
                 if metodo_pago == "Tarjeta":
                     metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
@@ -495,7 +490,6 @@ else:
                 else:
                     metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
                 
-                # LEER LA PLANTILLA MODULAR HTML EXTERNA
                 if os.path.exists(RUTA_HTML):
                     with open(RUTA_HTML, "r", encoding="utf-8") as archivo_html:
                         plantilla_contenido = archivo_html.read()
