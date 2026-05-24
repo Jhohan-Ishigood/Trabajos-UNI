@@ -1,0 +1,9 @@
+/* Forzar que el borde de error de Streamlit se vuelva Verde */
+div[data-baseweb="input"] {
+    border-color: #28a745 !important;
+}
+/* Cambiar también el color cuando haces clic adentro de la casilla */
+div[data-baseweb="input"]:focus-within {
+    border-color: #218838 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}

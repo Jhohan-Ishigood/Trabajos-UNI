@@ -1,0 +1,40 @@
+<script src="https://cloudflare.com"></script>
+
+<div id="ticket" style="
+    background-color: #f8f9fa; 
+    color: #000000; 
+    font-family: monospace; 
+    padding: 20px; 
+    width: 380px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    line-height: 1.4;
+    margin-bottom: 15px;
+">TEXTO_DE_LA_BOLETA</div>
+
+<button onclick="descargarTicket()" style="
+    background-color: #28a745; 
+    background-image: linear-gradient(135deg, #28a745, #218838);
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    font-weight: bold;
+    border-radius: 5px; 
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+">📥 DESCARGAR BOLETA COMO IMAGEN</button>
+
+<script>
+function descargarTicket() {
+    const elemento = document.getElementById('ticket');
+    html2canvas(elemento, { scale: 2 }).then(canvas => {
+        let enlace = document.createElement('a');
+        enlace.download = 'Boleta_Gran_Buffalo_Descargada.png';
+        enlace.href = canvas.toDataURL('image/png');
+        enlace.click();
+    });
+}
+</script>

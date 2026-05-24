@@ -8,24 +8,15 @@ import streamlit.components.v1 as components
 # =========================================================
 st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
 
-# INYECCIÓN DE CSS PARA PERSONALIZAR LOS BORDES A COLOR VERDE
-st.markdown(
-    """
-    <style>
-    /* Forzar que el borde de error de Streamlit se vuelva Verde */
-    div[data-baseweb="input"] {
-        border-color: #28a745 !important;
-    }
-    /* Cambiar también el color cuando haces clic adentro de la casilla */
-    div[data-baseweb="input"]:focus-within {
-        border-color: #218838 !important;
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
+# SEPARACIÓN DE ARQUITECTURA: Cargar el archivo CSS externo para los bordes verdes
+try:
+    with open("El Gran Buffalo-Python/estilos.css", "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except FileNotFoundError:
+    # Por si ejecutas en una ruta distinta
+    if os.path.exists("estilos.css"):
+        with open("estilos.css", "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
@@ -94,13 +85,13 @@ if not st.session_state.pedido_guardado:
             st.rerun()
         else:
             st.error("⚠️ Error: Debe seleccionar al menos 1 producto para continuar.")
+
 # =========================================================
 # BLOQUE 2: PROCESAMIENTO DE DELIVERY Y PAGO
 # =========================================================
 else:
     st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
     
-    # Mostrar resumen de lo seleccionado antes de pagar
     st.markdown("**Resumen de artículos solicitados:**")
     for item in st.session_state.carrito:
         st.text(f"• {MENU[item['producto']]['icono']} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']}.00")
@@ -115,8 +106,7 @@ else:
     if opcion_delivery == "SI":
         tiene_delivery = True
         costo_delivery = 6.0
-        # El campo se muestra limpio y sin alertas molestas mientras el usuario escribe
-        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...")  
+        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...").strip()
             
     total_con_delivery = st.session_state.total_acumulado + costo_delivery
     st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.2f}")
@@ -146,7 +136,7 @@ else:
             formulario_valido = False
 
     else:
-        st.warning("SOLO SE ACEPTA MONEDA NACIONAL(Sol Peruano)\nEste establecimiento NO recibe dólares ni euros.")
+        st.warning("⚠️ ¡ALERTA DE CAJA: SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
         pago_usuario = st.number_input("Ingrese monto de pago: S/", min_value=0.0, value=total_con_delivery, step=1.0)
         if pago_usuario < total_con_delivery:
             st.error("Pago insuficiente")
@@ -154,9 +144,7 @@ else:
         else:
             vuelto = pago_usuario - total_con_delivery
 
-    # Botón para generar la boleta con validación en tiempo de ejecución al hacer clic
     if st.button("💾 EMITIR BOLETA DE VENTA", use_container_width=True):
-        # NUEVA VALIDACIÓN: Si eligió delivery pero el campo está totalmente en blanco, frena el flujo aquí mismo
         if tiene_delivery and not direccion_delivery:
             st.error("⚠️ Error: Llenar este campo obligatorio (Ingrese su dirección de entrega).")
         elif not formulario_valido:
@@ -165,82 +153,49 @@ else:
             st.success("PAGO REALIZADO CORRECTAMENTE - Pedido registrado exitosamente")
             st.markdown("### 🧾 COMPROBANTE EMITIDO")
             
-            boleta_texto = f"==============================================\\n"
-            boleta_texto += f"            EL GRAN BUFFALO E.I.R.L.\\n"
-            boleta_texto += f"            RUC: 20608247140\\n"
-            boleta_texto += f"            ║█│█║▌│█║▌│║▌║▌█║│▌║█│\\n"
-            boleta_texto += f"   Av. La Revolucion Nro. 1821 P.J. Almirante Grau\\n"
-            boleta_texto += f"             El Porvenir - Trujillo\\n"
-            boleta_texto += f"==============================================\\n"
-            boleta_texto += f"                BOLETA DE VENTA\\n"
-            boleta_texto += f"----------------------------------------------\\n"
-            boleta_texto += f"Fecha y hora: {fecha_actual}\\n"
+            boleta_texto = f"==============================================<br>"
+            boleta_texto += f"            EL GRAN BUFFALO E.I.R.L.<br>"
+            boleta_texto += f"            RUC: 20608247140<br>"
+            boleta_texto += f"            ║█│█║▌│█║▌│║▌║▌█║│▌║█│<br>"
+            boleta_texto += f"   Av. La Revolucion Nro. 1821 P.J. Almirante Grau<br>"
+            boleta_texto += f"             El Porvenir - Trujillo<br>"
+            boleta_texto += f"==============================================<br>"
+            boleta_texto += f"                BOLETA DE VENTA<br>"
+            boleta_texto += f"----------------------------------------------<br>"
+            boleta_texto += f"Fecha y hora: {fecha_actual}<br>"
             
             if tiene_delivery:
-                boleta_texto += f"Tipo Entrega: DELIVERY\\nDir. Entrega: {direccion_delivery}\\n"
+                boleta_texto += f"Tipo Entrega: DELIVERY<br>Dir. Entrega: {direccion_delivery}<br>"
             else:
-                boleta_texto += f"Tipo Entrega: CONSUMO EN LOCAL\\n"
+                boleta_texto += f"Tipo Entrega: CONSUMO EN LOCAL<br>"
                 
             if metodo_pago == "Tarjeta":
-                boleta_texto += f"Forma de Pago: TARJETA (APROBADA)\\nTitular:      {titular_tarjeta}\\nNro. Tarjeta: ************{ultimos_digitos}\\n"
+                boleta_texto += f"Forma de Pago: TARJETA (APROBADA)<br>Titular:      {titular_tarjeta}<br>Nro. Tarjeta: ************{ultimos_digitos}<br>"
             elif metodo_pago == "Yape":
-                boleta_texto += f"Forma de Pago: YAPE (PAGO ELECTRÓNICO)\\nVuelto:       S/ 0.00 (Monto exacto)\\n"
+                boleta_texto += f"Forma de Pago: YAPE (PAGO ELECTRÓNICO)<br>Vuelto:       S/ 0.00 (Monto exacto)<br>"
             else:
-                boleta_texto += f"Forma de Pago: EFECTIVO\\nEfectivo Recibido: S/{pago_usuario:.2f}\\nVuelto:            S/{vuelto:.2f}\\n"
+                boleta_texto += f"Forma de Pago: EFECTIVO<br>Efectivo Recibido: S/{pago_usuario:.2f}<br>Vuelto:            S/{vuelto:.2f}<br>"
 
-            boleta_texto += f"----------------------------------------------\\n"
+            boleta_texto += f"----------------------------------------------<br>"
             for item in st.session_state.carrito:
-                boleta_texto += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']}.00\\n"
+                boleta_texto += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']}.00<br>"
             if tiene_delivery:
-                boleta_texto += f"1x Costo de Envío        S/6.00\\n"
-            boleta_texto += f"----------------------------------------------\\n"
-            boleta_texto += f"TOTAL A PAGAR:            S/{total_con_delivery:.2f}\\n"
+                boleta_texto += f"1x Costo de Envío        S/6.00<br>"
+            boleta_texto += f"----------------------------------------------<br>"
+            boleta_texto += f"TOTAL A PAGAR:            S/{total_con_delivery:.2f}<br>"
             boleta_texto += f"=============================================="
 
-            componente_html = f"""
-            <script src="https://cloudflare.com"></script>
-            <div id="ticket" style="
-                background-color: #f8f9fa; 
-                color: #000000; 
-                font-family: monospace; 
-                padding: 20px; 
-                width: 380px; 
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                white-space: pre-wrap;
-                line-height: 1.4;
-                margin-bottom: 15px;
-            ">{boleta_texto.replace('\\n', '<br>')}</div>
+            # SEPARACIÓN DE ARQUITECTURA: Cargar la plantilla HTML externa y reemplazar datos
+            plantilla_ruta = "El Gran Buffalo-Python/boleta_plantilla.html"
+            if not os.path.exists(plantilla_ruta) and os.path.exists("boleta_plantilla.html"):
+                plantilla_ruta = "boleta_plantilla.html"
+                
+            with open(plantilla_ruta, "r", encoding="utf-8") as archivo_html:
+                plantilla_contenido = archivo_html.read()
             
-            <button onclick="descargarTicket()" style="
-                background-color: #28a745; 
-                background-image: linear-gradient(135deg, #28a745, #218838);
-                color: white; 
-                border: none; 
-                padding: 10px 20px; 
-                font-size: 16px; 
-                font-weight: bold;
-                border-radius: 5px; 
-                cursor: pointer;
-                width: 100%;
-                box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-            ">📥 DESCARGAR BOLETA COMO IMAGEN</button>
-
-            <script>
-            function descargarTicket() {{
-                const elemento = document.getElementById('ticket');
-                html2canvas(elemento, {{ scale: 2 }}).then(canvas => {{
-                    let enlace = document.createElement('a');
-                    enlace.download = 'Boleta_Gran_Buffalo_{datetime.now().strftime("%d%m%Y_%H%M%S")}.png';
-                    enlace.href = canvas.toDataURL('image/png');
-                    enlace.click();
-                }});
-            }}
-            </script>
-            """
-            components.html(componente_html, height=650)
+            html_final = plantilla_contenido.replace("TEXTO_DE_LA_BOLETA", boleta_texto)
+            components.html(html_final, height=650)
             
-    # El botón de reinicio se mantiene afuera para limpiar la orden si se requiere
     if st.session_state.pedido_guardado:
         if st.button("🔄 Crear una nueva orden", use_container_width=True):
             st.session_state.clear()
