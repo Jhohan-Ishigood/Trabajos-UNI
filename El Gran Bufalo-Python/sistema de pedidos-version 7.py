@@ -2,13 +2,15 @@ import streamlit as st
 from datetime import datetime
 import os
 import streamlit.components.v1 as components
+import pandas as pd  # Librería de analítica para estructurar las tablas de datos
+import altair as alt  # Motor gráfico premium para el Dashboard corporativo
 
 # =========================================================
 # CONFIGURACIÓN E INICIALIZACIÓN DE VARIABLES DE SESIÓN
 # =========================================================
 st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
 
-# Escaneo inteligente para inyectar el archivo CSS externo
+# Escaneo inteligente para inyectar el archivo CSS externo (Bordes verdes)
 css_rutas = [
     "El Gran Buffalo-Python/estilos.css",
     "El Gran Búfalo-Python/estilos.css",
@@ -22,7 +24,7 @@ for ruta in css_rutas:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
         break
 
-# Inicializar estados de control
+# Inicializar estados de control del carrito
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
 if "total_acumulado" not in st.session_state:
@@ -34,7 +36,7 @@ if "numero_boleta" not in st.session_state:
 if "pantalla_actual" not in st.session_state:
     st.session_state.pantalla_actual = "bienvenida"
 
-# VARIABLES DEL PANEL DE CONTROL DE CAJA
+# VARIABLES DEL PANEL DE CONTROL DE CAJA (Mantiene las finanzas en silencio)
 if "caja_chica" not in st.session_state:
     st.session_state.caja_chica = 0.0
 if "total_ordenes" not in st.session_state:
@@ -52,7 +54,6 @@ MENU = {
     "Bebida": {"precio": 6, "icono": "🥤"},
     "Combo Buffalo": {"precio": 25, "icono": "🎁"}
 }
-
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -73,12 +74,11 @@ elif usuario_input or clave_input:
 fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
 if es_admin:
-    # NUEVO DISEÑO: Encabezado estilizado tipo Dashboard Corporativo
     st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Generado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # KPIs Financieros Principales encajonados de forma limpia
+    # KPIs Financieros Principales encajonados
     col_kpi1, col_kpi2 = st.columns(2)
     with col_kpi1:
         st.markdown(
@@ -102,60 +102,73 @@ if es_admin:
         )
         
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS")
-    # Gráfico de barras interactivo de productos
-    st.bar_chart(st.session_state.productos_vendidos)
+    st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE HOY")
+    
+    # NUEVO MOTOR GRÁFICO PREMIUM (ALTAIR)
+    # Convertimos los datos guardados en una tabla estructurada de Pandas
+    df_grafico = pd.DataFrame({
+        'Producto': list(st.session_state.productos_vendidos.keys()),
+        'Cantidad': list(st.session_state.productos_vendidos.values())
+    })
+    
+    # Diseñamos las barras con bordes redondeados y degradado de color fuego-parrilla
+    barras = alt.Chart(df_grafico).mark_bar(
+        cornerRadiusTopLeft=6,
+        cornerRadiusTopRight=6
+    ).encode(
+        x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(labelAngle=0, labelColor='#ffffff', titleColor='#f39c12')),
+        y=alt.Y('Cantidad:Q', title='Unidades Vendidas', axis=alt.Axis(grid=True, gridColor='#2c2c2c', labelColor='#ffffff', titleColor='#f39c12')),
+        color=alt.Color('Cantidad:Q', scale=alt.Scale(scheme='orangered'), legend=None)
+    )
+    
+    # Añadimos las etiquetas numéricas flotantes encima de cada barra
+    texto_etiquetas = barras.mark_text(
+        align='center',
+        baseline='bottom',
+        dy=-5,
+        color='#ffffff',
+        fontSize=13,
+        fontWeight='bold'
+    ).encode(
+        text='Cantidad:Q'
+    )
+    
+    # Fusionamos barras y textos con un fondo transparente corporativo
+    grafico_final = (barras + texto_etiquetas).properties(
+        width=600, height=320
+    ).configure_view(
+        strokeWidth=0
+    ).configure_axis(
+        domainWidth=1, domainColor='#444444'
+    )
+    
+    # Mostramos el gráfico interactivo premium
+    st.altair_chart(grafico_final, use_container_width=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 💳 AUDITORÍA: FLUJO POR MÉTODO DE PAGO")
     
-    # Subpaneles detallados con iconos para control de arqueo de caja
     col_ef, col_yp, col_tj = st.columns(3)
     with col_ef:
-        st.markdown(
-            f"""
-            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
-                <span style='font-size:24px;'>💵</span>
-                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p>
-                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}</h4>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💵</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}</h4></div>", unsafe_allow_html=True)
     with col_yp:
-        st.markdown(
-            f"""
-            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
-                <span style='font-size:24px;'>📱</span>
-                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>YAPE</p>
-                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Yape']:.2f}</h4>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>📱</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>YAPE</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Yape']:.2f}</h4></div>", unsafe_allow_html=True)
     with col_tj:
-        st.markdown(
-            f"""
-            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
-                <span style='font-size:24px;'>💳</span>
-                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p>
-                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}</h4>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
-
 else:
+    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE
     if st.session_state.pantalla_actual == "bienvenida":
         st.markdown("<br><br>", unsafe_allow_html=True)
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
         
         if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
+    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN 2 COLUMNAS
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.text(f"Fecha y hora: {fecha_actual}\n")
@@ -188,7 +201,8 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-    # PANTALLA 3: GESTIÓN DE PAGO Y GENERACIÓN DE COMPROBANTE
+
+    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
         
@@ -254,7 +268,7 @@ else:
                 st.balloons()
                 st.markdown("### 🧾 COMPROBANTE EMITIDO")
                 
-                # ACTUALIZACIÓN DE AUDITORÍA: Alimenta el nuevo dashboard gerencial del Grupo 5 en tiempo real
+                # ACTUALIZACIÓN FINANCIERA AUTOMÁTICA DE AUDITORÍA
                 st.session_state.caja_chica += total_con_delivery
                 st.session_state.total_ordenes += 1
                 st.session_state.ventas_por_metodo[metodo_pago] += total_con_delivery
@@ -278,7 +292,7 @@ else:
                 if tiene_delivery:
                     detalle_productos_txt += f"1x Costo de Envío        S/6.00\n"
                 
-                # LEER LA PLANTILLA HTML EXTERNA: Inyección limpia en la vista modular
+                # LEER LA PLANTILLA MODULAR HTML EXTERNA
                 html_rutas = [
                     "El Gran Buffalo-Python/boleta_plantilla.html",
                     "El Gran Búfalo-Python/boleta_plantilla.html",
@@ -295,6 +309,7 @@ else:
                         break
                 
                 if plantilla_contenido:
+                    # Inyección limpia sustituyendo marcadores
                     html_final = plantilla_contenido
                     html_final = html_final.replace("{{ SERIE_BOLETA }}", correlativo_sunat)
                     html_final = html_final.replace("{{ FECHA_HORA }}", fecha_actual)
