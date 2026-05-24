@@ -17,20 +17,23 @@ css_rutas = [
     "estilos.css"
 ]
 
-css_cargado = False
 for ruta in css_rutas:
     if os.path.exists(ruta):
         with open(ruta, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-        css_cargado = True
         break
 
+# Inicializar variables de control del carrito
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
 if "total_acumulado" not in st.session_state:
     st.session_state.total_acumulado = 0.0
 if "pedido_guardado" not in st.session_state:
     st.session_state.pedido_guardado = False
+
+# NUEVA MEJORA: Inicializar el contador correlativo de boletas de la SUNAT
+if "numero_boleta" not in st.session_state:
+    st.session_state.numero_boleta = 1  # Empieza en la boleta número 1
 
 MENU = {
     "Hamburguesa": {"precio": 18, "icono": "🍔"},
@@ -157,7 +160,14 @@ else:
             st.error("⚠️ Error: Complete correctamente los datos del formulario de pago antes de continuar.")
         else:
             st.success("PAGO REALIZADO CORRECTAMENTE - Pedido registrado exitosamente")
+            
+            # Lanzar animación de festejo por la venta exitosa
+            st.balloons()
+            
             st.markdown("### 🧾 COMPROBANTE EMITIDO")
+            
+            # Formatear el correlativo oficial: convierte el número 1 en "000001"
+            correlativo_sunat = f"B001-{st.session_state.numero_boleta:06d}"
             
             boleta_texto = f"==============================================<br>"
             boleta_texto += f"            EL GRAN BUFFALO E.I.R.L.<br>"
@@ -166,7 +176,8 @@ else:
             boleta_texto += f"   Av. La Revolucion Nro. 1821 P.J. Almirante Grau<br>"
             boleta_texto += f"             El Porvenir - Trujillo<br>"
             boleta_texto += f"==============================================<br>"
-            boleta_texto += f"                BOLETA DE VENTA<br>"
+            boleta_texto += f"         BOLETA DE VENTA ELECTRÓNICA          <br>"
+            boleta_texto += f"             SERIE: {correlativo_sunat}       <br>"
             boleta_texto += f"----------------------------------------------<br>"
             boleta_texto += f"Fecha y hora: {fecha_actual}<br>"
             
@@ -191,7 +202,7 @@ else:
             boleta_texto += f"TOTAL A PAGAR:            S/{total_con_delivery:.2f}<br>"
             boleta_texto += f"=============================================="
 
-            # SEPARACIÓN DE ARQUITECTURA INTELIGENTE: Escaneo de múltiples combinaciones de carpetas
+            # Cargar la plantilla HTML externa y reemplazar datos
             html_rutas = [
                 "El Gran Buffalo-Python/boleta_plantilla.html",
                 "El Gran Búfalo-Python/boleta_plantilla.html",
@@ -215,5 +226,11 @@ else:
             
     if st.session_state.pedido_guardado:
         if st.button("🔄 Crear una nueva orden", use_container_width=True):
-            st.session_state.clear()
+            # NUEVA MEJORA: Antes de limpiar la pantalla, sumamos 1 al número de la boleta para la siguiente venta
+            st.session_state.numero_boleta += 1
+            
+            # Limpiamos los datos del carrito pero mantenemos a salvo el número correlativo
+            st.session_state.carrito = []
+            st.session_state.total_acumulado = 0.0
+            st.session_state.pedido_guardado = False
             st.rerun()
