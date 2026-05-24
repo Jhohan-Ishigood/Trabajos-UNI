@@ -96,9 +96,10 @@ if es_admin:
         st.info(f"**Tarjeta:** S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}")
 
 else:
-    if st.session_state.pantarma_actual == "bienvenida" if "pantarma_actual" in st.session_state else st.session_state.pantalla_actual == "bienvenida":
+    if st.session_state.pantalla_actual == "bienvenida":
         st.markdown("<br><br>", unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center;'>¡BIENVENIDO A EL GRAN BUFFALO!</h1>", unsafe_allow_html=True)
+        # Título de bienvenida con la nueva clase CSS premium
+        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         
         if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
@@ -106,9 +107,9 @@ else:
             st.rerun()
             
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
-        st.text("____________________________________________")
-        st.text("SISTEMA DE PEDIDOS GRAN BUFFALO")
-        st.text("____________________________________________")
+        # Título del catálogo con la nueva clase CSS premium
+        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+        st.text(f"Fecha y hora: {fecha_actual}\n")
         
         st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
         
@@ -118,7 +119,8 @@ else:
             cant_hamburguesa = st.number_input(f"{MENU['Hamburguesa']['icono']} Hamburguesa — S/18.00", min_value=0, step=1)
             cant_carne = st.number_input(f"{MENU['Carne a la parrilla']['icono']} Carne a la parrilla — S/35.00", min_value=0, step=1)
         with col2:
-            st.markdown("### ### 🥤 COMPLEMENTOS Y COMBOS")
+            # CORRECCIÓN AQUÍ: Eliminados los tres caracteres '###' sobrantes del título de complementos
+            st.markdown("### 🥤 COMPLEMENTOS Y COMBOS")
             cant_bebida = st.number_input(f"{MENU['Bebida']['icono']} Bebida — S/6.00", min_value=0, step=1)
             cant_combo = st.number_input(f"{MENU['Combo Buffalo']['icono']} Combo Buffalo — S/25.00", min_value=0, step=1)
 

@@ -76,3 +76,19 @@ button[data-testid="stBaseButton-secondary"]:hover {
     box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
 }
 
+/* Hacer el título de bienvenida gigante y llamativo */
+.titulo-principal {
+    font-size: 42px !important;
+    font-family: 'Trebuchet MS', sans-serif !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin-top: 15px !important;
+    margin-bottom: 25px !important;
+    display: block !important;
+}
