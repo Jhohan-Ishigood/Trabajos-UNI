@@ -8,15 +8,22 @@ import streamlit.components.v1 as components
 # =========================================================
 st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
 
-# SEPARACIÓN DE ARQUITECTURA: Cargar el archivo CSS externo para los bordes verdes
-try:
-    with open("El Gran Buffalo-Python/estilos.css", "r", encoding="utf-8") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-except FileNotFoundError:
-    # Por si ejecutas en una ruta distinta
-    if os.path.exists("estilos.css"):
-        with open("estilos.css", "r", encoding="utf-8") as f:
+# SEPARACIÓN DE ARQUITECTURA: Cargar el archivo CSS de forma inteligente
+css_rutas = [
+    "El Gran Buffalo-Python/estilos.css",
+    "El Gran Búfalo-Python/estilos.css",
+    "El Gran Bufalo-Python/estilos.css",
+    "El Gran Búfalo-Pitón/estilos.css",
+    "estilos.css"
+]
+
+css_cargado = False
+for ruta in css_rutas:
+    if os.path.exists(ruta):
+        with open(ruta, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        css_cargado = True
+        break
 
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
@@ -85,7 +92,6 @@ if not st.session_state.pedido_guardado:
             st.rerun()
         else:
             st.error("⚠️ Error: Debe seleccionar al menos 1 producto para continuar.")
-
 # =========================================================
 # BLOQUE 2: PROCESAMIENTO DE DELIVERY Y PAGO
 # =========================================================
@@ -185,16 +191,27 @@ else:
             boleta_texto += f"TOTAL A PAGAR:            S/{total_con_delivery:.2f}<br>"
             boleta_texto += f"=============================================="
 
-            # SEPARACIÓN DE ARQUITECTURA: Cargar la plantilla HTML externa y reemplazar datos
-            plantilla_ruta = "El Gran Buffalo-Python/boleta_plantilla.html"
-            if not os.path.exists(plantilla_ruta) and os.path.exists("boleta_plantilla.html"):
-                plantilla_ruta = "boleta_plantilla.html"
-                
-            with open(plantilla_ruta, "r", encoding="utf-8") as archivo_html:
-                plantilla_contenido = archivo_html.read()
+            # SEPARACIÓN DE ARQUITECTURA INTELIGENTE: Escaneo de múltiples combinaciones de carpetas
+            html_rutas = [
+                "El Gran Buffalo-Python/boleta_plantilla.html",
+                "El Gran Búfalo-Python/boleta_plantilla.html",
+                "El Gran Bufalo-Python/boleta_plantilla.html",
+                "El Gran Búfalo-Pitón/boleta_plantilla.html",
+                "boleta_plantilla.html"
+            ]
             
-            html_final = plantilla_contenido.replace("TEXTO_DE_LA_BOLETA", boleta_texto)
-            components.html(html_final, height=650)
+            plantilla_contenido = ""
+            for ruta in html_rutas:
+                if os.path.exists(ruta):
+                    with open(ruta, "r", encoding="utf-8") as archivo_html:
+                        plantilla_contenido = archivo_html.read()
+                    break
+            
+            if plantilla_contenido:
+                html_final = plantilla_contenido.replace("TEXTO_DE_LA_BOLETA", boleta_texto)
+                components.html(html_final, height=650)
+            else:
+                st.error("⚠️ Error: No se pudo encontrar 'boleta_plantilla.html'. Verifique que el archivo exista en su GitHub.")
             
     if st.session_state.pedido_guardado:
         if st.button("🔄 Crear una nueva orden", use_container_width=True):
