@@ -62,7 +62,7 @@ MENU = {
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
-st.sidebar.markdown("### 🔒 ACCESO ADMINISTRATIVO")
+st.sidebar.markdown("### 🔒 ACCESO SOLO A PERSONAL ADMINISTRATIVO")
 usuario_input = st.sidebar.text_input("Nombre de Usuario:", key="user_login").strip()
 clave_input = st.sidebar.text_input("Contraseña:", type="password", key="pass_login").strip()
 
