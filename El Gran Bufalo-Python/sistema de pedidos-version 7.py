@@ -29,13 +29,12 @@ fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 st.text(f"Fecha y hora: {fecha_actual}")
 
 # =========================================================
-# BLOQUE 1: NUEVA SELECCIÓN DE PRODUCTOS EN PARALELO
+# BLOQUE 1: SELECCIÓN DE PRODUCTOS EN PARALELO
 # =========================================================
 if not st.session_state.pedido_guardado:
     st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
     st.info("Ingrese las cantidades de los productos que desea llevar:")
 
-    # Creamos un diseño en cuadrícula (2 columnas principales)
     col1, col2 = st.columns(2)
     
     with col1:
@@ -50,7 +49,6 @@ if not st.session_state.pedido_guardado:
 
     st.markdown("---")
     
-    # Botón unificado para procesar toda la selección
     if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
         cantidades = {
             "Hamburguesa": cant_hamburguesa,
@@ -59,7 +57,6 @@ if not st.session_state.pedido_guardado:
             "Combo Buffalo": cant_combo
         }
         
-        # Filtrar solo los productos que el usuario seleccionó (mayor a 0)
         st.session_state.carrito = []
         st.session_state.total_acumulado = 0.0
         
@@ -99,9 +96,8 @@ else:
     if opcion_delivery == "SI":
         tiene_delivery = True
         costo_delivery = 6.0
-        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):").strip()
-        if not direccion_delivery:
-            st.warning("⚠️ Error: La dirección no puede estar vacía si solicitó delivery.")
+        # El campo se muestra limpio y sin alertas molestas mientras el usuario escribe
+        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...").strip()
             
     total_con_delivery = st.session_state.total_acumulado + costo_delivery
     st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.2f}")
@@ -139,9 +135,14 @@ else:
         else:
             vuelto = pago_usuario - total_con_delivery
 
-    # Botón para generar la boleta
-    if formulario_valido and (opcion_delivery == "NO" or direccion_delivery != ""):
-        if st.button("💾 EMITIR BOLETA DE VENTA", use_container_width=True):
+    # Botón para generar la boleta con validación en tiempo de ejecución al hacer clic
+    if st.button("💾 EMITIR BOLETA DE VENTA", use_container_width=True):
+        # NUEVA VALIDACIÓN: Si eligió delivery pero el campo está totalmente en blanco, frena el flujo aquí mismo
+        if tiene_delivery and not direccion_delivery:
+            st.error("⚠️ Error: Llenar este campo obligatorio (Ingrese su dirección de entrega).")
+        elif not formulario_valido:
+            st.error("⚠️ Error: Complete correctamente los datos del formulario de pago antes de continuar.")
+        else:
             st.success("PAGO REALIZADO CORRECTAMENTE - Pedido registrado exitosamente")
             st.markdown("### 🧾 COMPROBANTE EMITIDO")
             
@@ -220,6 +221,8 @@ else:
             """
             components.html(componente_html, height=650)
             
-            if st.button("🔄 Crear una nueva orden", use_container_width=True):
-                st.session_state.clear()
-                st.rerun()
+    # El botón de reinicio se mantiene afuera para limpiar la orden si se requiere
+    if st.session_state.pedido_guardado:
+        if st.button("🔄 Crear una nueva orden", use_container_width=True):
+            st.session_state.clear()
+            st.rerun()
