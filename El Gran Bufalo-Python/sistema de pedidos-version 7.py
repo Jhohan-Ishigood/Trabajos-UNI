@@ -4,10 +4,10 @@ import os
 import streamlit.components.v1 as components
 import pandas as pd  
 import altair as alt  
-import json  # Librería nativa para guardar los precios fijos en un archivo de texto
+import json  
 
 # =========================================================
-# RUTAS DE CONTROL PARA ARQUITECTURA DESACOPLADA Y ARCHIVOS
+# RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
 # =========================================================
 BASE_DIR = ""
 if os.path.exists("El Gran Buffalo-Python"):
@@ -21,15 +21,15 @@ elif os.path.exists("El Gran Búfalo-Pitón"):
 
 RUTA_CSS = os.path.join(BASE_DIR, "estilos.css")
 RUTA_HTML = os.path.join(BASE_DIR, "boleta_plantilla.html")
-RUTA_JSON_MENU = os.path.join(BASE_DIR, "menu_config.json")  # Archivo donde se guardarán los precios para siempre
+RUTA_JSON_MENU = os.path.join(BASE_DIR, "menu_config.json")
+RUTA_JSON_HISTORIAL = os.path.join(BASE_DIR, "historial_config.json")  # Archivo para la bitácora eterna
 
-# Funciones de persistencia de datos (Lectura y Escritura del menú)
+# --- FUNCIONES DE PERSISTENCIA DE LA CARTA ---
 def guardar_menu_en_archivo(menu_data):
     with open(RUTA_JSON_MENU, "w", encoding="utf-8") as archivo:
         json.dump(menu_data, archivo, indent=4, ensure_ascii=False)
 
 def cargar_menu_desde_archivo():
-    # Menú original por defecto por si el archivo aún no existe
     menu_defecto = {
         "Hamburguesa": {"precio": 18.0, "icono": "🍔", "disponible": True},
         "Carne a la parrilla": {"precio": 35.0, "icono": "🥩", "disponible": True},
@@ -44,46 +44,80 @@ def cargar_menu_desde_archivo():
             return menu_defecto
     return menu_defecto
 
+# --- NUEVAS FUNCIONES DE PERSISTENCIA PARA EL HISTORIAL DE COMPRAS ---
+def guardar_historial_en_archivo(historial_data):
+    with open(RUTA_JSON_HISTORIAL, "w", encoding="utf-8") as archivo:
+        json.dump(historial_data, archivo, indent=4, ensure_ascii=False)
+
+def cargar_historial_desde_archivo():
+    if os.path.exists(RUTA_JSON_HISTORIAL):
+        try:
+            with open(RUTA_JSON_HISTORIAL, "r", encoding="utf-8") as archivo:
+                return json.load(archivo)
+        except:
+            return []
+    return []
+
 # =========================================================
 # CONFIGURACIÓN E INICIALIZACIÓN DE VARIABLES DE SESIÓN
 # =========================================================
 st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
 
-# Inyección automatizada del archivo CSS externo
 if os.path.exists(RUTA_CSS):
     with open(RUTA_CSS, "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# NUEVA MEJORA: El menú se carga directo desde el archivo JSON fijo para persistencia eterna
+# Cargar Carta e Historial ETERNOS desde los archivos físicos del servidor
 if "menu_dinamico" not in st.session_state:
     st.session_state.menu_dinamico = cargar_menu_desde_archivo()
+if "historial_ordenes" not in st.session_state:
+    st.session_state.historial_ordenes = cargar_historial_desde_archivo()
 
-# Inicializar estados de control del carrito y del flujo
+# Inicializar estados de control de flujo del cliente
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
 if "total_acumulado" not in st.session_state:
     st.session_state.total_acumulado = 0.0
 if "pedido_guardado" not in st.session_state:
     st.session_state.pedido_guardado = False
-if "numero_boleta" not in st.session_state:
-    st.session_state.numero_boleta = 1
 if "pantalla_actual" not in st.session_state:
     st.session_state.pantalla_actual = "bienvenida"
 
-# VARIABLES DEL PANEL DE CONTROL DE CAJA
-if "caja_chica" not in st.session_state:
-    st.session_state.caja_chica = 0.0
-if "total_ordenes" not in st.session_state:
-    st.session_state.total_ordenes = 0
-if "productos_vendidos" not in st.session_state:
-    st.session_state.productos_vendidos = {
-        "Hamburguesa": 0, "Carne a la parrilla": 0, "Bebida": 0, "Combo Buffalo": 0
-    }
-if "ventas_por_metodo" not in st.session_state:
-    st.session_state.ventas_por_metodo = {"Efectivo": 0.0, "Yape": 0.0, "Tarjeta": 0.0}
-if "historial_ordenes" not in st.session_state:
-    st.session_state.historial_ordenes = []
+# CALCULAR MÉTRICAS EN VIVO BASADO EN EL HISTORIAL PERMANENTE
+total_caja = 0.0
+total_pedidos = len(st.session_state.historial_ordenes)
+conteos_productos = {"Hamburguesa": 0, "Carne a la parrilla": 0, "Bebida": 0, "Combo Buffalo": 0}
+metodos_pagos = {"Efectivo": 0.0, "Yape": 0.0, "Tarjeta": 0.0}
 
+for orden in st.session_state.historial_ordenes:
+    # Quitar el prefijo 'S/' y sumar a la caja chica
+    monto_num = float(orden["Total"].replace("S/", ""))
+    total_caja += monto_num
+    
+    # Sumar al subtotal del método de pago correspondiente
+    if orden["Método Pago"] in metodos_pagos:
+        metodos_pagos[orden["Método Pago"]] += monto_num
+        
+    # Analizar el texto del detalle de artículos para reconstruir las estadísticas del gráfico
+    detalle = orden["Detalle Artículos"]
+    for prod in conteos_productos.keys():
+        if prod in detalle:
+            try:
+                # Extrae la cantidad buscando el número antes de la 'x' (Ej: '2x Hamburguesa')
+                parte = detalle.split(f"x {prod}")[0].split(",")[-1].strip()
+                conteos_productos[prod] += int(parte.replace("x", ""))
+            except:
+                pass
+
+# Asignar número de boleta correlativo correcto basado en el conteo permanente de filas
+st.session_state.numero_boleta = total_pedidos + 1
+
+MENU = {
+    "Hamburguesa": {"precio": 18, "icono": "🍔"},
+    "Carne a la parrilla": {"precio": 35, "icono": "🥩"},
+    "Bebida": {"precio": 6, "icono": "🥤"},
+    "Combo Buffalo": {"precio": 25, "icono": "🎁"}
+}
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -128,7 +162,6 @@ if es_admin:
         combo_p = st.number_input("Precio Combo (S/):", min_value=1.0, value=float(st.session_state.menu_dinamico["Combo Buffalo"]["precio"]), step=0.5)
         combo_d = st.checkbox("🎁 Combo Buffalo Disponible", value=st.session_state.menu_dinamico["Combo Buffalo"]["disponible"])
         
-    # Botón exclusivo para confirmar y sobreescribir el archivo de configuración
     if st.button("💾 GUARDAR CAMBIOS DE LA CARTA", use_container_width=True):
         st.session_state.menu_dinamico["Hamburguesa"] = {"precio": hamb_p, "icono": "🍔", "disponible": hamb_d}
         st.session_state.menu_dinamico["Carne a la parrilla"] = {"precio": carne_p, "icono": "🥩", "disponible": carne_d}
@@ -139,91 +172,52 @@ if es_admin:
         st.rerun()
         
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
-    # KPIs Financieros Principales encajonados
+    st.markdown("### 📈 ANALÍTICA GENERAL DEL NEGOCIO")
+
+    # KPIs Financieros Principales encajonados leyendo los datos fijos cargados
     col_kpi1, col_kpi2 = st.columns(2)
     with col_kpi1:
-        st.markdown(
-            f"""
-            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
-                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL</p>
-                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{st.session_state.caja_chica:.2f}</h2>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL ACUMULADA</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{total_caja:.2f}</h2></div>", unsafe_allow_html=True)
     with col_kpi2:
-        st.markdown(
-            f"""
-            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
-                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES PROCESADAS</p>
-                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{st.session_state.total_ordenes} Pedidos</h2>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES HISTÓRICAS PROCESADAS</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{total_pedidos} Pedidos</h2></div>", unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE HOY")
+    st.markdown("### 📊 UNIDADES TOTALES VENDIDAS")
     
-    # Convertimos los datos guardados en una tabla estructurada de Pandas
+    # Reconstrucción del Gráfico Avanzado de Altair basado en los contadores del JSON
     df_grafico = pd.DataFrame({
-        'Producto': list(st.session_state.productos_vendidos.keys()),
-        'Cantidad': list(st.session_state.productos_vendidos.values())
+        'Producto': list(conteos_productos.keys()),
+        'Cantidad': list(conteos_productos.values())
     })
-    
-    # Diseñamos las barras con bordes redondeados y degradado de color fuego-parrilla
-    barras = alt.Chart(df_grafico).mark_bar(
-        cornerRadiusTopLeft=6,
-        cornerRadiusTopRight=6
-    ).encode(
+    barras = alt.Chart(df_grafico).mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6).encode(
         x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(labelAngle=0, labelColor='#ffffff', titleColor='#f39c12')),
         y=alt.Y('Cantidad:Q', title='Unidades Vendidas', axis=alt.Axis(grid=True, gridColor='#2c2c2c', labelColor='#ffffff', titleColor='#f39c12')),
         color=alt.Color('Cantidad:Q', scale=alt.Scale(scheme='orangered'), legend=None)
     )
-    
-    # Añadimos las etiquetas numéricas flotantes encima de cada barra
-    texto_etiquetas = barras.mark_text(
-        align='center',
-        baseline='bottom',
-        dy=-5,
-        color='#ffffff',
-        fontSize=13,
-        fontWeight='bold'
-    ).encode(
-        text='Cantidad:Q'
-    )
-    
-    # Fusionamos barras y textos con un fondo transparente corporativo
-    grafico_final = (barras + texto_etiquetas).properties(
-        width=600, height=320
-    ).configure_view(
-        strokeWidth=0
-    ).configure_axis(
-        domainWidth=1, domainColor='#444444'
-    )
-    
+    texto_etiquetas = barras.mark_text(align='center', baseline='bottom', dy=-5, color='#ffffff', fontSize=13, fontWeight='bold').encode(text='Cantidad:Q')
+    grafico_final = (barras + texto_etiquetas).properties(width=600, height=320).configure_view(strokeWidth=0).configure_axis(domainWidth=1, domainColor='#444444')
     st.altair_chart(grafico_final, use_container_width=True)
     
-    # Registro de Auditoría en Tabla Formateada con Pandas
+    # Registro de Auditoría en Tabla Formateada con Pandas leyendo el JSON de forma permanente
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🕒 BITÁCORA: HISTORIAL CRONOLÓGICO DE COMPRAS")
+    st.markdown("### 🕒 BITÁCORA: AUDITORÍA HISTÓRICA DE COMPRAS")
     if st.session_state.historial_ordenes:
         df_historial = pd.DataFrame(st.session_state.historial_ordenes)
         df_historial.columns = ["🕒 FECHA Y HORA", "🧾 NRO. BOLETA", "📦 DETALLE ARTÍCULOS", "🛵 ENTREGA", "💳 MÉTODO PAGO", "💰 TOTAL"]
         st.dataframe(df_historial, use_container_width=True, hide_index=True)
     else:
-        st.caption("Aún no se han registrado transacciones en esta sesión.")
+        st.caption("Aún no se han registrado transacciones en la base de datos.")
     
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 💳 AUDITORÍA: FLUJO POR MÉTODO DE PAGO")
+    st.markdown("### 💳 AUDITORÍA: FLUJO HISTÓRICO POR MÉTODO DE PAGO")
     
     col_ef, col_yp, col_tj = st.columns(3)
     with col_ef:
-        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💵</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}</h4></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💵</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Efectivo']:.2f}</h4></div>", unsafe_allow_html=True)
     with col_yp:
-        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>📱</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>YAPE</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Yape']:.2f}</h4></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>📱</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>YAPE</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Yape']:.2f}</h4></div>", unsafe_allow_html=True)
     with col_tj:
-        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
     # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE PREMIUM
@@ -237,7 +231,7 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN COLUMNAS DINÁMICAS
+    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN COLUMNAS DINÁMICAS (CON FILTRO DE STOCK)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.text(f"Fecha y hora: {fecha_actual}\n")
@@ -375,7 +369,7 @@ else:
                 resumen_articulos_linea = ", ".join(items_resumen_lista)
                 tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
                 
-                # 1. ACTUALIZACIÓN AUTOMÁTICA DEL HISTORIAL CRONOLÓGICO DE AUDITORÍA
+                # MULTI-PERSISTENCIA AUTOMÁTICA: Añadir el registro a la sesión y guardarlo físicamente en el archivo JSON
                 st.session_state.historial_ordenes.append({
                     "Fecha y Hora": fecha_actual,
                     "Nro. Boleta": correlativo_sunat,
@@ -385,14 +379,9 @@ else:
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
                 
-                # 2. ACTUALIZACIÓN DE LAS ESTADÍSTICAS GENERALES DE CAJA CHICA
-                st.session_state.caja_chica += total_con_delivery
-                st.session_state.total_ordenes += 1
-                st.session_state.ventas_por_metodo[metodo_pago] += total_con_delivery
-                for item in st.session_state.carrito:
-                    st.session_state.productos_vendidos[item['producto']] += item['cantidad']
+                guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
-                # 3. PREPARACIÓN DEL TEXTO PARA LA RECOMPOSICIÓN DE LA BOLETA
+                # PREPARACIÓN DEL TEXTO PARA LA RECOMPOSICIÓN DE LA BOLETA
                 if metodo_pago == "Tarjeta":
                     metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
@@ -400,23 +389,11 @@ else:
                 else:
                     metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
                 
-                # 4. LEER LA PLANTILLA MODULAR HTML EXTERNA
-                html_rutas = [
-                    "El Gran Buffalo-Python/boleta_plantilla.html",
-                    "El Gran Búfalo-Python/boleta_plantilla.html",
-                    "El Gran Bufalo-Python/boleta_plantilla.html",
-                    "El Gran Búfalo-Pitón/boleta_plantilla.html",
-                    "boleta_plantilla.html"
-                ]
-                
-                plantilla_contenido = ""
-                for ruta in html_rutas:
-                    if os.path.exists(ruta):
-                        with open(ruta, "r", encoding="utf-8") as archivo_html:
-                            plantilla_contenido = archivo_html.read()
-                        break
-                
-                if plantilla_contenido:
+                # LEER LA PLANTILLA MODULAR HTML EXTERNA
+                if os.path.exists(RUTA_HTML):
+                    with open(RUTA_HTML, "r", encoding="utf-8") as archivo_html:
+                        plantilla_contenido = archivo_html.read()
+                    
                     html_final = plantilla_contenido
                     html_final = html_final.replace("{{ SERIE_BOLETA }}", correlativo_sunat)
                     html_final = html_final.replace("{{ FECHA_HORA }}", fecha_actual)
@@ -431,7 +408,6 @@ else:
                 
         if st.session_state.pedido_guardado:
             if st.button("🔄 Crear una nueva orden", use_container_width=True):
-                st.session_state.numero_boleta += 1
                 st.session_state.carrito = []
                 st.session_state.total_acumulado = 0.0
                 st.session_state.pedido_guardado = False
