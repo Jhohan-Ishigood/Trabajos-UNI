@@ -48,12 +48,7 @@ def cargar_menu_desde_archivo():
             "disponible": True,
             "foto": FOTO_DEFECTO
         },
-        "Jugo": {
-            "precio": 6.0, 
-            "icono": "🥤", 
-            "disponible": True,
-            "foto": FOTO_DEFECTO
-        },
+        
         "Combo Buffalo": {
             "precio": 25.0, 
             "icono": "🎁", 
