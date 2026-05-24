@@ -307,19 +307,35 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL
-    if st.session_state.pantalla_actual == "bienvenida":
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        
-        # Banner estético de la fachada/parrilla del restaurante
-        st.image(URL_BANNER_LOCAL, caption="🔥 Bienvenidos al templo de la buena carne 🔥", use_container_width=True)
-        st.markdown("<br><p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
-            st.session_state.pantalla_actual = "catalogo"
-            st.rerun()
+# PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL
+        if st.session_state.pantalla_actual == "bienvenida":
+            # Transformación automática de tu foto local a formato web nativo
+            if os.path.exists(URL_BANNER_LOCAL):
+                with open(URL_BANNER_LOCAL, "rb") as image_file:
+                    encoded_string = base64.b64encode(image_file.read()).decode()
+                
+                st.markdown(f"""
+                    <style>
+                    .stApp {{
+                        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/png;base64,{encoded_string}");
+                        background-size: cover !important;
+                        background-position: center !important;
+                        background-repeat: no-repeat !important;
+                        background-attachment: fixed !important;
+                    }}
+                    </style>
+                """, unsafe_allow_html=True)
+                
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+            
+            st.markdown("<br><p style='text-align: center; font-size: 22px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
+                st.session_state.pantalla_actual = "catalogo"
+                st.rerun()
             
     # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
