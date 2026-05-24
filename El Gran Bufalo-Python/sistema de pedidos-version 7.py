@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
 import os
-import streamlit.components.v1 as components  # Necesario para el botón de descarga gráfica
+import streamlit.components.v1 as components
 
 # =========================================================
 # CONFIGURACIÓN E INICIALIZACIÓN DE VARIABLES DE SESIÓN
@@ -16,10 +16,10 @@ if "pedido_guardado" not in st.session_state:
     st.session_state.pedido_guardado = False
 
 MENU = {
-    "Hamburguesa": 18,
-    "Carne a la parrilla": 35,
-    "Bebida": 6,
-    "Combo Buffalo": 25
+    "Hamburguesa": {"precio": 18, "icono": "🍔"},
+    "Carne a la parrilla": {"precio": 35, "icono": "🥩"},
+    "Bebida": {"precio": 6, "icono": "🥤"},
+    "Combo Buffalo": {"precio": 25, "icono": "🎁"}
 }
 
 st.text("____________________________________________")
@@ -29,47 +29,67 @@ fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 st.text(f"Fecha y hora: {fecha_actual}")
 
 # =========================================================
-# BLOQUE 1: AGREGAR PRODUCTOS AL PEDIDO
+# BLOQUE 1: NUEVA SELECCIÓN DE PRODUCTOS EN PARALELO
 # =========================================================
 if not st.session_state.pedido_guardado:
-    st.subheader("🛒 AGREGAR PRODUCTOS AL PEDIDO")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        producto_sel = st.selectbox(
-            "Seleccione un producto:",
-            ["Hamburguesa", "Carne a la parrilla", "Bebida", "Combo Buffalo"]
-        )
-    with col2:
-        cantidad_sel = st.number_input("Ingrese cantidad:", min_value=1, step=1, value=1)
-    
-    if st.button("Agregar Producto"):
-        precio_unitario = MENU[producto_sel]
-        subtotal_item = cantidad_sel * precio_unitario
-        
-        st.session_state.carrito.append({
-            "producto": producto_sel,
-            "cantidad": cantidad_sel,
-            "subtotal": subtotal_item
-        })
-        st.session_state.total_acumulado += subtotal_item
-        st.toast(f"✔ {producto_sel} agregado correctamente.", icon="🍕")
+    st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
+    st.info("Ingrese las cantidades de los productos que desea llevar:")
 
-    if st.session_state.carrito:
-        st.markdown("### Resumen Actual de la Orden:")
-        for item in st.session_state.carrito:
-            st.text(f"• {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']}.00")
-        st.info(f"**Total acumulado actual: S/{st.session_state.total_acumulado:.2f}**")
+    # Creamos un diseño en cuadrícula (2 columnas principales)
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### 🍔 PLATOS PRINCIPALES")
+        cant_hamburguesa = st.number_input(f"{MENU['Hamburguesa']['icono']} Hamburguesa — S/18.00", min_value=0, step=1, value=0)
+        cant_carne = st.number_input(f"{MENU['Carne a la parrilla']['icono']} Carne a la parrilla — S/35.00", min_value=0, step=1, value=0)
         
-        if st.button("Terminar de agregar productos y continuar"):
+    with col2:
+        st.markdown("### 🥤 COMPLEMENTOS Y COMBOS")
+        cant_bebida = st.number_input(f"{MENU['Bebida']['icono']} Bebida — S/6.00", min_value=0, step=1, value=0)
+        cant_combo = st.number_input(f"{MENU['Combo Buffalo']['icono']} Combo Buffalo — S/25.00", min_value=0, step=1, value=0)
+
+    st.markdown("---")
+    
+    # Botón unificado para procesar toda la selección
+    if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
+        cantidades = {
+            "Hamburguesa": cant_hamburguesa,
+            "Carne a la parrilla": cant_carne,
+            "Bebida": cant_bebida,
+            "Combo Buffalo": cant_combo
+        }
+        
+        # Filtrar solo los productos que el usuario seleccionó (mayor a 0)
+        st.session_state.carrito = []
+        st.session_state.total_acumulado = 0.0
+        
+        for producto, cantidad in cantidades.items():
+            if cantidad > 0:
+                subtotal_item = cantidad * MENU[producto]["precio"]
+                st.session_state.carrito.append({
+                    "producto": producto,
+                    "cantidad": cantidad,
+                    "subtotal": subtotal_item
+                })
+                st.session_state.total_acumulado += subtotal_item
+        
+        if st.session_state.total_acumulado > 0:
             st.session_state.pedido_guardado = True
             st.rerun()
-
+        else:
+            st.error("⚠️ Error: Debe seleccionar al menos 1 producto para continuar.")
 # =========================================================
 # BLOQUE 2: PROCESAMIENTO DE DELIVERY Y PAGO
 # =========================================================
 else:
     st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
+    
+    # Mostrar resumen de lo seleccionado antes de pagar
+    st.markdown("**Resumen de artículos solicitados:**")
+    for item in st.session_state.carrito:
+        st.text(f"• {MENU[item['producto']]['icono']} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']}.00")
+    
+    st.markdown("---")
     
     opcion_delivery = st.radio("¿Desea delivery? (+ S/6.00)", ["NO", "SI"])
     direccion_delivery = ""
@@ -121,11 +141,10 @@ else:
 
     # Botón para generar la boleta
     if formulario_valido and (opcion_delivery == "NO" or direccion_delivery != ""):
-        if st.button("💾 EMITIR BOLETA DE VENTA"):
+        if st.button("💾 EMITIR BOLETA DE VENTA", use_container_width=True):
             st.success("PAGO REALIZADO CORRECTAMENTE - Pedido registrado exitosamente")
             st.markdown("### 🧾 COMPROBANTE EMITIDO")
             
-            # Construir la estructura exacta del texto de la boleta
             boleta_texto = f"==============================================\\n"
             boleta_texto += f"            EL GRAN BUFFALO E.I.R.L.\\n"
             boleta_texto += f"            RUC: 20608247140\\n"
@@ -158,7 +177,6 @@ else:
             boleta_texto += f"TOTAL A PAGAR:            S/{total_con_delivery:.2f}\\n"
             boleta_texto += f"=============================================="
 
-            # Código HTML e Inyección de JavaScript (html2canvas integrado desde CDN) para convertir el texto en Imagen descargable
             componente_html = f"""
             <script src="https://cloudflare.com"></script>
             <div id="ticket" style="
@@ -175,7 +193,7 @@ else:
             ">{boleta_texto.replace('\\n', '<br>')}</div>
             
             <button onclick="descargarTicket()" style="
-                background-color: #2eth4e; 
+                background-color: #28a745; 
                 background-image: linear-gradient(135deg, #28a745, #218838);
                 color: white; 
                 border: none; 
@@ -200,10 +218,8 @@ else:
             }}
             </script>
             """
-            # Renderizar el componente interactivo en la página web
             components.html(componente_html, height=650)
             
-            # Botón para resetear e iniciar otra orden
-            if st.button("🔄 Crear una nueva orden"):
+            if st.button("🔄 Crear una nueva orden", use_container_width=True):
                 st.session_state.clear()
                 st.rerun()
