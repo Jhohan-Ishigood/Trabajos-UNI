@@ -222,7 +222,7 @@ else:
                 formulario_valido = False
 
         else:
-            st.warning("⚠️ ¡ALERTA DE CAJA: SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
+            st.warning(" SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
             pago_usuario = st.number_input("Ingrese monto de pago: S/", min_value=0.0, value=total_con_delivery, step=1.0)
             if pago_usuario < total_con_delivery:
                 st.error("Pago insuficiente")
