@@ -151,12 +151,12 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("### 🍔 PLATOS PRINCIPALES")
-            cant_hamburguesa = st.number_input(f"{MENU['Hamburguesa']['icono']} Hamburguesa — S/18.00", min_value=0, step=1)
-            cant_carne = st.number_input(f"{MENU['Carne a la parrilla']['icono']} Carne a la parrilla — S/35.00", min_value=0, step=1)
+            cant_hamburguesa = st.number_input(f"{MENU['Hamburguesa']['icono']} Hamburguesa — S/12.00", min_value=0, step=1)
+            cant_carne = st.number_input(f"{MENU['Carne a la parrilla']['icono']} Carne a la parrilla — S/25.00", min_value=0, step=1)
         with col2:
             st.markdown("### 🥤 COMPLEMENTOS Y COMBOS")
-            cant_bebida = st.number_input(f"{MENU['Bebida']['icono']} Bebida — S/6.00", min_value=0, step=1)
-            cant_combo = st.number_input(f"{MENU['Combo Buffalo']['icono']} Combo Buffalo — S/25.00", min_value=0, step=1)
+            cant_bebida = st.number_input(f"{MENU['Bebida']['icono']} Bebida — S/5.00", min_value=0, step=1)
+            cant_combo = st.number_input(f"{MENU['Combo Buffalo']['icono']} Combo Buffalo — S/30.00", min_value=0, step=1)
 
         if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
             cantidades = {"Hamburguesa": cant_hamburguesa, "Carne a la parrilla": cant_carne, "Bebida": cant_bebida, "Combo Buffalo": cant_combo}
