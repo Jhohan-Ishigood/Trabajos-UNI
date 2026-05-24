@@ -73,32 +73,82 @@ elif usuario_input or clave_input:
 fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
 if es_admin:
-    st.title("📊 PANEL DE AUDITORÍA Y CAJA CHICA")
-    st.text(f"Reporte gerencial generado el: {fecha_actual}")
-    st.markdown("---")
+    # NUEVO DISEÑO: Encabezado estilizado tipo Dashboard Corporativo
+    st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
+    st.info(f"📋 **Reporte Gerencial del Grupo 5** — Generado en tiempo real: {fecha_actual}")
+    st.markdown("<br>", unsafe_allow_html=True)
     
+    # KPIs Financieros Principales encajonados de forma limpia
     col_kpi1, col_kpi2 = st.columns(2)
     with col_kpi1:
-        st.metric(label="💰 TOTAL RECAUDADO EN CAJA", value=f"S/{st.session_state.caja_chica:.2f}")
+        st.markdown(
+            f"""
+            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
+                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL</p>
+                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{st.session_state.caja_chica:.2f}</h2>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
     with col_kpi2:
-        st.metric(label="📦 TOTAL ÓRDENES PROCESADAS", value=f"{st.session_state.total_ordenes} Pedidos")
+        st.markdown(
+            f"""
+            <div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'>
+                <p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES PROCESADAS</p>
+                <h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{st.session_state.total_ordenes} Pedidos</h2>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
         
-    st.markdown("### 📈 PRODUCTOS MÁS VENDIDOS")
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS")
+    # Gráfico de barras interactivo de productos
     st.bar_chart(st.session_state.productos_vendidos)
     
-    st.markdown("### 💳 INGRESOS POR MÉTODO DE PAGO")
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 💳 AUDITORÍA: FLUJO POR MÉTODO DE PAGO")
+    
+    # Subpaneles detallados con iconos para control de arqueo de caja
     col_ef, col_yp, col_tj = st.columns(3)
     with col_ef:
-        st.info(f"**Efectivo:** S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}")
+        st.markdown(
+            f"""
+            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
+                <span style='font-size:24px;'>💵</span>
+                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>EFECTIVO</p>
+                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Efectivo']:.2f}</h4>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
     with col_yp:
-        st.info(f"**Yape:** S/{st.session_state.ventas_por_metodo['Yape']:.2f}")
+        st.markdown(
+            f"""
+            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
+                <span style='font-size:24px;'>📱</span>
+                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>YAPE</p>
+                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Yape']:.2f}</h4>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
     with col_tj:
-        st.info(f"**Tarjeta:** S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}")
+        st.markdown(
+            f"""
+            <div style='background-color: #1a1a1a; padding: 15px; border-radius: 6px; border: 1px solid #333; text-align:center;'>
+                <span style='font-size:24px;'>💳</span>
+                <p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p>
+                <h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{st.session_state.ventas_por_metodo['Tarjeta']:.2f}</h4>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
+    st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
 else:
     if st.session_state.pantalla_actual == "bienvenida":
         st.markdown("<br><br>", unsafe_allow_html=True)
-        # Título de bienvenida con la nueva clase CSS premium
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         
@@ -107,7 +157,6 @@ else:
             st.rerun()
             
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
-        # Título del catálogo con la nueva clase CSS premium
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.text(f"Fecha y hora: {fecha_actual}\n")
         
@@ -119,7 +168,6 @@ else:
             cant_hamburguesa = st.number_input(f"{MENU['Hamburguesa']['icono']} Hamburguesa — S/18.00", min_value=0, step=1)
             cant_carne = st.number_input(f"{MENU['Carne a la parrilla']['icono']} Carne a la parrilla — S/35.00", min_value=0, step=1)
         with col2:
-            # CORRECCIÓN AQUÍ: Eliminados los tres caracteres '###' sobrantes del título de complementos
             st.markdown("### 🥤 COMPLEMENTOS Y COMBOS")
             cant_bebida = st.number_input(f"{MENU['Bebida']['icono']} Bebida — S/6.00", min_value=0, step=1)
             cant_combo = st.number_input(f"{MENU['Combo Buffalo']['icono']} Combo Buffalo — S/25.00", min_value=0, step=1)
@@ -206,14 +254,13 @@ else:
                 st.balloons()
                 st.markdown("### 🧾 COMPROBANTE EMITIDO")
                 
-                # 1. ACTUALIZACIÓN DE AUDITORÍA: Alimentar las estadísticas de la Caja Chica en Python
+                # ACTUALIZACIÓN DE AUDITORÍA: Alimenta el nuevo dashboard gerencial del Grupo 5 en tiempo real
                 st.session_state.caja_chica += total_con_delivery
                 st.session_state.total_ordenes += 1
                 st.session_state.ventas_por_metodo[metodo_pago] += total_con_delivery
                 for item in st.session_state.carrito:
                     st.session_state.productos_vendidos[item['producto']] += item['cantidad']
                 
-                # 2. SEPARACIÓN DINÁMICA: Formatear variables puras de texto en Python
                 correlativo_sunat = f"B001-{st.session_state.numero_boleta:06d}"
                 
                 tipo_entrega_txt = f"DELIVERY\nDir. Entrega: {direccion_delivery}" if tiene_delivery else "CONSUMO EN LOCAL"
@@ -231,7 +278,7 @@ else:
                 if tiene_delivery:
                     detalle_productos_txt += f"1x Costo de Envío        S/6.00\n"
                 
-                # 3. LEER LA PLANTILLA HTML EXTERNA: Inyección de variables limpia
+                # LEER LA PLANTILLA HTML EXTERNA: Inyección limpia en la vista modular
                 html_rutas = [
                     "El Gran Buffalo-Python/boleta_plantilla.html",
                     "El Gran Búfalo-Python/boleta_plantilla.html",
@@ -248,7 +295,6 @@ else:
                         break
                 
                 if plantilla_contenido:
-                    # Sustitución limpia de marcadores de posición HTML por variables de Python
                     html_final = plantilla_contenido
                     html_final = html_final.replace("{{ SERIE_BOLETA }}", correlativo_sunat)
                     html_final = html_final.replace("{{ FECHA_HORA }}", fecha_actual)
@@ -257,10 +303,9 @@ else:
                     html_final = html_final.replace("{{ DETALLE_PRODUCTOS }}", detalle_productos_txt.strip())
                     html_final = html_final.replace("{{ TOTAL_FINAL }}", f"{total_con_delivery:.2f}")
                     
-                    # Renderizar componente de la vista de forma externa y aislada
                     components.html(html_final, height=650)
                 else:
-                    st.error("⚠️ Error: No se pudo encontrar 'boleta_plantilla.html'. Verifique que el archivo exista en su GitHub.")
+                    st.error("⚠️ Error: No se pudo encontrar 'boleta_plantilla.html'.")
                 
         if st.session_state.pedido_guardado:
             if st.button("🔄 Crear una nueva orden", use_container_width=True):
