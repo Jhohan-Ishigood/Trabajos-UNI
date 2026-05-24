@@ -137,7 +137,7 @@ st.session_state.numero_boleta = total_pedidos + 1
 
 # Enlace web panorámico de alta definición por defecto para la cabecera del local
 # Modifica la línea 103 con esta ruta dinámica para tu imagen local
-URL_BANNER_LOCAL = os.path.join(BASE_DIR, "captura de pantalla 2024-06-17 a las 12.28.45.png")
+URL_BANNER_LOCAL = os.path.join(BASE_DIR, "f:\📄Documentos\Trabajos UNI\El Gran Bufalo-Python\Captura de pantalla 2026-05-24 090610.png").replace("\\", "/")
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
