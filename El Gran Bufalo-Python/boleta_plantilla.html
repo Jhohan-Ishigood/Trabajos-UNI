@@ -1,7 +1,7 @@
-<!-- CDN para la captura gráfica de la boleta -->
+<!-- CDN para capturar la pantalla y descargar como imagen -->
 <script src="https://cloudflare.com"></script>
 
-<!-- 1. Contenedor de la boleta estilo ticketera física realista -->
+<!-- Contenedor con diseño de ticket físico realista -->
 <div id="ticket" style="
     background-color: #fffdf6; 
     color: #111111; 
@@ -10,16 +10,33 @@
     font-weight: bold;
     padding: 25px; 
     width: 380px; 
-    border-top: 4px solid #f39c12; /* Línea decorativa dorada */
-    border-bottom: 3px dashed #bbb; /* Simulación de corte de papel */
+    border-top: 4px solid #f39c12; 
+    border-bottom: 3px dashed #bbb; 
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.5);
     white-space: pre-wrap;
     line-height: 1.5;
     margin: 10px auto 25px auto;
     border-radius: 2px;
-">TEXTO_DE_LA_BOLETA</div>
+">==============================================
+            EL GRAN BUFFALO E.I.R.L.
+            RUC: 20608247140
+            ║█│█║▌│█║▌│║▌║▌█║│▌║█│
+   Av. La Revolucion Nro. 1821 P.J. Almirante Grau
+             El Porvenir - Trujillo
+==============================================
+         BOLETA DE VENTA ELECTRÓNICA          
+             SERIE: {{ SERIE_BOLETA }}
+----------------------------------------------
+Fecha y hora: {{ FECHA_HORA }}
+Tipo Entrega: {{ TIPO_ENTREGA }}
+Forma de Pago: {{ METODO_PAGO }}
+----------------------------------------------
+{{ DETALLE_PRODUCTOS }}
+----------------------------------------------
+TOTAL A PAGAR:            S/{{ TOTAL_FINAL }}
+==============================================</div>
 
-<!-- 2. Botón de descarga con diseño corporativo premium -->
+<!-- Botón de descarga premium en HTML -->
 <button onclick="descargarTicket()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
@@ -40,24 +57,16 @@
     transition: all 0.3s ease;
 ">📥 DESCARGAR COMPROBANTE EMITIDO</button>
 
-<!-- 3. Lógica JavaScript optimizada para alta definición (escala 3x) -->
 <script>
 function descargarTicket() {
     const elemento = document.getElementById('ticket');
-    
-    // Configuramos la captura con alta escala para que la imagen no salga borrosa en el celular
     html2canvas(elemento, { 
         scale: 3,
         backgroundColor: "#fffdf6",
         logging: false
     }).then(canvas => {
         let enlace = document.createElement('a');
-        
-        // Nombre dinámico con la fecha actual del guardado
-        const fecha = new Date();
-        const timestamp = fecha.getDate() + '' + (fecha.getMonth()+1) + '' + fecha.getFullYear() + '_' + fecha.getHours() + '' + fecha.getMinutes();
-        
-        enlace.download = 'Boleta_Gran_Buffalo_' + timestamp + '.png';
+        enlace.download = 'Boleta_Gran_Buffalo_Descarga.png';
         enlace.href = canvas.toDataURL('image/png');
         enlace.click();
     });
