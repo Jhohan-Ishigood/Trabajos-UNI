@@ -48,7 +48,7 @@ def cargar_menu_desde_archivo():
             "disponible": True,
             "foto": FOTO_DEFECTO
         },
-        "Bebida": {
+        "Jugo": {
             "precio": 6.0, 
             "icono": "🥤", 
             "disponible": True,
