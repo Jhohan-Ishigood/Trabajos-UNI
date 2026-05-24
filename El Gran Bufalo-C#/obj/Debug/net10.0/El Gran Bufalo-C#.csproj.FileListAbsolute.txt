@@ -1,0 +1,14 @@
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.GeneratedMSBuildEditorConfig.editorconfig
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.AssemblyInfoInputs.cache
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.AssemblyInfo.cs
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.csproj.CoreCompileInputs.cache
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\bin\Debug\net10.0\El Gran Bufalo-C#.exe
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\bin\Debug\net10.0\El Gran Bufalo-C#.deps.json
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\bin\Debug\net10.0\El Gran Bufalo-C#.runtimeconfig.json
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\bin\Debug\net10.0\El Gran Bufalo-C#.dll
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\bin\Debug\net10.0\El Gran Bufalo-C#.pdb
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.dll
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\refint\El Gran Bufalo-C#.dll
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.pdb
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\El Gran Bufalo-C#.genruntimeconfig.cache
+F:\📄Documentos\Trabajos UNI\El Gran Bufalo-C#\obj\Debug\net10.0\ref\El Gran Bufalo-C#.dll
