@@ -169,14 +169,11 @@ if es_admin:
         with col_new2:
             nuevo_icono = st.text_input("Icono representativo (Emoji):", value="🍟", max_chars=2).strip()
             
-        # MODIFICADO: Ahora seleccionas tu propio archivo local de imagen
         archivo_foto = st.file_uploader("Selecciona la foto del plato desde tu equipo:", type=["jpg", "jpeg", "png"], key="upload_nuevo_prod")
             
         if st.button("🚀 GUARDAR E INTEGRAR NUEVO PRODUCTO", use_container_width=True):
             if nuevo_nombre:
                 if nuevo_nombre not in st.session_state.menu_dinamico:
-                    
-                    # Transformación binaria a String seguro Base64
                     if archivo_foto is not None:
                         bytes_foto = archivo_foto.getvalue()
                         encoded_foto = base64.b64encode(bytes_foto).decode()
@@ -184,7 +181,6 @@ if es_admin:
                     else:
                         src_final_foto = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
 
-                    # Inserción limpia en el diccionario vivo
                     st.session_state.menu_dinamico[nuevo_nombre] = {
                         "precio": nuevo_precio,
                         "icono": nuevo_icono,
@@ -199,9 +195,9 @@ if es_admin:
             else:
                 st.error("⚠️ Error: El nombre del producto no puede estar vacío.")
 
-    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (CON SOPORTE MULTIMEDIA)
-    st.markdown("### 📝 GESTIÓN DE PRECIOS Y STOCK DISPONIBLE")
-    st.caption("Modifique los valores o desactive productos. Se guardarán en el archivo JSON local de forma permanente.")
+    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (ACTUALIZADO: AHORA PERMITE CAMBIAR LA FOTO)
+    st.markdown("### 📝 GESTIÓN DE PRECIOS, STOCK Y FOTOS")
+    st.caption("Modifique los valores o suba una nueva foto para los productos existentes.")
     
     productos_lista = list(st.session_state.menu_dinamico.keys())
     for i in range(0, len(productos_lista), 2):
@@ -214,8 +210,15 @@ if es_admin:
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
             
-            # Mantiene la foto existente de manera segura al actualizar stock o precios
-            foto_existente_izq = st.session_state.menu_dinamico[p_izq].get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
+            # NUEVO: Botón para actualizar la foto del producto de la izquierda
+            foto_cambio_izq = st.file_uploader(f"Actualizar foto de {p_izq}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_izq}")
+            
+            if foto_cambio_izq is not None:
+                bytes_f = foto_cambio_izq.getvalue()
+                encoded_f = base64.b64encode(bytes_f).decode()
+                foto_existente_izq = f"data:image/png;base64,{encoded_f}"
+            else:
+                foto_existente_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
             
             st.session_state.menu_dinamico[p_izq] = {
                 "precio": p_izq_val, 
@@ -232,7 +235,15 @@ if es_admin:
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
                 
-                foto_existente_der = st.session_state.menu_dinamico[p_der].get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
+                # NUEVO: Botón para actualizar la foto del producto de la derecha
+                foto_cambio_der = st.file_uploader(f"Actualizar foto de {p_der}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_der}")
+                
+                if foto_cambio_der is not None:
+                    bytes_f = foto_cambio_der.getvalue()
+                    encoded_f = base64.b64encode(bytes_f).decode()
+                    foto_existente_der = f"data:image/png;base64,{encoded_f}"
+                else:
+                    foto_existente_der = st.session_state.menu_dinamico[p_der].get("foto", "")
                 
                 st.session_state.menu_dinamico[p_der] = {
                     "precio": p_der_val, 
@@ -260,7 +271,6 @@ if es_admin:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE LA JORNADA")
     
-    # Reconstrucción Adaptativa del Gráfico Avanzado de Altair
     df_grafico = pd.DataFrame({
         'Producto': list(conteos_productos.keys()),
         'Cantidad': list(conteos_productos.values())
@@ -274,9 +284,9 @@ if es_admin:
     grafico_final = (barras + texto_etiquetas).properties(width=600, height=320).configure_view(strokeWidth=0).configure_axis(domainWidth=1, domainColor='#444444')
     st.altair_chart(grafico_final, use_container_width=True)
     
-    # Registro de Auditoría en Tabla Formateada con Pandas
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 🕒 BITÁCORA: CONTROL HISTÓRICO DE PEDIDOS")
+
     if st.session_state.historial_ordenes:
         df_historial = pd.DataFrame(st.session_state.historial_ordenes)
         df_historial.columns = ["🕒 FECHA Y HORA", "🧾 NRO. BOLETA", "📦 DETALLE ARTÍCULOS", "🛵 ENTREGA", "💳 MÉTODO PAGO", "💰 TOTAL"]
