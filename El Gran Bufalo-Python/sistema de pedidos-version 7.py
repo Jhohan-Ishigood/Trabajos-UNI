@@ -1,10 +1,9 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta, timezone  # Reloj oficial para Perú (GMT-5)
 import os
 import streamlit.components.v1 as components
-import pandas as pd  
-import altair as alt  
-import json  
+import pandas as pd  # Motor analítico para las tablas en tiempo real
+import altair as alt  # Motor gráfico premium para las estadísticas
 
 # =========================================================
 # RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
@@ -22,14 +21,16 @@ elif os.path.exists("El Gran Búfalo-Pitón"):
 RUTA_CSS = os.path.join(BASE_DIR, "estilos.css")
 RUTA_HTML = os.path.join(BASE_DIR, "boleta_plantilla.html")
 RUTA_JSON_MENU = os.path.join(BASE_DIR, "menu_config.json")
-RUTA_JSON_HISTORIAL = os.path.join(BASE_DIR, "historial_config.json")  # Archivo para la bitácora eterna
+RUTA_JSON_HISTORIAL = os.path.join(BASE_DIR, "historial_config.json")  
 
-# --- FUNCIONES DE PERSISTENCIA DE LA CARTA ---
+# --- FUNCIONES DE PERSISTENCIA Y SINCRONIZACIÓN DE LA CARTA ---
 def guardar_menu_en_archivo(menu_data):
+    import json
     with open(RUTA_JSON_MENU, "w", encoding="utf-8") as archivo:
         json.dump(menu_data, archivo, indent=4, ensure_ascii=False)
 
 def cargar_menu_desde_archivo():
+    import json
     menu_defecto = {
         "Hamburguesa": {"precio": 18.0, "icono": "🍔", "disponible": True},
         "Carne a la parrilla": {"precio": 35.0, "icono": "🥩", "disponible": True},
@@ -44,12 +45,14 @@ def cargar_menu_desde_archivo():
             return menu_defecto
     return menu_defecto
 
-# --- NUEVAS FUNCIONES DE PERSISTENCIA PARA EL HISTORIAL DE COMPRAS ---
+# --- FUNCIONES DE PERSISTENCIA Y REGISTRO EN TIEMPO REAL DEL HISTORIAL ---
 def guardar_historial_en_archivo(historial_data):
+    import json
     with open(RUTA_JSON_HISTORIAL, "w", encoding="utf-8") as archivo:
         json.dump(historial_data, archivo, indent=4, ensure_ascii=False)
 
 def cargar_historial_desde_archivo():
+    import json
     if os.path.exists(RUTA_JSON_HISTORIAL):
         try:
             with open(RUTA_JSON_HISTORIAL, "r", encoding="utf-8") as archivo:
@@ -67,13 +70,10 @@ if os.path.exists(RUTA_CSS):
     with open(RUTA_CSS, "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Cargar Carta e Historial ETERNOS desde los archivos físicos del servidor
-if "menu_dinamico" not in st.session_state:
-    st.session_state.menu_dinamico = cargar_menu_desde_archivo()
-if "historial_ordenes" not in st.session_state:
-    st.session_state.historial_ordenes = cargar_historial_desde_archivo()
+# LECTURA REACTIVA EN TIEMPO REAL: Sincroniza los archivos con cada acción en la página
+st.session_state.menu_dinamico = cargar_menu_desde_archivo()
+st.session_state.historial_ordenes = cargar_historial_desde_archivo()
 
-# Inicializar estados de control de flujo del cliente
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
 if "total_acumulado" not in st.session_state:
@@ -83,41 +83,35 @@ if "pedido_guardado" not in st.session_state:
 if "pantalla_actual" not in st.session_state:
     st.session_state.pantalla_actual = "bienvenida"
 
-# CALCULAR MÉTRICAS EN VIVO BASADO EN EL HISTORIAL PERMANENTE
+# RECOLECCIÓN HORARIA OFICIAL PARA PERÚ (GMT-5)
+zona_peru = timezone(timedelta(hours=-5))
+fecha_actual = datetime.now(zona_peru).strftime("%d/%m/%Y %H:%M:%S")
+
+# PROCESAMIENTO REACTIVO DE KPI'S Y GRÁFICOS
 total_caja = 0.0
 total_pedidos = len(st.session_state.historial_ordenes)
-conteos_productos = {"Hamburguesa": 0, "Carne a la parrilla": 0, "Bebida": 0, "Combo Buffalo": 0}
+conteos_productos = {prod: 0 for prod in st.session_state.menu_dinamico.keys()}
 metodos_pagos = {"Efectivo": 0.0, "Yape": 0.0, "Tarjeta": 0.0}
 
 for orden in st.session_state.historial_ordenes:
-    # Quitar el prefijo 'S/' y sumar a la caja chica
     monto_num = float(orden["Total"].replace("S/", ""))
     total_caja += monto_num
-    
-    # Sumar al subtotal del método de pago correspondiente
     if orden["Método Pago"] in metodos_pagos:
         metodos_pagos[orden["Método Pago"]] += monto_num
         
-    # Analizar el texto del detalle de artículos para reconstruir las estadísticas del gráfico
     detalle = orden["Detalle Artículos"]
-    for prod in conteos_productos.keys():
+    for prod in list(conteos_productos.keys()):
         if prod in detalle:
             try:
-                # Extrae la cantidad buscando el número antes de la 'x' (Ej: '2x Hamburguesa')
-                parte = detalle.split(f"x {prod}")[0].split(",")[-1].strip()
-                conteos_productos[prod] += int(parte.replace("x", ""))
+                partes = detalle.split(", ")
+                for parte in partes:
+                    if prod in parte:
+                        cant_txt = parte.split(f"x {prod}")[0].strip()
+                        conteos_productos[prod] += int(cant_txt)
             except:
                 pass
 
-# Asignar número de boleta correlativo correcto basado en el conteo permanente de filas
 st.session_state.numero_boleta = total_pedidos + 1
-
-MENU = {
-    "Hamburguesa": {"precio": 18, "icono": "🍔"},
-    "Carne a la parrilla": {"precio": 35, "icono": "🥩"},
-    "Bebida": {"precio": 6, "icono": "🥤"},
-    "Combo Buffalo": {"precio": 25, "icono": "🎁"}
-}
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -135,46 +129,75 @@ elif usuario_input or clave_input:
 # =========================================================
 # FLUJO DE PANTALLAS
 # =========================================================
-fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-
 if es_admin:
     st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
-    st.info(f"📋 **Reporte Gerencial del Grupo 5** — Generado en tiempo real: {fecha_actual}")
+    st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # PERMANENCIA FIJA: Formulario para editar precios y guardarlos para siempre
-    st.markdown("### 🛠️ GESTIÓN DE CARTA Y PRECIOS (PARA SIEMPRE)")
-    st.caption("Modifique los precios o desactive productos. Se guardarán en un archivo JSON local.")
-    
-    edit_col1, edit_col2 = st.columns(2)
-    with edit_col1:
-        st.markdown("**🍔 Platos Principales**")
-        hamb_p = st.number_input("Precio Hamburguesa (S/):", min_value=1.0, value=float(st.session_state.menu_dinamico["Hamburguesa"]["precio"]), step=0.5)
-        hamb_d = st.checkbox("🍔 Hamburguesa Disponible", value=st.session_state.menu_dinamico["Hamburguesa"]["disponible"])
-        st.markdown("---")
-        carne_p = st.number_input("Precio Carne (S/):", min_value=1.0, value=float(st.session_state.menu_dinamico["Carne a la parrilla"]["precio"]), step=0.5)
-        carne_d = st.checkbox("🥩 Carne Disponible", value=st.session_state.menu_dinamico["Carne a la parrilla"]["disponible"])
-    with edit_col2:
-        st.markdown("**🥤 Complementos y Combos**")
-        beb_p = st.number_input("Precio Bebida (S/):", min_value=1.0, value=float(st.session_state.menu_dinamico["Bebida"]["precio"]), step=0.5)
-        beb_d = st.checkbox("🥤 Bebida Disponible", value=st.session_state.menu_dinamico["Bebida"]["disponible"])
-        st.markdown("---")
-        combo_p = st.number_input("Precio Combo (S/):", min_value=1.0, value=float(st.session_state.menu_dinamico["Combo Buffalo"]["precio"]), step=0.5)
-        combo_d = st.checkbox("🎁 Combo Buffalo Disponible", value=st.session_state.menu_dinamico["Combo Buffalo"]["disponible"])
+    # NUEVO MÓDULO: Formulario para añadir nuevos productos al menú en caliente
+    with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO A LA CARTA", expanded=False):
+        st.caption("Complete los datos para agregar un plato, postre o complemento nuevo al menú autogestionable.")
+        nuevo_nombre = st.text_input("Nombre del nuevo producto:", placeholder="Ej. Alitas BBQ, Papas Nativas...").strip()
         
-    if st.button("💾 GUARDAR CAMBIOS DE LA CARTA", use_container_width=True):
-        st.session_state.menu_dinamico["Hamburguesa"] = {"precio": hamb_p, "icono": "🍔", "disponible": hamb_d}
-        st.session_state.menu_dinamico["Carne a la parrilla"] = {"precio": carne_p, "icono": "🥩", "disponible": carne_d}
-        st.session_state.menu_dinamico["Bebida"] = {"precio": beb_p, "icono": "🥤", "disponible": beb_d}
-        st.session_state.menu_dinamico["Combo Buffalo"] = {"precio": combo_p, "icono": "🎁", "disponible": combo_d}
+        col_new1, col_new2 = st.columns(2)
+        with col_new1:
+            nuevo_precio = st.number_input("Precio de venta (S/):", min_value=0.5, value=10.0, step=0.5)
+        with col_new2:
+            nuevo_icono = st.text_input("Icono representativo (Emoji):", value="🍟", max_chars=2).strip()
+            
+        if st.button("🚀 GUARDAR E INTEGRAR NUEVO PRODUCTO", use_container_width=True):
+            if nuevo_nombre:
+                if nuevo_nombre not in st.session_state.menu_dinamico:
+                    # Lo insertamos en la base de datos viva
+                    st.session_state.menu_dinamico[nuevo_nombre] = {
+                        "precio": nuevo_precio,
+                        "icono": nuevo_icono,
+                        "disponible": True
+                    }
+                    guardar_menu_en_archivo(st.session_state.menu_dinamico)
+                    st.success(f"✔ ¡{nuevo_icono} {nuevo_nombre} integrado con éxito al catálogo para siempre!")
+                    st.rerun()
+                else:
+                    st.error("⚠️ Error: Ese producto ya existe en la carta actual.")
+            else:
+                st.error("⚠️ Error: El nombre del producto no puede estar vacío.")
+
+    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE
+    st.markdown("### 📝 GESTIÓN DE PRECIOS Y STOCK DISPONIBLE")
+    st.caption("Modifique los valores o desactive productos. Se guardarán en el archivo JSON local.")
+    
+    # Renderizar controles de edición adaptativos para todos los productos de la base de datos
+    productos_lista = list(st.session_state.menu_dinamico.keys())
+    for i in range(0, len(productos_lista), 2):
+        col_ed1, col_ed2 = st.columns(2)
+        
+        # Producto Izquierda
+        p_izq = productos_lista[i]
+        with col_ed1:
+            st.markdown(f"**{st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}**")
+            p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
+            p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
+            st.session_state.menu_dinamico[p_izq] = {"precio": p_izq_val, "icono": st.session_state.menu_dinamico[p_izq]["icono"], "disponible": p_izq_disp}
+            
+        # Producto Derecha (Si existe en el índice)
+        if i + 1 < len(productos_lista):
+            p_der = productos_lista[i+1]
+            with col_ed2:
+                st.markdown(f"**{st.session_state.menu_dinamico[p_der]['icono']} {p_der}**")
+                p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
+                p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
+                st.session_state.menu_dinamico[p_der] = {"precio": p_der_val, "icono": st.session_state.menu_dinamico[p_der]["icono"], "disponible": p_der_disp}
+        st.markdown("---")
+        
+    if st.button("💾 CONFIRMAR Y SINCRONIZAR CAMBIOS DE LA CARTA", use_container_width=True):
         guardar_menu_en_archivo(st.session_state.menu_dinamico)
-        st.success("✔ ¡Carta guardada en archivo con éxito! Los cambios se mantendrán fijos.")
+        st.success("✔ ¡Cambios de la carta guardados físicamente con éxito!")
         st.rerun()
         
-    st.markdown("<br><hr><br>", unsafe_allow_html=True)
-    st.markdown("### 📈 ANALÍTICA GENERAL DEL NEGOCIO")
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 📊 AUDITORÍA GENERAL DE CAJA CHICA")
 
-    # KPIs Financieros Principales encajonados leyendo los datos fijos cargados
+    # KPIs Financieros Principales Reactivos
     col_kpi1, col_kpi2 = st.columns(2)
     with col_kpi1:
         st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>💰 RECAUDACIÓN TOTAL ACUMULADA</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>S/{total_caja:.2f}</h2></div>", unsafe_allow_html=True)
@@ -182,9 +205,9 @@ if es_admin:
         st.markdown(f"<div style='background-color: #1c1c1c; padding: 20px; border-radius: 8px; border-left: 5px solid #f39c12; box-shadow: 0px 4px 10px rgba(0,0,0,0.3);'><p style='margin:0; font-size:14px; color:#aaa; font-weight:bold;'>📦 ÓRDENES HISTÓRICAS PROCESADAS</p><h2 style='margin:5px 0 0 0; color:#fff; font-size:32px;'>{total_pedidos} Pedidos</h2></div>", unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 📊 UNIDADES TOTALES VENDIDAS")
+    st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE LA JORNADA")
     
-    # Reconstrucción del Gráfico Avanzado de Altair basado en los contadores del JSON
+    # Reconstrucción Adaptativa del Gráfico Avanzado de Altair (Se ajusta solo al añadir productos)
     df_grafico = pd.DataFrame({
         'Producto': list(conteos_productos.keys()),
         'Cantidad': list(conteos_productos.values())
@@ -200,7 +223,7 @@ if es_admin:
     
     # Registro de Auditoría en Tabla Formateada con Pandas leyendo el JSON de forma permanente
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🕒 BITÁCORA: AUDITORÍA HISTÓRICA DE COMPRAS")
+    st.markdown("### 🕒 BITÁCORA: CONTROL HISTÓRICO DE PEDIDOS")
     if st.session_state.historial_ordenes:
         df_historial = pd.DataFrame(st.session_state.historial_ordenes)
         df_historial.columns = ["🕒 FECHA Y HORA", "🧾 NRO. BOLETA", "📦 DETALLE ARTÍCULOS", "🛵 ENTREGA", "💳 MÉTODO PAGO", "💰 TOTAL"]
@@ -209,7 +232,7 @@ if es_admin:
         st.caption("Aún no se han registrado transacciones en la base de datos.")
     
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 💳 AUDITORÍA: FLUJO HISTÓRICO POR MÉTODO DE PAGO")
+    st.markdown("### 💳 FLUJO DE CAJA POR MÉTODO DE PAGO")
     
     col_ef, col_yp, col_tj = st.columns(3)
     with col_ef:
@@ -231,10 +254,10 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-    # PANTALLA 2: CATÁLOGO DE PRODUCTOS EN COLUMNAS DINÁMICAS (CON FILTRO DE STOCK)
+    # PANTALLA 2: CATÁLOGO DE PRODUCTOS ADAPTATIVO EN TIEMPO REAL
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        st.text(f"Fecha y hora: {fecha_actual}\n")
+        st.text(f"Fecha y hora oficial de Perú: {fecha_actual}\n")
         
         st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
         st.info("Ingrese las cantidades de los productos que desea llevar:")
@@ -242,33 +265,24 @@ else:
         col1, col2 = st.columns(2)
         cantidades_ingresadas = {}
         
-        with col1:
-            st.markdown("### 🍔 PLATOS PRINCIPALES")
-            if st.session_state.menu_dinamico["Hamburguesa"]["disponible"]:
-                precio_h = st.session_state.menu_dinamico["Hamburguesa"]["precio"]
-                cantidades_ingresadas["Hamburguesa"] = st.number_input(f"🍔 Hamburguesa — S/{precio_h:.2f}", min_value=0, step=1, key="input_hamb")
-            else:
-                st.markdown("<p style='color: #ff4b4b; font-weight: bold;'>❌ Hamburguesa (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
-                
-            if st.session_state.menu_dinamico["Carne a la parrilla"]["disponible"]:
-                precio_c = st.session_state.menu_dinamico["Carne a la parrilla"]["precio"]
-                cantidades_ingresadas["Carne a la parrilla"] = st.number_input(f"🥩 Carne a la parrilla — S/{precio_c:.2f}", min_value=0, step=1, key="input_carne")
-            else:
-                st.markdown("<p style='color: #ff4b4b; font-weight: bold;'>❌ Carne a la parrilla (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
-                
-        with col2:
-            st.markdown("### 🥤 COMPLEMENTOS Y COMBOS")
-            if st.session_state.menu_dinamico["Bebida"]["disponible"]:
-                precio_b = st.session_state.menu_dinamico["Bebida"]["precio"]
-                cantidades_ingresadas["Bebida"] = st.number_input(f"🥤 Bebida — S/{precio_b:.2f}", min_value=0, step=1, key="input_beb")
-            else:
-                st.markdown("<p style='color: #ff4b4b; font-weight: bold;'>❌ Bebida (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
-                
-            if st.session_state.menu_dinamico["Combo Buffalo"]["disponible"]:
-                precio_co = st.session_state.menu_dinamico["Combo Buffalo"]["precio"]
-                cantidades_ingresadas["Combo Buffalo"] = st.number_input(f"🎁 Combo Buffalo — S/{precio_co:.2f}", min_value=0, step=1, key="input_combo")
-            else:
-                st.markdown("<p style='color: #ff4b4b; font-weight: bold;'>❌ Combo Buffalo (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
+        # Clasificar y renderizar dinámicamente los productos activos
+        productos_lista = list(st.session_state.menu_dinamico.keys())
+        
+        for i in range(len(productos_lista)):
+            prod = productos_lista[i]
+            info = st.session_state.menu_dinamico[prod]
+            
+            # Repartir los productos equitativamente entre la columna 1 y la columna 2
+            target_col = col1 if i % 2 == 0 else col2
+            
+            with target_col:
+                if info["disponible"]:
+                    cantidades_ingresadas[prod] = st.number_input(
+                        f"{info['icono']} {prod} — S/{info['precio']:.2f}", 
+                        min_value=0, step=1, key=f"cat_{prod}"
+                    )
+                else:
+                    st.markdown(f"<p style='color: #ff4b4b; font-weight: bold;'>❌ {info['icono']} {prod} (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
 
         st.markdown("---")
         
@@ -287,6 +301,7 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
+
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
@@ -294,7 +309,7 @@ else:
         st.markdown("**Resumen de artículos solicitados:**")
         for item in st.session_state.carrito:
             icono_p = st.session_state.menu_dinamico[item['producto']]['icono']
-            st.text(f"• {icono_p} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']}.00")
+            st.text(f"• {icono_p} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']:.2f}")
         
         st.markdown("---")
         
@@ -329,6 +344,7 @@ else:
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
+            st.sidebar.markdown(f"") # Espacio estético auxiliar
             titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
             ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4)
             if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
@@ -359,7 +375,7 @@ else:
                 detalle_productos_txt = ""
                 items_resumen_lista = []
                 for item in st.session_state.carrito:
-                    detalle_productos_txt += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']}.00\n"
+                    detalle_productos_txt += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']:.2f}\n"
                     items_resumen_lista.append(f"{item['cantidad']}x {item['producto']}")
                 
                 if tiene_delivery:
@@ -369,7 +385,7 @@ else:
                 resumen_articulos_linea = ", ".join(items_resumen_lista)
                 tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
                 
-                # MULTI-PERSISTENCIA AUTOMÁTICA: Añadir el registro a la sesión y guardarlo físicamente en el archivo JSON
+                # SINCRO-REGISTRO AUTOMÁTICO EN EL ARCHIVO HISTÓRICO JSON
                 st.session_state.historial_ordenes.append({
                     "Fecha y Hora": fecha_actual,
                     "Nro. Boleta": correlativo_sunat,
@@ -378,10 +394,8 @@ else:
                     "Método Pago": metodo_pago,
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
-                
                 guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
-                # PREPARACIÓN DEL TEXTO PARA LA RECOMPOSICIÓN DE LA BOLETA
                 if metodo_pago == "Tarjeta":
                     metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
@@ -389,7 +403,7 @@ else:
                 else:
                     metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
                 
-                # LEER LA PLANTILLA MODULAR HTML EXTERNA
+                # RENDERIZAR LA BOLETA MODULAR DESACOPLADA
                 if os.path.exists(RUTA_HTML):
                     with open(RUTA_HTML, "r", encoding="utf-8") as archivo_html:
                         plantilla_contenido = archivo_html.read()
