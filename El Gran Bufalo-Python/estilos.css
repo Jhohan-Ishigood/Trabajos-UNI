@@ -107,3 +107,11 @@ div[data-testid="stDataFrame"] {
 div[data-testid="stDataFrame"] table {
     font-family: 'Courier New', Courier, monospace !important;
 }
+/* Fuerza a que la imagen de la fachada sea el fondo de toda la aplicación */
+.stApp {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url("app/static/media/Captura_de_pantalla_2026-05-24_090610.9859f97637cf218f4803.png");
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
