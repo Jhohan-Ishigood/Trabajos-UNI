@@ -4,7 +4,7 @@ import os
 import streamlit.components.v1 as components
 import pandas as pd  # Motor de analítica para el control de la bitácora
 import altair as alt  # Motor gráfico premium para el Dashboard corporativo
-import base64  # NUEVO: Librería para codificar imágenes locales a texto seguro HTML
+import base64  # Motor multimedia para incrustar fotos locales en HTML y CSS
 
 # =========================================================
 # RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
@@ -32,7 +32,7 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # NUEVO: Silueta Base64 por defecto para evitar caídas imprevistas
+    # Silueta vectorial en Base64 por defecto para evitar pantallas colapsadas
     FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
     
     menu_defecto = {
@@ -48,7 +48,12 @@ def cargar_menu_desde_archivo():
             "disponible": True,
             "foto": FOTO_DEFECTO
         },
-        
+        "Jugo": {
+            "precio": 6.0, 
+            "icono": "🥤", 
+            "disponible": True,
+            "foto": FOTO_DEFECTO
+        },
         "Combo Buffalo": {
             "precio": 25.0, 
             "icono": "🎁", 
@@ -63,7 +68,6 @@ def cargar_menu_desde_archivo():
         except:
             return menu_defecto
     return menu_defecto
-
 # --- FUNCIONES DE PERSISTENCIA Y REGISTRO EN TIEMPO REAL DEL HISTORIAL ---
 def guardar_historial_en_archivo(historial_data):
     import json
@@ -79,6 +83,7 @@ def cargar_historial_desde_archivo():
         except:
             return []
     return []
+
 # =========================================================
 # LECTURA Y CARGA DE HOJAS DE ESTILOS Y ARCHIVOS CONFIG
 # =========================================================
@@ -190,22 +195,29 @@ if es_admin:
             else:
                 st.error("⚠️ Error: El nombre del producto no puede estar vacío.")
 
-    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (ACTUALIZADO: CAMBIA FOTO DE LOS QUE YA ESTÁN)
+    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (ACTUALIZADO: VER FOTO ESTILIZADA Y ELIMINAR)
     st.markdown("### 📝 GESTIÓN DE PRECIOS, STOCK Y FOTOS")
-    st.caption("Modifique los valores o suba una nueva foto para los productos existentes.")
+    st.caption("Modifique los valores, actualice fotos o elimine alimentos permanentemente.")
     
+    eliminar_producto = None
     productos_lista = list(st.session_state.menu_dinamico.keys())
+    
     for i in range(0, len(productos_lista), 2):
         col_ed1, col_ed2 = st.columns(2)
         
         # Producto Izquierda
         p_izq = productos_lista[i]
         with col_ed1:
-            st.markdown(f"**{st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}**")
+            st.markdown(f"### {st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}")
+            
+            # Previsualización de la foto actual estilizada
+            foto_actual_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
+            if foto_actual_izq:
+                st.markdown(f"""<img src="{foto_actual_izq}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
+            
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
             
-            # Cargador multimedia para cambiar la foto del plato izquierdo actual
             foto_cambio_izq = st.file_uploader(f"Actualizar foto de {p_izq}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_izq}")
             
             if foto_cambio_izq is not None:
@@ -222,15 +234,22 @@ if es_admin:
                 "foto": foto_existente_izq
             }
             
+            if st.button(f"❌ Eliminar {p_izq}", key=f"del_{p_izq}", use_container_width=True):
+                eliminar_producto = p_izq
         # Producto Derecha (Si existe en el índice)
         if i + 1 < len(productos_lista):
             p_der = productos_lista[i+1]
             with col_ed2:
-                st.markdown(f"**{st.session_state.menu_dinamico[p_der]['icono']} {p_der}**")
+                st.markdown(f"### {st.session_state.menu_dinamico[p_der]['icono']} {p_der}")
+                
+                # Previsualización de la foto actual estilizada
+                foto_actual_der = st.session_state.menu_dinamico[p_der].get("foto", "")
+                if foto_actual_der:
+                    st.markdown(f"""<img src="{foto_actual_der}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
+                
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
                 
-                # Cargador multimedia para cambiar la foto del plato derecho actual
                 foto_cambio_der = st.file_uploader(f"Actualizar foto de {p_der}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_der}")
                 
                 if foto_cambio_der is not None:
@@ -246,7 +265,17 @@ if es_admin:
                     "disponible": p_der_disp,
                     "foto": foto_existente_der
                 }
+                
+                if st.button(f"❌ Eliminar {p_der}", key=f"del_{p_der}", use_container_width=True):
+                    eliminar_producto = p_der
         st.markdown("---")
+        
+    # Lógica de eliminación inmediata física
+    if eliminar_producto is not None:
+        del st.session_state.menu_dinamico[eliminar_producto]
+        guardar_menu_en_archivo(st.session_state.menu_dinamico)
+        st.warning(f"🗑️ Producto '{eliminar_producto}' removido permanentemente de la base de datos.")
+        st.rerun()
         
     if st.button("💾 CONFIRMAR Y SINCRONIZAR CAMBIOS DE LA CARTA", use_container_width=True):
         guardar_menu_en_archivo(st.session_state.menu_dinamico)
@@ -354,7 +383,7 @@ else:
             
             with target_col:
                 if info["disponible"]:
-                    # CORREGIDO: Uso seguro de .get() para evitar caídas por KeyError y asegurar carga fluida
+                    # Uso seguro de .get() para evitar caídas por KeyError y asegurar carga fluida de tus fotos
                     url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
                     
                     st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0px 0px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
