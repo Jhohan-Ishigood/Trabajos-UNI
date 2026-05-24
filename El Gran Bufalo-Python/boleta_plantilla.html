@@ -1,38 +1,63 @@
+<!-- CDN para la captura gráfica de la boleta -->
 <script src="https://cloudflare.com"></script>
 
+<!-- 1. Contenedor de la boleta estilo ticketera física realista -->
 <div id="ticket" style="
-    background-color: #f8f9fa; 
-    color: #000000; 
-    font-family: monospace; 
-    padding: 20px; 
+    background-color: #fffdf6; 
+    color: #111111; 
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 14px;
+    font-weight: bold;
+    padding: 25px; 
     width: 380px; 
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-top: 4px solid #f39c12; /* Línea decorativa dorada */
+    border-bottom: 3px dashed #bbb; /* Simulación de corte de papel */
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.5);
     white-space: pre-wrap;
-    line-height: 1.4;
-    margin-bottom: 15px;
+    line-height: 1.5;
+    margin: 10px auto 25px auto;
+    border-radius: 2px;
 ">TEXTO_DE_LA_BOLETA</div>
 
+<!-- 2. Botón de descarga con diseño corporativo premium -->
 <button onclick="descargarTicket()" style="
-    background-color: #28a745; 
-    background-image: linear-gradient(135deg, #28a745, #218838);
+    background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
-    padding: 10px 20px; 
-    font-size: 16px; 
+    padding: 14px 20px; 
+    font-size: 15px; 
+    font-family: 'Trebuchet MS', sans-serif;
     font-weight: bold;
-    border-radius: 5px; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 6px; 
     cursor: pointer;
     width: 100%;
-    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-">📥 DESCARGAR BOLETA COMO IMAGEN</button>
+    max-width: 430px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
+    transition: all 0.3s ease;
+">📥 DESCARGAR COMPROBANTE EMITIDO</button>
 
+<!-- 3. Lógica JavaScript optimizada para alta definición (escala 3x) -->
 <script>
 function descargarTicket() {
     const elemento = document.getElementById('ticket');
-    html2canvas(elemento, { scale: 2 }).then(canvas => {
+    
+    // Configuramos la captura con alta escala para que la imagen no salga borrosa en el celular
+    html2canvas(elemento, { 
+        scale: 3,
+        backgroundColor: "#fffdf6",
+        logging: false
+    }).then(canvas => {
         let enlace = document.createElement('a');
-        enlace.download = 'Boleta_Gran_Buffalo_Descargada.png';
+        
+        // Nombre dinámico con la fecha actual del guardado
+        const fecha = new Date();
+        const timestamp = fecha.getDate() + '' + (fecha.getMonth()+1) + '' + fecha.getFullYear() + '_' + fecha.getHours() + '' + fecha.getMinutes();
+        
+        enlace.download = 'Boleta_Gran_Buffalo_' + timestamp + '.png';
         enlace.href = canvas.toDataURL('image/png');
         enlace.click();
     });
