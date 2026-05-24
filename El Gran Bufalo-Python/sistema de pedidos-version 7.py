@@ -2,8 +2,8 @@ import streamlit as st
 from datetime import datetime, timedelta, timezone  # Reloj oficial para Perú (GMT-5)
 import os
 import streamlit.components.v1 as components
-import pandas as pd  # Motor analítico para las tablas en tiempo real
-import altair as alt  # Motor gráfico premium para las estadísticas
+import pandas as pd  # Motor de analítica para el control de la bitácora
+import altair as alt  # Motor gráfico premium para el Dashboard corporativo
 
 # =========================================================
 # RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
@@ -31,11 +31,32 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
+    # NUEVO: Menú inicial con enlaces URL de fotos de alta velocidad preconfiguradas
     menu_defecto = {
-        "Hamburguesa": {"precio": 18.0, "icono": "🍔", "disponible": True},
-        "Carne a la parrilla": {"precio": 35.0, "icono": "🥩", "disponible": True},
-        "Bebida": {"precio": 6.0, "icono": "🥤", "disponible": True},
-        "Combo Buffalo": {"precio": 25.0, "icono": "🎁", "disponible": True}
+        "Hamburguesa": {
+            "precio": 18.0, 
+            "icono": "🍔", 
+            "disponible": True,
+            "foto": "https://unsplash.com"
+        },
+        "Carne a la parrilla": {
+            "precio": 35.0, 
+            "icono": "🥩", 
+            "disponible": True,
+            "foto": "https://unsplash.com"
+        },
+        "Bebida": {
+            "precio": 6.0, 
+            "icono": "🥤", 
+            "disponible": True,
+            "foto": "https://unsplash.com"
+        },
+        "Combo Buffalo": {
+            "precio": 25.0, 
+            "icono": "🎁", 
+            "disponible": True,
+            "foto": "https://unsplash.com"
+        }
     }
     if os.path.exists(RUTA_JSON_MENU):
         try:
@@ -62,15 +83,13 @@ def cargar_historial_desde_archivo():
     return []
 
 # =========================================================
-# CONFIGURACIÓN E INICIALIZACIÓN DE VARIABLES DE SESIÓN
+# LECTURA Y CARGA DE HOJAS DE ESTILOS Y ARCHIVOS CONFIG
 # =========================================================
-st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
-
 if os.path.exists(RUTA_CSS):
     with open(RUTA_CSS, "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# LECTURA REACTIVA EN TIEMPO REAL: Sincroniza los archivos con cada acción en la página
+# Sincronización reactiva inmediata de los datos permanentes
 st.session_state.menu_dinamico = cargar_menu_desde_archivo()
 st.session_state.historial_ordenes = cargar_historial_desde_archivo()
 
@@ -83,11 +102,11 @@ if "pedido_guardado" not in st.session_state:
 if "pantalla_actual" not in st.session_state:
     st.session_state.pantalla_actual = "bienvenida"
 
-# RECOLECCIÓN HORARIA OFICIAL PARA PERÚ (GMT-5)
+# ANCLAJE DE RELOJ OFICIAL PARA PERÚ (GMT-5) SINCRO WEB
 zona_peru = timezone(timedelta(hours=-5))
 fecha_actual = datetime.now(zona_peru).strftime("%d/%m/%Y %H:%M:%S")
 
-# PROCESAMIENTO REACTIVO DE KPI'S Y GRÁFICOS
+# PROCESAMIENTO REACTIVO DE KPI'S DEL NEGOCIO
 total_caja = 0.0
 total_pedidos = len(st.session_state.historial_ordenes)
 conteos_productos = {prod: 0 for prod in st.session_state.menu_dinamico.keys()}
@@ -112,6 +131,9 @@ for orden in st.session_state.historial_ordenes:
                 pass
 
 st.session_state.numero_boleta = total_pedidos + 1
+
+# Enlace web panorámico de alta definición por defecto para la cabecera del local
+URL_BANNER_LOCAL = "https://unsplash.com"
 # =========================================================
 # BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
 # =========================================================
@@ -127,16 +149,16 @@ elif usuario_input or clave_input:
     st.sidebar.error("❌ Credenciales incorrectas")
 
 # =========================================================
-# FLUJO DE PANTALLAS
+# FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
 # =========================================================
 if es_admin:
     st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # NUEVO MÓDULO: Formulario para añadir nuevos productos al menú en caliente
-    with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO A LA CARTA", expanded=False):
-        st.caption("Complete los datos para agregar un plato, postre o complemento nuevo al menú autogestionable.")
+    # MÓDULO MULTIMEDIA: Formulario para añadir nuevos productos con foto URL en caliente
+    with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO CON FOTO", expanded=False):
+        st.caption("Complete los datos para agregar un plato nuevo con su respectiva imagen web al catálogo dinámico.")
         nuevo_nombre = st.text_input("Nombre del nuevo producto:", placeholder="Ej. Alitas BBQ, Papas Nativas...").strip()
         
         col_new1, col_new2 = st.columns(2)
@@ -145,28 +167,30 @@ if es_admin:
         with col_new2:
             nuevo_icono = st.text_input("Icono representativo (Emoji):", value="🍟", max_chars=2).strip()
             
+        nuevo_link_foto = st.text_input("Enlace URL de la foto del plato:", value="https://unsplash.com", placeholder="Pegue aquí el link de la imagen de internet...").strip()
+            
         if st.button("🚀 GUARDAR E INTEGRAR NUEVO PRODUCTO", use_container_width=True):
             if nuevo_nombre:
                 if nuevo_nombre not in st.session_state.menu_dinamico:
-                    # Lo insertamos en la base de datos viva
+                    # Inserción en la base de datos viva incluyendo su foto externa
                     st.session_state.menu_dinamico[nuevo_nombre] = {
                         "precio": nuevo_precio,
                         "icono": nuevo_icono,
-                        "disponible": True
+                        "disponible": True,
+                        "foto": nuevo_link_foto
                     }
                     guardar_menu_en_archivo(st.session_state.menu_dinamico)
-                    st.success(f"✔ ¡{nuevo_icono} {nuevo_nombre} integrado con éxito al catálogo para siempre!")
+                    st.success(f"✔ ¡{nuevo_icono} {nuevo_nombre} con foto integrada guardado para siempre!")
                     st.rerun()
                 else:
                     st.error("⚠️ Error: Ese producto ya existe en la carta actual.")
             else:
                 st.error("⚠️ Error: El nombre del producto no puede estar vacío.")
 
-    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE
+    # GESTIÓN Y EDICIÓN DE CARTA EXISTENTE (CON SOPORTE MULTIMEDIA)
     st.markdown("### 📝 GESTIÓN DE PRECIOS Y STOCK DISPONIBLE")
-    st.caption("Modifique los valores o desactive productos. Se guardarán en el archivo JSON local.")
+    st.caption("Modifique los valores o desactive productos. Se guardarán en el archivo JSON local de forma permanente.")
     
-    # Renderizar controles de edición adaptativos para todos los productos de la base de datos
     productos_lista = list(st.session_state.menu_dinamico.keys())
     for i in range(0, len(productos_lista), 2):
         col_ed1, col_ed2 = st.columns(2)
@@ -177,7 +201,12 @@ if es_admin:
             st.markdown(f"**{st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}**")
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
-            st.session_state.menu_dinamico[p_izq] = {"precio": p_izq_val, "icono": st.session_state.menu_dinamico[p_izq]["icono"], "disponible": p_izq_disp}
+            st.session_state.menu_dinamico[p_izq] = {
+                "precio": p_izq_val, 
+                "icono": st.session_state.menu_dinamico[p_izq]["icono"], 
+                "disponible": p_izq_disp,
+                "foto": st.session_state.menu_dinamico[p_izq].get("foto", "https://unsplash.com")
+            }
             
         # Producto Derecha (Si existe en el índice)
         if i + 1 < len(productos_lista):
@@ -186,7 +215,12 @@ if es_admin:
                 st.markdown(f"**{st.session_state.menu_dinamico[p_der]['icono']} {p_der}**")
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
-                st.session_state.menu_dinamico[p_der] = {"precio": p_der_val, "icono": st.session_state.menu_dinamico[p_der]["icono"], "disponible": p_der_disp}
+                st.session_state.menu_dinamico[p_der] = {
+                    "precio": p_der_val, 
+                    "icono": st.session_state.menu_dinamico[p_der]["icono"], 
+                    "disponible": p_der_disp,
+                    "foto": st.session_state.menu_dinamico[p_der].get("foto", "https://unsplash.com")
+                }
         st.markdown("---")
         
     if st.button("💾 CONFIRMAR Y SINCRONIZAR CAMBIOS DE LA CARTA", use_container_width=True):
@@ -207,7 +241,7 @@ if es_admin:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 📈 ANALÍTICA: UNIDADES VENDIDAS DE LA JORNADA")
     
-    # Reconstrucción Adaptativa del Gráfico Avanzado de Altair (Se ajusta solo al añadir productos)
+    # Reconstrucción Adaptativa del Gráfico Avanzado de Altair
     df_grafico = pd.DataFrame({
         'Producto': list(conteos_productos.keys()),
         'Cantidad': list(conteos_productos.values())
@@ -221,7 +255,7 @@ if es_admin:
     grafico_final = (barras + texto_etiquetas).properties(width=600, height=320).configure_view(strokeWidth=0).configure_axis(domainWidth=1, domainColor='#444444')
     st.altair_chart(grafico_final, use_container_width=True)
     
-    # Registro de Auditoría en Tabla Formateada con Pandas leyendo el JSON de forma permanente
+    # Registro de Auditoría en Tabla Formateada con Pandas
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 🕒 BITÁCORA: CONTROL HISTÓRICO DE PEDIDOS")
     if st.session_state.historial_ordenes:
@@ -243,21 +277,25 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE PREMIUM
+    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL
     if st.session_state.pantalla_actual == "bienvenida":
-        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
+        
+        # Banner estético de la fachada/parrilla del restaurante
+        st.image(URL_BANNER_LOCAL, caption="🔥 Bienvenidos al templo de la buena carne 🔥", use_container_width=True)
+        st.markdown("<br><p style='text-align: center; font-size: 18px;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         
         if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-    # PANTALLA 2: CATÁLOGO DE PRODUCTOS ADAPTATIVO EN TIEMPO REAL
+    # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        st.text(f"Fecha y hora oficial de Perú: {fecha_actual}\n")
+        st.image(URL_BANNER_LOCAL, use_container_width=True)
+        st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
         st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
         st.info("Ingrese las cantidades de los productos que desea llevar:")
@@ -265,24 +303,29 @@ else:
         col1, col2 = st.columns(2)
         cantidades_ingresadas = {}
         
-        # Clasificar y renderizar dinámicamente los productos activos
+        # Bucle inteligente que dibuja las tarjetas con fotos según la base de datos JSON
         productos_lista = list(st.session_state.menu_dinamico.keys())
         
         for i in range(len(productos_lista)):
             prod = productos_lista[i]
             info = st.session_state.menu_dinamico[prod]
             
-            # Repartir los productos equitativamente entre la columna 1 y la columna 2
+            # Repartir los platos simétricamente
             target_col = col1 if i % 2 == 0 else col2
             
             with target_col:
                 if info["disponible"]:
+                    # Renderizar la foto del plato arriba con esquinas redondeadas
+                    st.markdown(f"""<img src="{info['foto']}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0px 0px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
+                    
+                    # La casilla numérica de Streamlit se acopla abajo con borde verde
                     cantidades_ingresadas[prod] = st.number_input(
                         f"{info['icono']} {prod} — S/{info['precio']:.2f}", 
                         min_value=0, step=1, key=f"cat_{prod}"
                     )
                 else:
-                    st.markdown(f"<p style='color: #ff4b4b; font-weight: bold;'>❌ {info['icono']} {prod} (AGOTADO POR HOY)</p>", unsafe_allow_html=True)
+                    st.markdown(f"""<div style="width:100%; height:180px; background-color:#222; border-radius:8px 8px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:40px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background-color:#1c1c1c; padding:15px; border-radius:0px 0px 8px 8px; border:1px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
 
         st.markdown("---")
         
@@ -301,7 +344,6 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
@@ -344,7 +386,6 @@ else:
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
-            st.sidebar.markdown(f"") # Espacio estético auxiliar
             titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
             ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4)
             if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
@@ -385,7 +426,7 @@ else:
                 resumen_articulos_linea = ", ".join(items_resumen_lista)
                 tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
                 
-                # SINCRO-REGISTRO AUTOMÁTICO EN EL ARCHIVO HISTÓRICO JSON
+                # PERSISTENCIA FIJA: Añadir el nuevo registro a la memoria local de la sesión
                 st.session_state.historial_ordenes.append({
                     "Fecha y Hora": fecha_actual,
                     "Nro. Boleta": correlativo_sunat,
@@ -394,8 +435,11 @@ else:
                     "Método Pago": metodo_pago,
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
+                
+                # MULTI-PERSISTENCIA AUTOMÁTICA: Guardar toda la tabla actualizada en el archivo físico JSON del servidor
                 guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
+                # PREPARACIÓN DEL TEXTO PARA LA RECOMPOSICIÓN DE LA BOLETA
                 if metodo_pago == "Tarjeta":
                     metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
@@ -403,7 +447,7 @@ else:
                 else:
                     metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
                 
-                # RENDERIZAR LA BOLETA MODULAR DESACOPLADA
+                # LEER LA PLANTILLA MODULAR HTML EXTERNA
                 if os.path.exists(RUTA_HTML):
                     with open(RUTA_HTML, "r", encoding="utf-8") as archivo_html:
                         plantilla_contenido = archivo_html.read()

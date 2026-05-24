@@ -29,7 +29,7 @@ h1, h2, h3, .stSubheader {
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     margin-top: 15px !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 10px !important;
     display: block !important;
 }
 
@@ -40,20 +40,18 @@ div[data-testid="stNotification"] {
     border-radius: 4px !important;
 }
 
-/* 4. Tarjetas contenedoras de los productos del menú */
+/* 4. NUEVAS TARJETAS VERTICALES DE COMIDA (Food Cards Premium) */
 .stNumberInput {
     background-color: #1c1c1c !important;
-    padding: 15px !important;
-    border-radius: 8px !important;
-    border: 1px solid #2c2c2c !important;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4) !important;
-    margin-bottom: 10px !important;
+    padding: 10px 15px 15px 15px !important;
+    border-radius: 0px 0px 8px 8px !important; /* Redondeado solo abajo para acoplarse a la foto */
+    border-left: 1px solid #2c2c2c !important;
+    border-right: 1px solid #2c2c2c !important;
+    border-bottom: 1px solid #2c2c2c !important;
+    border-top: none !important;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5) !important;
+    margin-bottom: 25px !important;
     transition: all 0.3s ease;
-}
-
-.stNumberInput:hover {
-    border-color: #f39c12 !important;
-    transform: translateY(-2px);
 }
 
 /* 5. Estilo de las casillas de entrada (Contorno Verde) */
@@ -91,10 +89,6 @@ button[data-testid="stBaseButton-secondary"]:hover {
     box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
 }
 
-/* =========================================================
-   NUEVOS ESTILOS AVANZADOS: SECCIÓN ADMINISTRATIVA Y LOGS
-   ========================================================= */
-
 /* 7. Barra lateral con efecto Glassmorphism traslúcido */
 section[data-testid="stSidebar"] {
     background-color: #0f0f0f !important;
@@ -110,7 +104,6 @@ div[data-testid="stDataFrame"] {
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Hacer que los textos de la tabla de auditoría sean más legibles */
 div[data-testid="stDataFrame"] table {
     font-family: 'Courier New', Courier, monospace !important;
 }
