@@ -8,6 +8,25 @@ import streamlit.components.v1 as components
 # =========================================================
 st.set_page_config(page_title="El Gran Buffalo", page_icon="🍔", layout="centered")
 
+# INYECCIÓN DE CSS PARA PERSONALIZAR LOS BORDES A COLOR VERDE
+st.markdown(
+    """
+    <style>
+    /* Forzar que el borde de error de Streamlit se vuelva Verde */
+    div[data-baseweb="input"] {
+        border-color: #28a745 !important;
+    }
+    /* Cambiar también el color cuando haces clic adentro de la casilla */
+    div[data-baseweb="input"]:focus-within {
+        border-color: #218838 !important;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
 if "carrito" not in st.session_state:
     st.session_state.carrito = []
 if "total_acumulado" not in st.session_state:
@@ -97,7 +116,7 @@ else:
         tiene_delivery = True
         costo_delivery = 6.0
         # El campo se muestra limpio y sin alertas molestas mientras el usuario escribe
-        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...").strip()
+        direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...")  
             
     total_con_delivery = st.session_state.total_acumulado + costo_delivery
     st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.2f}")
@@ -127,7 +146,7 @@ else:
             formulario_valido = False
 
     else:
-        st.warning("⚠️ ¡ALERTA DE CAJA: SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
+        st.warning("SOLO SE ACEPTA MONEDA NACIONAL(Sol Peruano)\nEste establecimiento NO recibe dólares ni euros.")
         pago_usuario = st.number_input("Ingrese monto de pago: S/", min_value=0.0, value=total_con_delivery, step=1.0)
         if pago_usuario < total_con_delivery:
             st.error("Pago insuficiente")
