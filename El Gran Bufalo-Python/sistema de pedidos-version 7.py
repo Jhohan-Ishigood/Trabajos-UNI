@@ -4,6 +4,7 @@ import os
 import streamlit.components.v1 as components
 import pandas as pd  # Motor de analítica para el control de la bitácora
 import altair as alt  # Motor gráfico premium para el Dashboard corporativo
+import base64  # NUEVO: Librería para codificar imágenes locales a texto seguro HTML
 
 # =========================================================
 # RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
@@ -31,31 +32,33 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # NUEVO: Menú inicial con enlaces URL de fotos de alta velocidad preconfiguradas
+    # NUEVO: Silueta Base64 por defecto para evitar caídas imprevistas
+    FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
+    
     menu_defecto = {
         "Hamburguesa": {
             "precio": 18.0, 
             "icono": "🍔", 
             "disponible": True,
-            "foto": "https://unsplash.com"
+            "foto": FOTO_DEFECTO
         },
         "Carne a la parrilla": {
             "precio": 35.0, 
             "icono": "🥩", 
             "disponible": True,
-            "foto": "https://unsplash.com"
+            "foto": FOTO_DEFECTO
         },
         "Bebida": {
             "precio": 6.0, 
             "icono": "🥤", 
             "disponible": True,
-            "foto": "https://unsplash.com"
+            "foto": FOTO_DEFECTO
         },
         "Combo Buffalo": {
             "precio": 25.0, 
             "icono": "🎁", 
             "disponible": True,
-            "foto": "https://unsplash.com"
+            "foto": FOTO_DEFECTO
         }
     }
     if os.path.exists(RUTA_JSON_MENU):
@@ -147,7 +150,6 @@ if es_admin:
     st.sidebar.success("✔ Modo Administrador Activo")
 elif usuario_input or clave_input:
     st.sidebar.error("❌ Credenciales incorrectas")
-
 # =========================================================
 # FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
 # =========================================================
@@ -156,9 +158,9 @@ if es_admin:
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # MÓDULO MULTIMEDIA: Formulario para añadir nuevos productos con foto URL en caliente
+    # MÓDULO MULTIMEDIA: Formulario para añadir nuevos productos con foto local
     with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO CON FOTO", expanded=False):
-        st.caption("Complete los datos para agregar un plato nuevo con su respectiva imagen web al catálogo dinámico.")
+        st.caption("Complete los datos para agregar un plato nuevo subiendo una imagen desde su dispositivo.")
         nuevo_nombre = st.text_input("Nombre del nuevo producto:", placeholder="Ej. Alitas BBQ, Papas Nativas...").strip()
         
         col_new1, col_new2 = st.columns(2)
@@ -167,20 +169,30 @@ if es_admin:
         with col_new2:
             nuevo_icono = st.text_input("Icono representativo (Emoji):", value="🍟", max_chars=2).strip()
             
-        nuevo_link_foto = st.text_input("Enlace URL de la foto del plato:", value="https://unsplash.com", placeholder="Pegue aquí el link de la imagen de internet...").strip()
+        # MODIFICADO: Ahora seleccionas tu propio archivo local de imagen
+        archivo_foto = st.file_uploader("Selecciona la foto del plato desde tu equipo:", type=["jpg", "jpeg", "png"], key="upload_nuevo_prod")
             
         if st.button("🚀 GUARDAR E INTEGRAR NUEVO PRODUCTO", use_container_width=True):
             if nuevo_nombre:
                 if nuevo_nombre not in st.session_state.menu_dinamico:
-                    # Inserción en la base de datos viva incluyendo su foto externa
+                    
+                    # Transformación binaria a String seguro Base64
+                    if archivo_foto is not None:
+                        bytes_foto = archivo_foto.getvalue()
+                        encoded_foto = base64.b64encode(bytes_foto).decode()
+                        src_final_foto = f"data:image/png;base64,{encoded_foto}"
+                    else:
+                        src_final_foto = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
+
+                    # Inserción limpia en el diccionario vivo
                     st.session_state.menu_dinamico[nuevo_nombre] = {
                         "precio": nuevo_precio,
                         "icono": nuevo_icono,
                         "disponible": True,
-                        "foto": nuevo_link_foto
+                        "foto": src_final_foto
                     }
                     guardar_menu_en_archivo(st.session_state.menu_dinamico)
-                    st.success(f"✔ ¡{nuevo_icono} {nuevo_nombre} con foto integrada guardado para siempre!")
+                    st.success(f"✔ ¡{nuevo_icono} {nuevo_nombre} con foto propia integrado con éxito!")
                     st.rerun()
                 else:
                     st.error("⚠️ Error: Ese producto ya existe en la carta actual.")
@@ -201,11 +213,15 @@ if es_admin:
             st.markdown(f"**{st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}**")
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
+            
+            # Mantiene la foto existente de manera segura al actualizar stock o precios
+            foto_existente_izq = st.session_state.menu_dinamico[p_izq].get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
+            
             st.session_state.menu_dinamico[p_izq] = {
                 "precio": p_izq_val, 
                 "icono": st.session_state.menu_dinamico[p_izq]["icono"], 
                 "disponible": p_izq_disp,
-                "foto": st.session_state.menu_dinamico[p_izq].get("foto", "https://unsplash.com")
+                "foto": foto_existente_izq
             }
             
         # Producto Derecha (Si existe en el índice)
@@ -215,11 +231,14 @@ if es_admin:
                 st.markdown(f"**{st.session_state.menu_dinamico[p_der]['icono']} {p_der}**")
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
+                
+                foto_existente_der = st.session_state.menu_dinamico[p_der].get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
+                
                 st.session_state.menu_dinamico[p_der] = {
                     "precio": p_der_val, 
                     "icono": st.session_state.menu_dinamico[p_der]["icono"], 
                     "disponible": p_der_disp,
-                    "foto": st.session_state.menu_dinamico[p_der].get("foto", "https://unsplash.com")
+                    "foto": foto_existente_der
                 }
         st.markdown("---")
         
@@ -315,8 +334,10 @@ else:
             
             with target_col:
                 if info["disponible"]:
-                    # Renderizar la foto del plato arriba con esquinas redondeadas
-                    st.markdown(f"""<img src="{info['foto']}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0px 0px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
+                    # CORREGIDO: Uso seguro de .get() para evitar caídas por KeyError y asegurar carga fluida
+                    url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
+                    
+                    st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0px 0px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
                     
                     # La casilla numérica de Streamlit se acopla abajo con borde verde
                     cantidades_ingresadas[prod] = st.number_input(

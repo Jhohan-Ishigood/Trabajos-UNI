@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("El Gran Bufalo-C#")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9c72310f65440a288a723d001f365b92379a747")]
 [assembly: System.Reflection.AssemblyProductAttribute("El Gran Bufalo-C#")]
 [assembly: System.Reflection.AssemblyTitleAttribute("El Gran Bufalo-C#")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
