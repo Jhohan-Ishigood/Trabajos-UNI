@@ -53,10 +53,10 @@ if "historial_ordenes" not in st.session_state:
     st.session_state.historial_ordenes = []
 
 MENU = {
-    "Hamburguesa": {"precio": 18, "icono": "🍔"},
-    "Carne a la parrilla": {"precio": 35, "icono": "🥩"},
-    "Bebida": {"precio": 6, "icono": "🥤"},
-    "Combo Buffalo": {"precio": 25, "icono": "🎁"}
+    "Hamburguesa": {"precio": 12, "icono": "🍔"},
+    "Carne a la parrilla": {"precio": 25, "icono": "🥩"},
+    "Bebida": {"precio": 5, "icono": "🥤"},
+    "Combo Buffalo": {"precio": 30, "icono": "🎁"}
 }
 
 # =========================================================
