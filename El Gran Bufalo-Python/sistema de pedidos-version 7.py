@@ -243,6 +243,50 @@ if es_admin:
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
 
+    # =========================================================
+    # CONFIGURACIÓN PREMIUM DE GESTIÓN DE CATEGORÍAS
+    # =========================================================
+    with st.expander("📁 ⚙️ CONFIGURACIÓN DE SECCIONES EN LA CARTA", expanded=False):
+        st.markdown("<div class='admin-cat-box'>", unsafe_allow_html=True)
+        st.caption("Añada nuevas pestañas al menú horizontal o elimine las secciones que ya no utilice en la jornada.")
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        if "lista_categorias" not in st.session_state:
+            st.session_state.lista_categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
+
+        col_cat1, col_cat2 = st.columns(2, gap="medium")
+        
+        with col_cat1:
+            st.markdown("<div class='admin-cat-card active-card'>", unsafe_allow_html=True)
+            nueva_cat = st.text_input("Nombre de la nueva sección:", placeholder="Ej. Postres, Entradas, Alitas...").strip().capitalize()
+            if st.button("➕ CREAR NUEVA SECCIÓN", use_container_width=True, key="btn_create_cat"):
+                if nueva_cat and nueva_cat not in st.session_state.lista_categorias:
+                    st.session_state.lista_categorias.append(nueva_cat)
+                    st.success(f"✔ ¡Sección '{nueva_cat}' integrada con éxito!")
+                    st.rerun()
+                elif nueva_cat in st.session_state.lista_categorias:
+                    st.error("⚠️ Error: Esta categoría ya existe del menú.")
+                else:
+                    st.error("⚠️ Error: El nombre de la sección no puede estar vacío.")
+            st.markdown("</div>", unsafe_allow_html=True)
+                    
+        with col_cat2:
+            st.markdown("<div class='admin-cat-card delete-card'>", unsafe_allow_html=True)
+            cats_borrables = [c for c in st.session_state.lista_categorias if c != "Todos"]
+            cat_a_borrar = st.selectbox("Seleccione sección a remover:", options=cats_borrables)
+            if st.button("🗑️ ELIMINAR SECCIÓN SELECCIONADA", use_container_width=True, key="btn_delete_cat"):
+                if cat_a_borrar:
+                    st.session_state.lista_categorias.remove(cat_a_borrar)
+                    if st.session_state.categoria_activa == cat_a_borrar:
+                        st.session_state.categoria_activa = "Todos"
+                    st.warning(f"🗑️ Sección '{cat_a_borrar}' removida físicamente de la carta.")
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
     # MÓDULO MULTIMEDIA: Formulario para añadir nuevos productos con foto local
     with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO CON FOTO", expanded=False):
         st.caption("Complete los datos para agregar un plato nuevo subiendo una imagen desde su dispositivo.")

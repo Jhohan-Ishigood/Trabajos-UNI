@@ -421,4 +421,65 @@ div.stAlert:has(p) {
     margin-top: 2px !important;
 }
 
+/* =========================================================
+    ESTILIZADO PREMIUM DEL GESTOR DE SECCIONES (ADMIN)
+   ========================================================= */
+.admin-cat-box {
+    background-color: #141416 !important; /* Fondo carbón profundo */
+    padding: 20px !important;
+    border-radius: 12px !important;
+    border: 1px solid #28282c !important;
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.8) !important;
+}
+
+/* Tarjetas internas para separar la creación de la eliminación */
+.admin-cat-card {
+    background-color: #1c1c22 !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+    height: 100% !important;
+}
+
+/* Tarjeta de creación: Toque Oro Búfalo elegante */
+.active-card {
+    border-left: 4px solid #f39c12 !important;
+}
+
+/* Tarjeta de eliminación: Toque rojo carmesí de advertencia */
+.delete-card {
+    border-left: 4px solid #c0392b !important;
+}
+
+/* Botón específico de crear sección (Verde esmeralda limpio) */
+button[key*="btn_create_cat"] {
+    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border: 1px solid #2ecc71 !important;
+    border-radius: 6px !important;
+    box-shadow: 0px 4px 10px rgba(39, 174, 96, 0.3) !important;
+}
+button[key*="btn_create_cat"]:hover {
+    transform: translateY(-2px) !important;
+    filter: brightness(1.15) !important;
+}
+
+/* Botón específico de eliminar sección (Gris oscuro/Rojo sobrio anti-accidentes) */
+button[key*="btn_delete_cat"] {
+    background: linear-gradient(135deg, #7f8c8d 0%, #34495e 100%) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border: 1px solid #bdc3c7 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+button[key*="btn_delete_cat"]:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #962d00 100%) !important; /* Brilla en rojo al pasar el mouse */
+    border-color: #ff4b4b !important;
+    transform: translateY(-2px) !important;
+}
 
