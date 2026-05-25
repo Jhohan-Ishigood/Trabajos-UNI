@@ -529,11 +529,24 @@ else:
 
         if metodo_pago == "Yape":
             st.info(f"--- PROCESANDO PAGO CON YAPE ---\nMonto total a yapear: S/{total_con_delivery:.2f}")
-            st.caption("[!] Abriendo tu ventana de Yape con titular: Jhohan Antoni...")
+            
+            # Verificamos si existe la imagen del QR para procesarla de forma segura
             if os.path.exists("mi_qr_yape.png"):
-                st.image("mi_qr_yape.png", caption="Código QR de Yape oficial", width=250)
+                # Convertimos la imagen local a Base64 para que el HTML la lea directo del disco sin perderse
+                with open("mi_qr_yape.png", "rb") as img_file:
+                    encoded_qr = base64.b64encode(img_file.read()).decode()
+                
+                # Inyección de la tarjeta contenedora premium centrada matemáticamente
+                st.markdown(f"""
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 25px auto; max-width: 450px; background-color: #1e1e1e; padding: 25px; border-radius: 16px; border: 2px solid #8e44ad; box-shadow: 0px 8px 25px rgba(142, 68, 173, 0.25); text-align: center;">
+                        <p style="color: #aaaaaa; font-size: 14px; margin-bottom: 15px; font-weight: bold;">[!] Abriendo tu ventana de Yape con titular: Jhohan Antoni...</p>
+                        <img src="data:image/png;base64,{encoded_qr}" style="width: 280px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;" />
+                        <span style="color: #8e44ad; font-size: 14px; font-weight: bold; letter-spacing: 1px;">🟣 CÓDIGO QR DE YAPE OFICIAL</span>
+                    </div>
+                """, unsafe_allow_html=True)
             else:
                 st.warning("[Aviso] No se encontró el archivo 'mi_qr_yape.png' en la carpeta.")
+
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
