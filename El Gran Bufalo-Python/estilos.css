@@ -14,14 +14,14 @@
     padding-top: 60px !important;
 }
 
-/* Titulado Principal con Degradado de Fuego Premium - Ajustado hacia abajo */
+/* Titulado Principal con Degradado de Fuego Premium - Altura Equilibrada */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
     font-family: 'Arial Black', Gadget, sans-serif;
     font-size: 38px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    margin-top: 110px !important; /* CORRECCIÓN: Empuja el título hacia abajo hasta tu puntero */
+    margin-top: 50px !important; /* CORRECCIÓN: Sube un poco el título al punto medio exacto */
     margin-bottom: 15px;
 }
 
