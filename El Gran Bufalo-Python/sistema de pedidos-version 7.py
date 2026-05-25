@@ -42,7 +42,7 @@ if os.path.exists(RUTA_CSS):
     with open(RUTA_CSS, "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
         # Sello de autoría global en la cabecera del sistema
-st.markdown("<div class='sello-creador'>✨ Desarrollado por Jhohan Guadalupe</div>", unsafe_allow_html=True)
+st.markdown("<div class='sello-creador'> Desarrollado por Jhohan Guadalupe 😎</div>", unsafe_allow_html=True)
 
 # --- FUNCIONES DE PERSISTENCIA Y SINCRONIZACIÓN DE LA CARTA ---
 def guardar_menu_en_archivo(menu_data):
