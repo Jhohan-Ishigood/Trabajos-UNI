@@ -589,3 +589,47 @@ section[data-testid="stSidebar"] hr {
     height: 1px !important;
     background: linear-gradient(to right, transparent, rgba(243, 156, 18, 0.3), transparent) !important;
 }
+
+/* ============================================================================
+    ESTILIZADO PREMIUM Y AGRANDADO DE LA SECCIÓN DE PAGOS (SIN TOCAR EL METRIC)
+   ============================================================================ */
+
+/* 1. Agrandamos los títulos de las preguntas (Desea delivery, Seleccione método) */
+div[data-testid="stRadio"] label p, 
+div[data-testid="stSelectbox"] label p {
+    font-size: 18px !important; /* Letra más grande y visible */
+    font-weight: 700 !important; /* Más gruesa */
+    color: #ffffff !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+}
+
+/* 2. Agrandamos los textos de las opciones del Radio Button (NO / SI) */
+div[data-testid="stRadioHorizontal"] div[role="radiogroup"] label p,
+div[data-testid="stRadio"] div[role="radiogroup"] label p {
+    font-size: 17px !important; /* Opciones más grandes para tocar fácil en el cel */
+    font-weight: 600 !important;
+    color: #e0e0e0 !important;
+}
+
+/* 3. Estilizado y agrandado de la caja del selector de pagos (Efectivo/Yape) */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    background-color: #141416 !important; /* Fondo carbón oscuro */
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important; /* Más espacioso por dentro */
+}
+
+/* Agrandamos la letra de la opción seleccionada dentro de la caja */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+}
+
+/* 4. Agrandamos el texto del resumen de artículos solicitados */
+.stApp div[data-testid="stMarkdownContainer"] p:contains("Resumen de artículos"),
+.stApp div[data-testid="stMarkdownContainer"] p:contains("Chica Morada") {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+}
