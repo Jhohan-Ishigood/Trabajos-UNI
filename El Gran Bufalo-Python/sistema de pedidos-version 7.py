@@ -500,7 +500,7 @@ else:
             """, unsafe_allow_html=True)
             
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+        st.markdown("<h2 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h2>", unsafe_allow_html=True)
         st.markdown("<br><p style='text-align: center; font-size: 24px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
@@ -638,7 +638,7 @@ else:
             """, unsafe_allow_html=True)
         
         st.markdown("---")
-        opcion_delivery = st.radio("<h3>¿Desea delivery? (+ S/6.00)</h3>", ["NO", "SI"])
+        opcion_delivery = st.radio("b¿Desea delivery? (+ S/6.00)", ["NO", "SI"])
         direccion_delivery = ""
         costo_delivery = 0.0
         tiene_delivery = False
