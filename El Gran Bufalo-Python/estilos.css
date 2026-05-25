@@ -58,3 +58,11 @@
     color: #ffffff !important;
     text-shadow: 0px 0px 8px #f39c12;
 }
+
+/* Estilizado para resaltar la zona de apertura en la esquina superior izquierda */
+button[kind="headerNoPadding"] {
+    background-color: rgba(243, 156, 18, 0.2) !important;
+    border-radius: 50% !important;
+    box-shadow: 0px 0px 8px #f39c12 !important;
+    transition: 0.3s;
+}
