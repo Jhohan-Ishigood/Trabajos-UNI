@@ -169,7 +169,7 @@ if "mostrar_login_admin" not in st.session_state:
     st.session_state.mostrar_login_admin = False
 
 st.sidebar.markdown("#### ⚙️ GESTIÓN INTERNA")
-if st.sidebar.button("🔑 Ingresar como Administrador", use_container_width=True, key="btn_toggle_admin_login"):
+if st.sidebar.button("INGRESAR COMO ADMINISTRADOR🤵‍♂️", use_container_width=True, key="btn_toggle_admin_login"):
     st.session_state.mostrar_login_admin = not st.session_state.mostrar_login_admin
 
 usuario_input = ""
@@ -191,7 +191,7 @@ elif usuario_input or clave_input:
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("#### 🕒 HORARIO DE ATENCIÓN")
-st.sidebar.caption("Lunes a Domingo: 12:00 PM - 11:00 PM")
+st.sidebar.caption("Lunes a Domingo: 8:00 AM - 11:00 PM")
 
 st.sidebar.markdown("#### 📍 NUESTRA UBICACIÓN")
 st.sidebar.caption("Av. Principal El Gran Búfalo 742, Trujillo, Perú")
@@ -258,7 +258,7 @@ if es_admin or (st.session_state.pantalla_actual == "catalogo" and not st.sessio
 # PANEL DE CONTROL DEL ADMINISTRADOR - INTEGRACIÓN DE MÓDULOS GESTORES
 # ============================================================================
 if es_admin:
-    st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='titulo-principal'>📊 PANEL DE ADMINISTRACIÓN</h1>", unsafe_allow_html=True)
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -523,7 +523,7 @@ else:
 
     # PANTALLA 2: CATÁLOGO DE PRODUCTOS (VISTA DE CLIENTE CON FILTRADO OPERATIVO)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
-        st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
+        st.markdown("<h2 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h2>", unsafe_allow_html=True)
         st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
         st.subheader(f"🍽️ SELECCIÓN DE {st.session_state.categoria_activa.upper()}")
@@ -638,7 +638,7 @@ else:
             """, unsafe_allow_html=True)
         
         st.markdown("---")
-        opcion_delivery = st.radio("¿Desea delivery? (+ S/6.00)", ["NO", "SI"])
+        opcion_delivery = st.radio("<h3>¿Desea delivery? (+ S/6.00)</h3>", ["NO", "SI"])
         direccion_delivery = ""
         costo_delivery = 0.0
         tiene_delivery = False
