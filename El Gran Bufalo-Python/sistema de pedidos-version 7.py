@@ -657,15 +657,27 @@ else:
         if metodo_pago == "Yape":
             st.info(f"--- PROCESANDO PAGO CON YAPE ---\nMonto total a yapear: S/{total_con_delivery:.2f}")
             
-            # CONTROL QR BLINDADO: Usamos la API de QuickChart para evitar bloqueos por strings largos
-            url_qr_remoto = f"https://quickchart.io"
+            # DETERMINACIÓN DE LA RUTA DE TU FOTO LOCAL EN TU COMPUTADORA
+            # Buscamos tu archivo "mi_qr_yape.png" que se ve a la izquierda en tu carpeta del proyecto
+            ruta_qr_local = os.path.join(BASE_DIR, "mi_qr_yape-Jhohan.png")
+            
+            if os.path.exists(ruta_qr_local):
+                # Leemos la foto local de tu computadora y la convertimos a formato seguro Base64
+                with open(ruta_qr_local, "rb") as qr_file:
+                    encoded_qr = base64.b64encode(qr_file.read()).decode()
+                src_imagen_qr = f"data:image/png;base64,{encoded_qr}"
+            else:
+                # Silueta de respaldo por si el archivo cambia de nombre
+                src_imagen_qr = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
+
             st.markdown(f"""
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 25px auto; max-width: 450px; background-color: #1e1e24; padding: 25px; border-radius: 16px; border: 2px solid #8e44ad; box-shadow: 0px 8px 25px rgba(142, 68, 173, 0.25); text-align: center;">
                     <p style="color: #aaaaaa; font-size: 14px; margin-bottom: 15px; font-weight: bold;">[!] Escanee con la cámara de su celular para pagar:</p>
-                    <img src="{url_qr_remoto}" style="width: 260px; height: 260px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;" />
+                    <img src="{src_imagen_qr}" style="width: 260px; height: 260px; object-fit: contain; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;" />
                     <span style="color: #8e44ad; font-size: 14px; font-weight: bold; letter-spacing: 1px;">🟣 CÓDIGO QR DE YAPE OFICIAL</span>
                 </div>
             """, unsafe_allow_html=True)
+
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
