@@ -220,3 +220,36 @@ div[data-testid="stMetricLabel"] p {
 .stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
     color: #ffffff !important;
 }
+
+/* =========================================================
+    ESTILIZADO PREMIUM Y CENTRADO DE LA SECCIÓN DE YAPE
+   ========================================================= */
+
+/* 1. Centra la imagen del QR y le da un sombreado tridimensional elegante */
+[data-testid="stImage"] img, div[data-testid="element-container"] img {
+    margin: 0 auto !important; /* Centrado matemático perfecto */
+    display: block !important;
+    border-radius: 14px !important; /* Bordes redondeados premium */
+    box-shadow: 0px 6px 20px rgba(142, 68, 173, 0.4) !important; /* Brillo sutil morado Yape */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 2. Centra los textos informativos del Yape (Titular y subtítulo) */
+div[data-testid="stMarkdownContainer"] caption, 
+div.stMarkdown p:contains("Abriendo tu ventana"),
+div.stMarkdown p:contains("Código QR de Yape") {
+    text-align: center !important;
+    font-weight: bold !important;
+    color: #cccccc !important;
+    font-size: 15px !important;
+    margin-top: 8px !important;
+}
+
+/* 3. Estiliza el cuadro informativo azul de procesamiento para que sea compacto y centrado */
+div.stAlert:has(p:contains("PROCESANDO PAGO CON YAPE")) {
+    max-width: 600px !important;
+    margin: 15px auto !important;
+    border-radius: 8px !important;
+    border-left: 5px solid #8e44ad !important; /* Línea guía color morado Yape */
+    background-color: #111a24 !important;
+}
