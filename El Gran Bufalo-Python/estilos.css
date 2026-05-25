@@ -633,3 +633,103 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
     font-size: 16px !important;
     line-height: 1.6 !important;
 }
+
+/* ============================================================================
+    DISEÑO MAESTRO UNIFICADO DE PUNTA A PUNTA PARA LA PASARELA DE PAGOS
+   ============================================================================ */
+
+/* 1. ESTILIZADO DE LOS TÍTULOS Y REQUISITOS GENERALES DE LA SECCIÓN */
+.stApp h3:contains("GESTIÓN DE ENTREGA"), 
+.stApp div[data-testid="stMarkdownContainer"] p strong:contains("Resumen de artículos") {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #f39c12 !important; /* Oro Búfalo */
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 15px !important;
+}
+
+/* 2. DISEÑO PREMIUM PARA EL RESUMEN DE ARTÍCULOS SOLICITADOS */
+.stApp div[data-testid="stMarkdownContainer"] ul {
+    list-style: none !important; /* Quitamos los puntos nativos aburridos */
+    padding: 0 !important;
+    margin: 10px 0 !important;
+}
+.stApp div[data-testid="stMarkdownContainer"] li {
+    background-color: #1c1c22 !important; /* Caja carbón premium */
+    border-left: 4px solid #f39c12 !important; /* Hilo dorado de acento */
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 3. CAJAS DE ENTRADA DE TEXTO Y FORMULARIOS (DIRECCIÓN, TITULAR, DÍGITOS) */
+div[data-testid="stTextInput"] input, 
+div[data-testid="stNumberInput"] input {
+    background-color: #141416 !important;
+    color: #ffffff !important;
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+}
+div[data-testid="stTextInput"] input:focus, 
+div[data-testid="stNumberInput"] input:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
+}
+
+/* 4. TÍTULOS DE LOS SELECTORES Y CAJAS DE ENTRADA (MÉTODOS DE PAGO) */
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stTextInput"] label p,
+div[data-testid="stNumberInput"] label p {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+}
+
+/* 5. SELECTOR DE MÉTODOS DE PAGO COMPACTO Y MODERNO (EFECTIVO/YAPE/TARJETA) */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    background-color: #1c1c22 !important;
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+}
+
+/* 6. CAJAS DE ALERTA E INFORMACIÓN EN EL FLUJO FINAL (YAPE/TARJETA/ERRORES) */
+div.stAlert {
+    background-color: #111a24 !important; /* Fondo azul/negro premium nocturno */
+    border: 1px solid #1f3347 !important;
+    border-left: 5px solid #f39c12 !important; /* Acento dorado */
+    border-radius: 10px !important;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.6) !important;
+    padding: 15px !important;
+}
+div.stAlert p {
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+}
+
+/* Si es una alerta de error nativa, le ponemos acento carmesí en lugar de dorado */
+div.stAlert:has(svg[data-testid="stNotificationIconError"]) {
+    border-left: 5px solid #c0392b !important;
+    background-color: #1a1111 !important;
+    border-color: #471f1f !important;
+}
