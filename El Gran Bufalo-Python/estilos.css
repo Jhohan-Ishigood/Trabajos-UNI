@@ -114,3 +114,25 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
     content: "" !important;
     display: none !important;
 }
+
+/* 1. OCULTA POR COMPLETO EL MENÚ DE LOS TRES PUNTOS DE LA DERECHA */
+#MainMenu {
+    display: none !important;
+}
+
+/* 2. OCULTA TODA LA BARRA DE HERRAMIENTAS DE STREAMLIT DE LA DERECHA (COMPARTIR, ICONO DE GIT, ETC.) */
+div[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+div[data-testid="stHeader"] > div:first-child {
+    display: none !important;
+}
+
+/* 3. ASEGURA QUE SOLO SE VEA EL BOTÓN INTEGRADO DE LA IZQUIERDA */
+button[kind="headerNoPadding"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+}
