@@ -27,6 +27,14 @@ RUTA_HTML = os.path.join(BASE_DIR, "boleta_plantilla.html")
 RUTA_JSON_MENU = os.path.join(BASE_DIR, "menu_config.json")
 RUTA_JSON_HISTORIAL = os.path.join(BASE_DIR, "historial_config.json")  
 
+# =========================================================
+# LECTURA Y CARGA EN TIEMPO REAL DE LA HOJA DE ESTILOS CSS
+# =========================================================
+if os.path.exists(RUTA_CSS):
+    with open(RUTA_CSS, "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 # --- FUNCIONES DE PERSISTENCIA Y SINCRONIZACIÓN DE LA CARTA ---
 def guardar_menu_en_archivo(menu_data):
     import json
