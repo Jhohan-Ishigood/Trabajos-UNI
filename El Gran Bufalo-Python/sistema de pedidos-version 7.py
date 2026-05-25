@@ -124,7 +124,7 @@ if "total_acumulado" not in st.session_state:
 if "pedido_guardado" not in st.session_state:
     st.session_state.pedido_guardado = False
 if "pantalla_actual" not in st.session_state:
-    st.session_state.pantalla_actual = "bienvenida"
+    st.session_state.pantalla_actual = "catalogo"
 
 # ANCLAJE DE RELOJ OFICIAL PARA PERÚ (GMT-5) SINCRO WEB
 zona_peru = timezone(timedelta(hours=-5))
