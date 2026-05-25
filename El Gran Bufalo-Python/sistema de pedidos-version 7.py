@@ -51,27 +51,32 @@ def cargar_menu_desde_archivo():
             "precio": 18.0, 
             "icono": "🍔", 
             "disponible": True,
-            "foto": FOTO_DEFECTO
+            "foto": FOTO_DEFECTO,
+            "stock": 15  # <--- Unidades iniciales disponibles
         },
         "Carne a la parrilla": {
             "precio": 35.0, 
             "icono": "🥩", 
             "disponible": True,
-            "foto": FOTO_DEFECTO
+            "foto": FOTO_DEFECTO,
+            "stock": 10
         },
         "Jugo": {
             "precio": 6.0, 
             "icono": "🥤", 
             "disponible": True,
-            "foto": FOTO_DEFECTO
+            "foto": FOTO_DEFECTO,
+            "stock": 20
         },
         "Combo Buffalo": {
             "precio": 25.0, 
             "icono": "🎁", 
             "disponible": True,
-            "foto": FOTO_DEFECTO
+            "foto": FOTO_DEFECTO,
+            "stock": 8
         }
     }
+
     if os.path.exists(RUTA_JSON_MENU):
         try:
             with open(RUTA_JSON_MENU, "r", encoding="utf-8") as archivo:
@@ -439,27 +444,39 @@ else:
             info = st.session_state.menu_dinamico[prod]
             target_col = col1 if i % 2 == 0 else col2
             
+            # REGLA DE SEGURIDAD: Evaluamos si el producto tiene porciones en cocina
+            stock_actual = info.get("stock", 0)
+            esta_disponible = info["disponible"] and stock_actual > 0
+            
             with target_col:
-                if info["disponible"]:
+                if esta_disponible:
                     url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
                     
                     st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
                     
+                    # DINÁMICO: Si quedan 3 porciones o menos, cambia por una alerta visual
+                    texto_precio = f"S/{info['precio']:.2f}"
+                    if stock_actual <= 3:
+                        texto_precio = f"🔥 ¡SOLO QUEDAN {stock_actual}! 🔥"
+                    
                     st.markdown(f"""
                         <div class='product-card-bottom'>
                             <span class='product-title'>{info['icono']} {prod}</span>
-                            <span class='product-price'>S/{info['precio']:.2f}</span>
+                            <span class='product-price' style='font-size:16px;'>{texto_precio}</span>
                         </div>
                     """, unsafe_allow_html=True)
                     
+                    # CONTROL: El cliente no puede pedir un número mayor al stock real de la cocina
                     cantidades_ingresadas[prod] = st.number_input(
                         f"Cantidad a llevar de {prod}:", 
-                        min_value=0, step=1, key=f"cat_{prod}", label_visibility="collapsed"
+                        min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
                     )
                     st.markdown("<br>", unsafe_allow_html=True)
                 else:
+                    # Bloqueo total si el plato llega a 0 porciones en la jornada
                     st.markdown(f"""<div style="width:100%; height:200px; background-color:#222; border-radius:12px 12px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:50px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
-                    st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO EN COCINA)</p></div>", unsafe_allow_html=True)
+
 
         st.markdown("---")
         
