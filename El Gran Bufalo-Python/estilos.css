@@ -1,8 +1,13 @@
 /* =========================================================
-    PARTE 1: ESTILOS GLOBALES Y CABECERA (EL GRAN BÚFALO)
+    PARTE 1: ARQUITECTURA VISUAL GLOBAL - EL GRAN BÚFALO
    ========================================================= */
 
-/* Estilos Globales del Sistema El Gran Búfalo */
+/* Estilos Generales y Tipografía del Sistema */
+.stApp {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Titulado Principal con Degradado de Fuego Premium */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
@@ -12,12 +17,12 @@
     margin-bottom: 10px;
 }
 
-/* Oculta por completo el menú original de tres puntos de Streamlit a la derecha */
+/* Ocultación Absoluta del Menú de Tres Puntos Nativo de Streamlit */
 #MainMenu {
     display: none !important;
 }
 
-/* Oculta toda la barra de herramientas superior del servidor de Streamlit */
+/* Remoción de la Barra Superior de Despliegue del Servidor */
 div[data-testid="stHeader"] {
     background-color: transparent !important;
 }
@@ -25,7 +30,7 @@ div[data-testid="stHeader"] > div:first-child {
     display: none !important;
 }
 
-/* Diseña el botón personalizado "☰ Menú de Opciones" en la esquina izquierda */
+/* Reconfiguración Estética del Botón "☰ Menú de Opciones" (Esquina Superior Izquierda) */
 button[kind="headerNoPadding"] svg {
     display: none !important;
 }
@@ -47,25 +52,29 @@ button[kind="headerNoPadding"]::after {
     font-family: 'Segoe UI', sans-serif !important;
 }
 
-/* Evita que el texto del botón se duplique en subelementos de la barra */
+/* Bloqueo de Duplicación del Botón de Cabecera en la Barra de Despliegue */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
 .stAppDeployDropdown button::after {
     content: "" !important;
     display: none !important;
 }
 
-/* Centrado Premium del contenido en el medio de la pantalla */
+/* Centrado Estructural de la Pantalla Principal */
 .block-container {
     max-width: 800px !important;
     margin: 0 auto !important;
     padding-top: 60px !important;
 }
-
 /* =========================================================
-    PARTE 2: BARRA LATERAL (SIDEBAR MULTIUSO) Y CATÁLOGO
+    PARTE 2: BARRA LATERAL (SIDEBAR UNIFICADO) Y CATÁLOGO
    ========================================================= */
 
-/* Botón rojo personalizado para cerrar la barra lateral */
+/* Fondo general del menú lateral */
+section[data-testid="stSidebar"] {
+    background-color: #111113 !important;
+}
+
+/* Botón rojo personalizado para replegar o cerrar la barra lateral */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
     background-color: #c0392b !important;
     border: none !important;
@@ -82,23 +91,62 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]:hover {
     box-shadow: 0px 0px 8px rgba(231, 76, 60, 0.6) !important;
 }
 
-/* Separadores informativos en formato de tarjetas oscuras independientes */
+/* Tarjetas unificadas de la barra lateral: legibles, lindas y ordenadas */
 section[data-testid="stSidebar"] .element-container:has(p), 
 section[data-testid="stSidebar"] .element-container:has(h4) {
-    background-color: #1a1a1a !important;
-    padding: 12px 15px !important;
-    border-radius: 8px !important;
-    border-left: 3px solid #f39c12 !important;
-    margin-bottom: 10px !important;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.4) !important;
+    background-color: #1e1e24 !important; /* Gris oscuro moderno y vivo */
+    padding: 14px 16px !important;
+    border-radius: 12px !important; /* Bordes más redondeados */
+    border-left: 4px solid #f39c12 !important; /* Acento dorado del restaurante */
+    margin-bottom: 12px !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Brillo interactivo en los cuadros del inicio de sesión administrativo */
+/* Títulos principales dentro de la barra lateral en blanco brillante */
+section[data-testid="stSidebar"] h4, 
+section[data-testid="stSidebar"] b,
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong {
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Textos informativos de la barra lateral en blanco suave para máxima nitidez */
+section[data-testid="stSidebar"] p, 
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] caption {
+    color: #e0e0e0 !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+}
+
+/* Rediseño completo y estilizado del botón de inicio de sesión administrativo */
+section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; /* Degradado de fuego */
+    color: #ffffff !important; /* Letras blancas nítidas */
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    border: 1px solid #ff9f43 !important; /* Micro borde iluminado */
+    padding: 12px !important;
+    box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
+    transition: transform 0.2s ease, filter 0.2s ease !important;
+    text-transform: none !important;
+}
+section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"]:hover {
+    transform: translateY(-2px) !important;
+    filter: brightness(1.15) !important;
+    color: #ffffff !important;
+}
+
+/* Iluminación interactiva para las cajas de login del administrador */
 section[data-testid="stSidebar"] input[type="text"], 
 section[data-testid="stSidebar"] input[type="password"] {
     background-color: #121212 !important;
     border: 1px solid #333 !important;
     border-radius: 6px !important;
+    color: #ffffff !important;
 }
 section[data-testid="stSidebar"] input[type="text"]:focus, 
 section[data-testid="stSidebar"] input[type="password"]:focus {
@@ -106,7 +154,19 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
 }
 
-/* Tarjeta inferior de producto con textos gigantes y precio dorado */
+/* Botón de WhatsApp de Soporte Técnico en el menú lateral */
+section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
+    background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%) !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    box-shadow: 0px 4px 12px rgba(37, 211, 102, 0.3) !important;
+    border: none !important;
+}
+
+/* Estructura inferior de las tarjetas de platos (Food Cards) */
 .product-card-bottom {
     background-color: #1e1e1e !important;
     padding: 15px;
@@ -129,27 +189,27 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     color: #f39c12 !important;
     font-family: 'Impact', Charcoal, sans-serif;
 }
-/* Pie de página de Redes Sociales (Footer) ORIGINAL */
+/* =========================================================
+    PARTE 3: PASARELA DE PAGOS Y REDES SOCIALES ORIGINALES
+   ========================================================= */
+
+/* Pie de página de Redes Sociales (Footer) ORIGINAL RESTAURADO */
 .social-footer {
-    text-align: center;
-    background-color: rgba(15, 15, 15, 0.85);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #222;
-    margin-top: 40px;
+    text-align: center !important;
+    background-color: rgba(15, 15, 15, 0.85) !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+    border: 1px solid #222222 !important;
+    margin-top: 40px !important;
     max-width: 600px !important;
     margin: 40px auto 0 auto !important;
 }
-.social-icon {
+.social-icon, .social-footer a {
     font-size: 16px !important;
-    color: #f39c12 !important;
+    color: #f39c12 !important; /* Letras Oro Búfalo original */
     text-decoration: none !important;
     font-weight: bold !important;
 }
-
-/* =========================================================
-   PARTE 3: GESTIÓN DE ENTREGA Y PAGO (VERSION ESTABLE)
-   ========================================================= */
 
 /* Monto Total a Procesar en Verde Esmeralda Neón Tridimensional */
 div[data-testid="stMetricValue"] {
@@ -205,7 +265,7 @@ div[data-testid="element-container"]:has(iframe) + div.stButton > button,
     padding: 10px !important;
 }
 
-/* Aclara los textos generales de los labels para que no se pierdan con el fondo */
+/* Aclara los textos generales de los labels de entrada del formulario */
 .stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
     color: #ffffff !important;
 }
@@ -216,10 +276,10 @@ div[data-testid="element-container"]:has(iframe) + div.stButton > button,
 
 /* 1. Centra la imagen del QR y le da un sombreado tridimensional elegante */
 [data-testid="stImage"] img, div[data-testid="element-container"] img {
-    margin: 0 auto !important; /* Centrado matemático perfecto */
+    margin: 0 auto !important;
     display: block !important;
-    border-radius: 14px !important; /* Bordes redondeados premium */
-    box-shadow: 0px 6px 20px rgba(142, 68, 173, 0.4) !important; /* Brillo sutil morado Yape */
+    border-radius: 14px !important;
+    box-shadow: 0px 6px 20px rgba(142, 68, 173, 0.4) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -233,68 +293,10 @@ div.stMarkdown p[style*="text-align: center"] {
     margin-top: 8px !important;
 }
 
-/* 3. Estiliza el cuadro informativo azul de procesamiento para que sea compacto y centrado */
+/* 3. Estiliza el cuadro informativo azul de procesamiento para Yape */
 div.stAlert:has(p) {
     max-width: 600px !important;
     margin: 15px auto !important;
     border-radius: 8px !important;
     background-color: #111a24 !important;
-}
-
-/* =========================================================
-    REDISEÑO DE ULTRA LUJO PARA LA BARRA LATERAL (SIDEBAR)
-   ========================================================= */
-
-/* Fondo general del sidebar más elegante y oscuro */
-section[data-testid="stSidebar"] {
-    background-color: #111113 !important;
-}
-
-/* Transformación de los bloques informativos en Tarjetas Premium */
-section[data-testid="stSidebar"] .element-container:has(p), 
-section[data-testid="stSidebar"] .element-container:has(h4) {
-    background-color: #18181c !important; /* Negro carbón profundo */
-    padding: 16px 18px !important; /* Más espacio interno para respirar */
-    border-radius: 10px !important; /* Bordes más suaves y modernos */
-    border-left: 4px solid #f39c12 !important; /* Línea de acento Oro Búfalo */
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important; /* Micro brillo superior */
-    margin-bottom: 14px !important; /* Separación elegante entre bloques */
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6) !important; /* Sombra con mayor profundidad */
-}
-
-/* Estilizado de los Títulos de las Secciones (Gestión, Horario, Ubicación) */
-section[data-testid="stSidebar"] h4, 
-section[data-testid="stSidebar"] b {
-    color: #ffffff !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    font-size: 14px !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-}
-
-/* Estilizado de los Subtextos (Dirección, Horas) */
-section[data-testid="stSidebar"] p, 
-section[data-testid="stSidebar"] span {
-    color: #aeaeaf !important; /* Gris claro que no cansa la vista */
-    font-size: 13px !important;
-    line-height: 1.5 !important;
-}
-
-/* Botón interactivo de WhatsApp Premium con degradado vivo */
-section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
-    background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%) !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-    border-radius: 8px !important;
-    border: none !important;
-    box-shadow: 0px 5px 15px rgba(37, 211, 102, 0.3) !important;
-    transition: all 0.3s ease !important;
-}
-
-section[data-testid="stSidebar"] button:has(span:contains("Chatear")):hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0px 8px 20px rgba(37, 211, 102, 0.5) !important;
-    filter: brightness(1.1) !important;
 }
