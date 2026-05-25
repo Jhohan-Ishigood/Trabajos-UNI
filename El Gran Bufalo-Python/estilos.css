@@ -352,40 +352,59 @@ div.stAlert:has(p) {
     BARRA DE NAVEGACIÓN SUPERIOR HORIZONTAL (ESTILO NETFLIX)
    ========================================================= */
 .netflix-navbar {
-    background-color: rgba(17, 17, 19, 0.95) !important; /* Fondo negro semi-transparente */
-    backdrop-filter: blur(8px) !important;
-    padding: 10px 16px !important;
+    background-color: #141414 !important; /* Fondo oscuro sólido de Netflix */
+    padding: 12px 20px !important;
     border-radius: 8px !important;
-    border: 1px solid #2c2c2c !important;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #222222 !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* Modificación de los botones para que actúen como pestañas de texto de streaming */
-.netflix-navbar div[data-testid="column"] button {
-    background: transparent !important;
-    color: #aaaaaa !important; /* Texto gris de Netflix por defecto */
-    border: none !important;
-    font-size: 15px !important;
+/* REFORZADO: Forzamos a que las columnas de Streamlit se alineen en una sola línea horizontal */
+.netflix-navbar div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 15px !important;
+}
+
+/* BLINDAJE: Quitamos los bloques naranjas gigantes y los volvemos texto plano elegante */
+.netflix-navbar button,
+.netflix-navbar div[data-testid="column"] button,
+.netflix-navbar [data-testid="stHorizontalBlock"] button {
+    background: transparent !important; /* Quitamos el fondo naranja */
+    background-color: transparent !important;
+    color: #e5e5e5 !important; /* Blanco suave clásico de Netflix */
+    border: none !important; /* Eliminamos cualquier borde o contorno */
+    font-size: 14px !important;
     font-weight: 600 !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
     text-transform: none !important;
     box-shadow: none !important;
-    transition: color 0.2s ease-in-out, transform 0.2s ease !important;
-    padding: 6px 2px !important;
+    height: auto !important; /* Evita que se estiren verticalmente */
+    width: auto !important;
+    padding: 4px 8px !important;
+    margin: 0 !important;
+    transition: color 0.2s ease-in-out !important;
 }
 
-/* Efecto Hover: Cuando el cliente pasa el mouse, el texto cambia a Oro Búfalo */
+/* Efecto Hover interactivo: Cambia a tu color corporativo Oro Búfalo */
+.netflix-navbar button:hover,
 .netflix-navbar div[data-testid="column"] button:hover {
-    color: #f39c12 !important;
-    transform: scale(1.04) !important;
+    color: #f39c12 !important; /* Oro Búfalo interactivo */
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
-/* Rediseño estilizado para la caja de la barra de búsqueda a la derecha */
+/* Estilizado premium de la barra de búsqueda integrada a la derecha */
 .netflix-navbar div[data-testid="stTextInput"] input {
-    background-color: rgba(0, 0, 0, 0.6) !important;
-    border: 1px solid #444444 !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    border: 1px solid #333333 !important;
     border-radius: 4px !important;
     color: #ffffff !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
+    padding: 6px 10px !important;
 }
 .netflix-navbar div[data-testid="stTextInput"] input:focus {
     border-color: #f39c12 !important;
