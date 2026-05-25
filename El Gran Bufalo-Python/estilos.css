@@ -136,3 +136,23 @@ button[kind="headerNoPadding"] {
     justify-content: center !important;
     z-index: 999999 !important;
 }
+
+/* 1. CENTRA Y ACOTA TODO EL CONTENIDO PRINCIPAL DE LA PÁGINA */
+.block-container {
+    max-width: 800px !important; /* Limita el ancho para que no se estire a los lados */
+    margin: 0 auto !important;   /* Lo centra matemáticamente en la pantalla */
+    padding-top: 60px !important;
+}
+
+/* 2. OPTIMIZA EL DISEÑO DEL BOTÓN "EMPEZAR MI PEDIDO" */
+button[key="button"] {
+    max-width: 500px !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* 3. ESTILIZA EL CONTENEDOR DE REDES SOCIALES PARA QUE QUEDE COMPACTO */
+.social-footer {
+    max-width: 600px !important;
+    margin: 40px auto 0 auto !important;
+}
