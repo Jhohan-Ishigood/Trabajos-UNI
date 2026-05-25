@@ -266,7 +266,6 @@ if es_admin:
         with col_ed1:
             st.markdown(f"### {st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}")
             
-            # Previsualización de la foto actual estilizada
             foto_actual_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
             if foto_actual_izq:
                 st.markdown(f"""<img src="{foto_actual_izq}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -274,31 +273,35 @@ if es_admin:
             p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
             p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
             
+            # NUEVO: Cuadro numérico para controlar y recargar stock desde el panel
+            p_izq_stock = st.number_input(f"Stock Disponible - {p_izq}:", min_value=0, value=int(st.session_state.menu_dinamico[p_izq].get("stock", 10)), step=1, key=f"s_{p_izq}")
+            
             foto_cambio_izq = st.file_uploader(f"Actualizar foto de {p_izq}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_izq}")
             
             if foto_cambio_izq is not None:
                 bytes_f = foto_cambio_izq.getvalue()
                 encoded_f = base64.b64encode(bytes_f).decode()
-                foto_existente_izq = f"data:image/png;base64,{encoded_f}"
+                foto_existing_izq = f"data:image/png;base64,{encoded_f}"
             else:
-                foto_existente_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
+                foto_existing_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
             
             st.session_state.menu_dinamico[p_izq] = {
                 "precio": p_izq_val, 
                 "icono": st.session_state.menu_dinamico[p_izq]["icono"], 
                 "disponible": p_izq_disp,
-                "foto": foto_existente_izq
+                "foto": foto_existing_izq,
+                "stock": p_izq_stock  # <-- Guarda el stock en la base de datos
             }
             
             if st.button(f"❌ Eliminar {p_izq}", key=f"del_{p_izq}", use_container_width=True):
                 eliminar_producto = p_izq
-        # Producto Derecha (Si existe en el índice)
+                
+        # Producto Derecha (Si existe)
         if i + 1 < len(productos_lista):
             p_der = productos_lista[i+1]
             with col_ed2:
                 st.markdown(f"### {st.session_state.menu_dinamico[p_der]['icono']} {p_der}")
                 
-                # Previsualización de la foto actual estilizada
                 foto_actual_der = st.session_state.menu_dinamico[p_der].get("foto", "")
                 if foto_actual_der:
                     st.markdown(f"""<img src="{foto_actual_der}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -306,33 +309,30 @@ if es_admin:
                 p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                 p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
                 
+                # NUEVO: Cuadro numérico para controlar y recargar stock de la derecha
+                p_der_stock = st.number_input(f"Stock Disponible - {p_der}:", min_value=0, value=int(st.session_state.menu_dinamico[p_der].get("stock", 10)), step=1, key=f"s_{p_der}")
+                
                 foto_cambio_der = st.file_uploader(f"Actualizar foto de {p_der}:", type=["jpg", "jpeg", "png"], key=f"f_up_{p_der}")
                 
                 if foto_cambio_der is not None:
                     bytes_f = foto_cambio_der.getvalue()
                     encoded_f = base64.b64encode(bytes_f).decode()
-                    foto_existente_der = f"data:image/png;base64,{encoded_f}"
+                    foto_existing_der = f"data:image/png;base64,{encoded_f}"
                 else:
-                    foto_existente_der = st.session_state.menu_dinamico[p_der].get("foto", "")
+                    foto_existing_der = st.session_state.menu_dinamico[p_der].get("foto", "")
                 
                 st.session_state.menu_dinamico[p_der] = {
                     "precio": p_der_val, 
                     "icono": st.session_state.menu_dinamico[p_der]["icono"], 
                     "disponible": p_der_disp,
-                    "foto": foto_existente_der
+                    "foto": foto_existing_der,
+                    "stock": p_der_stock  # <-- Guarda el stock en la base de datos
                 }
                 
                 if st.button(f"❌ Eliminar {p_der}", key=f"del_{p_der}", use_container_width=True):
                     eliminar_producto = p_der
         st.markdown("---")
-        
-    # Lógica de eliminación inmediata física
-    if eliminar_producto is not None:
-        del st.session_state.menu_dinamico[eliminar_producto]
-        guardar_menu_en_archivo(st.session_state.menu_dinamico)
-        st.warning(f"🗑️ Producto '{eliminar_producto}' removido permanentemente de la base de datos.")
-        st.rerun()
-        
+
     if st.button("💾 CONFIRMAR Y SINCRONIZAR CAMBIOS DE LA CARTA", use_container_width=True):
         guardar_menu_en_archivo(st.session_state.menu_dinamico)
         st.success("✔ ¡Cambios de la carta guardados físicamente con éxito!")
@@ -615,6 +615,15 @@ else:
                     "Método Pago": metodo_pago,
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
+                
+                # DESCUENTO AUTOMÁTICO DE STOCK EN COCINA EN TIEMPO REAL
+                for item in st.session_state.carrito:
+                    prod_comprado = item["producto"]
+                    cant_comprada = item["cantidad"]
+                    st.session_state.menu_dinamico[prod_comprado]["stock"] = max(0, st.session_state.menu_dinamico[prod_comprado].get("stock", 10) - cant_comprada)
+                
+                # Sincronizamos los cambios inmediatamente en el archivo físico
+                guardar_menu_en_archivo(st.session_state.menu_dinamico)
                 
                 guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
