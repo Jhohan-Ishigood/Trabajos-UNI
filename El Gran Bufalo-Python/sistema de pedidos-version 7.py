@@ -480,9 +480,7 @@ if es_admin:
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
     # PANTALLA 1: BIENVENIDA LIMPIA CON TEXTURIZACIÓN EN EL FONDO LOCAL
-        # Sello de autoría premium discreto para la esquina superior derecha
-        st.markdown("<div class='sello-creador'>✨ Desarrollado por Jhohan Guadalupe</div>", unsafe_allow_html=True)
-
+    if st.session_state.pantalla_actual == "bienvenida":
         if os.path.exists(URL_BANNER_LOCAL):
             with open(URL_BANNER_LOCAL, "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode()
@@ -518,6 +516,8 @@ else:
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
+
+
     # PANTALLA 2: CATÁLOGO DE PRODUCTOS (VISTA DE CLIENTE CON FILTRADO OPERATIVO)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
