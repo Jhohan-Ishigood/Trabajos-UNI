@@ -250,7 +250,7 @@ section[data-testid="stSidebar"] hr {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    margin-top: 40px !important; /* CORRECCIÓN: Empuja TODA la barra 40 píxeles hacia abajo */
+    margin-top: 85px !important; /* CORRECCIÓN: Empuja TODA la barra 40 píxeles hacia abajo */
     margin-bottom: 15px !important;
     display: block !important;
     width: 100% !important;
