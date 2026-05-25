@@ -476,8 +476,18 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
+        # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
+        # TRUCO TÉCNICO COMPARTIDO: Código en JavaScript para forzar al navegador a subir al inicio
+        components.html(
+            """
+            <script>
+                window.parent.document.querySelector('.stApp').scrollTo({top: 0, behavior: 'smooth'});
+            </script>
+            """,
+            height=0,
+        )
+        
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
         
         st.markdown("**Resumen de artículos solicitados:**")
