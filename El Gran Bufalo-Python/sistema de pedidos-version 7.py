@@ -659,7 +659,7 @@ else:
             
             # DETERMINACIÓN DE LA RUTA DE TU FOTO LOCAL EN TU COMPUTADORA
             # Buscamos tu archivo "mi_qr_yape.png" que se ve a la izquierda en tu carpeta del proyecto
-            ruta_qr_local = os.path.join(BASE_DIR, "mi_qr_yape-Jhohan.png")
+            ruta_qr_local = os.path.join(BASE_DIR, "mi_qr_yape de Jhohan.png")
             
             if os.path.exists(ruta_qr_local):
                 # Leemos la foto local de tu computadora y la convertimos a formato seguro Base64
