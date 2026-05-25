@@ -377,7 +377,9 @@ else:
         st.markdown("<br>", unsafe_allow_html=True)
         
         # Botón premium superior para desplegar el menú de la izquierda con las 3 rayitas
-        col_menu_btn, _ = st.columns()
+                # CORREGIDO: Se especifica el número de columna para evitar el TypeError
+        if st.button("☰ Menú de Opciones", use_container_width=True, key="btn_abrir_sidebar"):
+            st.toast("⬅️ Haz clic en la pequeña flecha '>' en la esquina superior izquierda para desplegar el menú.", icon="📱")
         with col_menu_btn:
             if st.button("☰ Menú de Opciones", use_container_width=True, key="btn_abrir_sidebar"):
                 st.toast("⬅️ Haz clic en la flecha '>' arriba a la izquierda para desplegar el menú completo.", icon="📱")
