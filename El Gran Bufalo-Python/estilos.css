@@ -1,308 +1,242 @@
-/* ============================================================================
-    PARTE 1: ARQUITECTURA VISUAL DE LUJO - EL GRAN BÚFALO (STEAKHOUSE PREMIUM)
-   ============================================================================ */
+/* =========================================================
+    PARTE 1: ESTILOS GLOBALES Y CABECERA (EL GRAN BÚFALO)
+   ========================================================= */
 
-/* 1. Fondo Corporativo Texturizado y Configuración del Lienzo */
-.stApp {
-    background: radial-gradient(circle at 50% 30%, #1c140e 0%, #0a0806 70%, #020202 100%) !important;
-    font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif !important;
-}
-
-/* Contenedor central flotante con márgenes estilizados */
-.block-container {
-    max-width: 850px !important;
-    margin: 0 auto !important;
-    padding-top: 50px !important;
-    padding-bottom: 50px !important;
-}
-
-/* 2. Tipografía y Título Principal Oro Cepillado */
+/* Estilos Globales del Sistema El Gran Búfalo */
 .titulo-principal {
     text-align: center;
-    background: linear-gradient(135deg, #ffe066 0%, #f39c12 50%, #d35400 100%);
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    font-family: 'Arial Black', 'Impact', sans-serif;
-    font-size: 42px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.9));
-    margin-bottom: 15px;
-    animation: sutilBrillo 3s ease-in-out infinite alternate;
+    color: #f39c12;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 38px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 10px;
 }
 
-@keyframes sutilBrillo {
-    0% { filter: drop-shadow(0px 4px 8px rgba(243, 156, 18, 0.2)); }
-    100% { filter: drop-shadow(0px 6px 15px rgba(243, 156, 18, 0.5)); }
+/* Oculta por completo el menú original de tres puntos de Streamlit a la derecha */
+#MainMenu {
+    display: none !important;
 }
 
-/* 3. Hackeo Estético de Barras y Botón de Opciones Premium */
-#MainMenu { display: none !important; }
-div[data-testid="stHeader"] { background-color: transparent !important; }
-div[data-testid="stHeader"] > div:first-child { display: none !important; }
+/* Oculta toda la barra de herramientas superior del servidor de Streamlit */
+div[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+div[data-testid="stHeader"] > div:first-child {
+    display: none !important;
+}
 
-button[kind="headerNoPadding"] svg { display: none !important; }
+/* Diseña el botón personalizado "☰ Menú de Opciones" en la esquina izquierda */
+button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
 button[kind="headerNoPadding"] {
-    background: linear-gradient(135deg, #261c14 0%, #140f0a 100%) !important;
+    background-color: #1e1e1e !important;
     border: 1px solid #f39c12 !important;
-    border-radius: 8px !important;
-    padding: 8px 18px !important;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.5) !important;
-    transition: all 0.3s ease !important;
+    border-radius: 6px !important;
+    padding: 6px 14px !important;
+    height: auto !important;
+    width: auto !important;
+    margin-left: 10px !important;
+    margin-top: 5px !important;
 }
 button[kind="headerNoPadding"]::after {
-    content: "🥩 CARTA INDUSTRIAL" !important;
+    content: "☰ Menú de Opciones" !important;
     color: #f39c12 !important;
-    font-weight: 800 !important;
-    font-size: 13px !important;
-    letter-spacing: 1px;
-}
-button[kind="headerNoPadding"]:hover {
-    border-color: #ffe066 !important;
-    box-shadow: 0px 4px 12px rgba(243, 156, 18, 0.4) !important;
-    transform: scale(1.03);
+    font-weight: bold !important;
+    font-size: 14px !important;
+    font-family: 'Segoe UI', sans-serif !important;
 }
 
-/* 4. Barra Lateral en Cristal Esmerilado Intenso (Glassmorphism) */
-section[data-testid="stSidebar"] {
-    background: rgba(15, 12, 10, 0.85) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-right: 1px solid rgba(243, 156, 18, 0.15) !important;
+/* Evita que el texto del botón se duplique en subelementos de la barra */
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
+.stAppDeployDropdown button::after {
+    content: "" !important;
+    display: none !important;
 }
 
-/* Cerrar Barra Lateral */
-section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
-    background: #791c12 !important;
-    border: 1px solid #ff4b4b !important;
-}
-section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after {
-    content: "✕ REPLEGAR" !important;
-    color: #ffffff !important;
-}
-
-/* Bloques informativos internos del Sidebar */
-section[data-testid="stSidebar"] .element-container:has(p), 
-section[data-testid="stSidebar"] .element-container:has(h4) {
-    background: rgba(30, 25, 20, 0.6) !important;
-    backdrop-filter: blur(5px);
-    padding: 14px 16px !important;
-    border-radius: 10px !important;
-    border-left: 4px solid #f39c12 !important;
-    border-top: 1px solid rgba(255,255,255,0.03);
-    box-shadow: 0px 6px 15px rgba(0,0,0,0.6) !important;
-}
-
-/* 5. Tarjetas de Comida con Animación de Elevación (Food Cards Hover) */
-[data-testid="column"] {
-    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-}
-[data-testid="column"]:hover {
-    transform: translateY(-6px) !important;
-}
-
-.product-card-bottom {
-    background: linear-gradient(180deg, #16120e 0%, #0d0a08 100%) !important;
-    padding: 18px;
-    border-radius: 0px 0px 16px 16px;
-    border-bottom: 2px solid #2a1f14;
-    border-left: 1px solid #2a1f14;
-    border-right: 1px solid #2a1f14;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.75);
-    transition: border-color 0.3s ease;
-}
-[data-testid="column"]:hover .product-card-bottom {
-    border-bottom-color: #f39c12;
-}
-.product-title {
-    font-size: 20px !important;
-    font-weight: 800 !important;
-    color: #ffffff !important;
-    letter-spacing: 0.5px;
-}
-.product-price {
-    font-size: 26px !important;
-    font-weight: 900 !important;
-    color: #ffe066 !important;
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
-    font-family: 'Impact', 'Arial Black', sans-serif;
-}
-/* ============================================================================
-    PARTE 2: PASARELA TRIDIMENSIONAL Y SECCIONES DE PAGO DE ALTO IMPACTO
-   ============================================================================ */
-
-/* 1. Recaudación Total en Verde Neón Radiactivo Tridimensional */
-div[data-testid="stMetricValue"] {
-    font-size: 48px !important;
-    font-weight: 900 !important;
-    color: #2ecc71 !important;
-    font-family: 'Impact', 'Arial Black', sans-serif !important;
-    text-shadow: 0px 0px 20px rgba(46, 204, 113, 0.8), 0px 4px 10px rgba(0,0,0,0.9) !important;
-    background: linear-gradient(135deg, #091a10 0%, #030805 100%) !important;
-    padding: 14px 30px !important;
-    border-radius: 12px !important;
-    display: inline-block !important;
-    border: 2px solid #2ecc71 !important;
-    box-shadow: inset 0px 0px 15px rgba(46, 204, 113, 0.2), 0px 8px 25px rgba(0,0,0,0.7) !important;
-    margin-top: 8px !important;
-}
-div[data-testid="stMetricLabel"] p {
-    font-size: 24px !important;
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-/* 2. El Botón Definitivo: Fuego Líquido Erguido con Micro-Animaciones */
-.stButton > button {
-    background: linear-gradient(135deg, #f39c12 0%, #d35400 50%, #962d00 100%) !important;
-    color: #ffffff !important;
-    font-size: 24px !important;
-    font-weight: 900 !important;
-    font-family: 'Arial Black', 'Impact', sans-serif !important;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important;
-    padding: 18px 25px !important;
-    border-radius: 12px !important;
-    border: 1px solid #ff7e22 !important;
-    box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
-    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    width: 100% !important;
-}
-.stButton > button:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0px 12px 30px rgba(211, 84, 0, 0.8) !important;
-    filter: brightness(1.25) !important;
-    border-color: #ffe066 !important;
-}
-.stButton > button:active {
-    transform: translateY(-1px) !important;
-    box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.6) !important;
-}
-
-/* Exclusión Estricta: Restaura el botón para iniciar nuevas órdenes */
-div[data-testid="element-container"]:has(iframe) + div.stButton > button,
-.stButton:has(button[key*="nueva_orden"]) > button,
-button[key*="btn_toggle_admin_login"] {
-    background: rgba(35, 30, 25, 0.8) !important;
-    color: #b3b3b3 !important;
-    font-size: 15px !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    font-weight: 700 !important;
-    border: 1px solid #443525 !important;
-    box-shadow: none !important;
-    padding: 10px 15px !important;
-    text-transform: none !important;
-}
-div[data-testid="element-container"]:has(iframe) + div.stButton > button:hover,
-button[key*="btn_toggle_admin_login"]:hover {
-    transform: none !important;
-    background: #362b1f !important;
-    color: #f39c12 !important;
-    border-color: #f39c12 !important;
-}
-
-/* 3. Botón de WhatsApp Premium Integrado de Forma Nativa */
-div[data-testid="element-container"] a button {
-    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
-    color: #ffffff !important;
-    font-size: 16px !important;
-    font-weight: 800 !important;
-    border-radius: 8px !important;
-    border: none !important;
-    box-shadow: 0px 4px 15px rgba(37, 211, 102, 0.4) !important;
-    transition: transform 0.2s ease !important;
-}
-div[data-testid="element-container"] a button:hover {
-    transform: scale(1.02) !important;
-    filter: brightness(1.1) !important;
-}
-
-/* 4. Textos Generales e Inputs de Datos */
-.stMarkdown p, label p, [data-testid="stMarkdownContainer"] p, .stSubheader p {
-    color: #f5f5f5 !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-/* Estilizado global de cajas de texto del cuestionario */
-div[data-testid="stTextInput"] input, div[data-testid="stNumberInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #0f0d0b !important;
-    color: #ffffff !important;
-    border: 1px solid #3a2f24 !important;
-    border-radius: 8px !important;
-    padding: 4px 8px !important;
-}
-
-/* 5. Tratamiento de Lujo para la Pasarela de Yape */
-[data-testid="stImage"] img, div[data-testid="element-container"] img {
+/* Centrado Premium del contenido en el medio de la pantalla */
+.block-container {
+    max-width: 800px !important;
     margin: 0 auto !important;
-    display: block !important;
-    border-radius: 16px !important;
-    box-shadow: 0px 8px 30px rgba(142, 68, 173, 0.5) !important;
-    border: 2px solid rgba(142, 68, 173, 0.3) !important;
-    transition: transform 0.3s ease !important;
-}
-[data-testid="stImage"] img:hover {
-    transform: scale(1.02);
-}
-
-/* Cajas de alerta y procesamiento unificadas */
-div.stAlert {
-    background-color: #0d131a !important;
-    border: 1px solid #1f3347 !important;
-    border-left: 5px solid #f39c12 !important;
-    border-radius: 10px !important;
-    box-shadow: 0px 6px 20px rgba(0,0,0,0.5) !important;
+    padding-top: 60px !important;
 }
 
 /* =========================================================
-    RESTAURACIÓN PREMIUM DEL PIE DE PÁGINA (REDES SOCIALES)
+    PARTE 2: BARRA LATERAL (SIDEBAR MULTIUSO) Y CATÁLOGO
    ========================================================= */
 
-/* Forzamos al contenedor a recuperar su fondo oscuro y bordes limpios */
+/* Botón rojo personalizado para cerrar la barra lateral */
+section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
+    background-color: #c0392b !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 4px 12px !important;
+}
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after {
+    content: "✕ Cerrar" !important;
+    color: #ffffff !important;
+    font-size: 12px !important;
+}
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]:hover {
+    background-color: #e74c3c !important;
+    box-shadow: 0px 0px 8px rgba(231, 76, 60, 0.6) !important;
+}
+
+/* Separadores informativos en formato de tarjetas oscuras independientes */
+section[data-testid="stSidebar"] .element-container:has(p), 
+section[data-testid="stSidebar"] .element-container:has(h4) {
+    background-color: #1a1a1a !important;
+    padding: 12px 15px !important;
+    border-radius: 8px !important;
+    border-left: 3px solid #f39c12 !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.4) !important;
+}
+
+/* Brillo interactivo en los cuadros del inicio de sesión administrativo */
+section[data-testid="stSidebar"] input[type="text"], 
+section[data-testid="stSidebar"] input[type="password"] {
+    background-color: #121212 !important;
+    border: 1px solid #333 !important;
+    border-radius: 6px !important;
+}
+section[data-testid="stSidebar"] input[type="text"]:focus, 
+section[data-testid="stSidebar"] input[type="password"]:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
+}
+
+/* Tarjeta inferior de producto con textos gigantes y precio dorado */
+.product-card-bottom {
+    background-color: #1e1e1e !important;
+    padding: 15px;
+    border-radius: 0px 0px 12px 12px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+}
+.product-title {
+    font-size: 22px !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+}
+.product-price {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: #f39c12 !important;
+    font-family: 'Impact', Charcoal, sans-serif;
+}
+/* Pie de página de Redes Sociales (Footer) ORIGINAL */
 .social-footer {
-    text-align: center !important;
-    background-color: #1a1a1a !important; /* Tarjeta oscura independiente */
-    padding: 20px !important;
-    border-radius: 12px !important;
-    border: 1px solid #333333 !important;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6) !important;
+    text-align: center;
+    background-color: rgba(15, 15, 15, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    margin-top: 40px;
     max-width: 600px !important;
     margin: 40px auto 0 auto !important;
-    display: block !important;
 }
-
-/* Evitamos que el título secundario se herede en blanco opaco */
-.social-footer p {
-    color: #888888 !important; /* Gris elegante de auditoría */
-    font-size: 13px !important;
-    letter-spacing: 2px !important;
-    font-weight: bold !important;
-    margin-bottom: 15px !important;
-    text-transform: uppercase !important;
-}
-
-/* Forzamos a los enlaces a recuperar su color oro brillante original */
-.social-icon, 
-.social-footer a {
+.social-icon {
     font-size: 16px !important;
-    color: #f39c12 !important; /* Oro Búfalo */
+    color: #f39c12 !important;
     text-decoration: none !important;
     font-weight: bold !important;
-    transition: all 0.2s ease-in-out !important;
-    display: inline-block !important;
-    padding: 5px 10px !important;
 }
 
-/* Añadimos un micro-brillo cuando el cliente pasa el mouse por encima */
-.social-footer a:hover {
-    color: #ffe066 !important; /* Oro cepillado brillante */
-    transform: scale(1.05) !important;
-    text-shadow: 0px 0px 8px rgba(243, 156, 18, 0.5) !important;
+/* =========================================================
+   PARTE 3: GESTIÓN DE ENTREGA Y PAGO (VERSION ESTABLE)
+   ========================================================= */
+
+/* Monto Total a Procesar en Verde Esmeralda Neón Tridimensional */
+div[data-testid="stMetricValue"] {
+    font-size: 46px !important;
+    font-weight: 900 !important;
+    color: #2ecc71 !important;
+    font-family: 'Impact', Charcoal, sans-serif !important;
+    text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important;
+    background-color: #0f0f0f !important;
+    padding: 12px 25px !important;
+    border-radius: 8px !important;
+    display: inline-block !important;
+    border: 2px solid #2ecc71 !important;
+    margin-top: 5px !important;
+}
+div[data-testid="stMetricLabel"] p {
+    font-size: 22px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Buffalo Corporativo */
+.stButton > button {
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
+    color: #ffffff !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    font-family: 'Arial Black', Gadget, sans-serif !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6) !important;
+    padding: 16px 20px !important;
+    border-radius: 10px !important;
+    border: 1px solid #e67e22 !important;
+    box-shadow: 0px 5px 15px rgba(211, 84, 0, 0.4) !important;
+    transition: all 0.3s ease-in-out !important;
+    width: 100% !important;
+}
+.stButton > button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0px 8px 25px rgba(211, 84, 0, 0.7) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* Exclusión para que el botón de nueva orden mantenga su color sobrio nativo */
+div[data-testid="element-container"]:has(iframe) + div.stButton > button,
+.stButton:has(button[key*="nueva_orden"]) > button {
+    background: #222222 !important;
+    color: #aaaaaa !important;
+    font-size: 16px !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    font-weight: normal !important;
+    border: 1px solid #444444 !important;
+    box-shadow: none !important;
+    padding: 10px !important;
+}
+
+/* Aclara los textos generales de los labels para que no se pierdan con el fondo */
+.stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
+    color: #ffffff !important;
+}
+
+/* =========================================================
+    ESTILIZADO PREMIUM Y CENTRADO DE LA SECCIÓN DE YAPE
+   ========================================================= */
+
+/* 1. Centra la imagen del QR y le da un sombreado tridimensional elegante */
+[data-testid="stImage"] img, div[data-testid="element-container"] img {
+    margin: 0 auto !important; /* Centrado matemático perfecto */
+    display: block !important;
+    border-radius: 14px !important; /* Bordes redondeados premium */
+    box-shadow: 0px 6px 20px rgba(142, 68, 173, 0.4) !important; /* Brillo sutil morado Yape */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 2. Centra los textos informativos del Yape (Titular y subtítulo) */
+div[data-testid="stMarkdownContainer"] caption, 
+div.stMarkdown p[style*="text-align: center"] {
+    text-align: center !important;
+    font-weight: bold !important;
+    color: #cccccc !important;
+    font-size: 15px !important;
+    margin-top: 8px !important;
+}
+
+/* 3. Estiliza el cuadro informativo azul de procesamiento para que sea compacto y centrado */
+div.stAlert:has(p) {
+    max-width: 600px !important;
+    margin: 15px auto !important;
+    border-radius: 8px !important;
+    background-color: #111a24 !important;
 }
