@@ -428,3 +428,104 @@ div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
         gap: 4px !important;
     }
 }
+
+/* ============================================================================
+    SOLUCCIÓN DE EMERGENCIA: REORDENAMIENTO HORIZONTAL SECCIONES NETFLIX
+   ============================================================================ */
+
+/* 1. Contenedor principal de la barra en color negro sólido mate */
+.netflix-navbar-master {
+    background-color: #141414 !important;
+    padding: 10px 18px !important;
+    border-radius: 8px !important;
+    border: 1px solid #222222 !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 2. Forzamos a la fila de Streamlit a alinearse al costado de manera estricta */
+.netflix-navbar-master div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important; /* Fuerza la posición horizontal */
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important; /* Prohíbe terminantemente los saltos hacia abajo */
+}
+
+/* Ocultamos las etiquetas de texto sobrantes que ensucian la cabecera */
+.netflix-navbar-master label,
+.netflix-navbar-master div[data-testid="stRadioHorizontal"] > div:first-child {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+}
+
+/* 3. BORRADO DE CÍRCULOS: Desaparecemos por completo los círculos del botón de opción */
+.netflix-navbar-master div[role="radiogroup"] label div[data-testid="stMarker"] {
+    display: none !important;
+}
+
+/* 4. ALINEACIÓN INTERNA: Forzamos a que las opciones vayan pegadas al costado del título */
+.netflix-navbar-master div[role="radiogroup"] {
+    display: flex !important;
+    flex-direction: row !important; /* Pestañas una al costado de otra */
+    flex-wrap: nowrap !important;
+    gap: 18px !important; /* Distancia premium entre secciones */
+    align-items: center !important;
+}
+
+/* 5. ANULACIÓN DE FUEGO: Desactivamos el fondo naranja vertical rígido */
+.netflix-navbar-master div[role="radiogroup"] label {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    padding: 2px 0 !important;
+    margin: 0 !important;
+    height: auto !important; /* Restaura la altura automática */
+    width: auto !important;
+}
+
+/* Estilo del texto plano inactivo (Blanco suave de Netflix) */
+.netflix-navbar-master div[role="radiogroup"] label p {
+    color: #aaaaaa !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+    margin: 0 !important;
+    white-space: nowrap !important; /* Evita que las palabras se rompan en letras sueltas */
+}
+
+/* Hover interactivo Oro Búfalo */
+.netflix-navbar-master div[role="radiogroup"] label:hover p {
+    color: #f39c12 !important;
+}
+
+/* PESTAÑA ACTIVA SELECCIONADA: Brilla en blanco con línea dorada inferior */
+.netflix-navbar-master div[role="radiogroup"] div[data-checked="true"] label p {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    border-bottom: 2px solid #f39c12 !important;
+}
+
+/* Título izquierdo "✨ EXPLORAR:" */
+.explorer-prefix {
+    color: #f39c12 !important;
+    font-family: 'Arial Black', Gadget, sans-serif !important;
+    font-size: 14.5px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    margin-right: 15px !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* Caja de búsqueda de la derecha ultra-compacta */
+.netflix-navbar-master div[data-testid="stTextInput"] input {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    border: 1px solid #333333 !important;
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+}

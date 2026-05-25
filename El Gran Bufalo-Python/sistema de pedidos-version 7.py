@@ -205,9 +205,10 @@ st.sidebar.markdown("""
         </button>
     </a>
 """, unsafe_allow_html=True)
-# ============================================================================
-# BARRA DE EXPLORACIÓN GLOBAL (ESTILO NETFLIX TEXTO PLANO AL COSTADO)
-# ============================================================================
+
+# =========================================================
+# BARRA DE EXPLORACIÓN GLOBAL MAESTRA (ESTILO NETFLIX REAL)
+# =========================================================
 
 # Inicializamos estados globales de pestañas si no existen
 if "categoria_activa" not in st.session_state:
@@ -218,43 +219,41 @@ if "lista_categorias" not in st.session_state:
 # Inicializamos la variable de búsqueda limpia por defecto
 busqueda = ""
 
-# CASO 1: BARRA HORIZONTAL COMPACTA EXCLUSIVA PARA EL CLIENTE (EN EL CATÁLOGO)
-if not es_admin and (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
-    # Creamos las columnas necesarias dinámicamente según las secciones existentes
-    num_cats = len(st.session_state.lista_categorias)
-    nav_cols = st.columns([1.2] + [1] * num_cats + [2.5], gap="small")
+# Renderizamos la barra horizontal si estás en Catálogo o eres Admin
+if es_admin or (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
+    st.markdown("<div class='netflix-navbar-master'>", unsafe_allow_html=True)
     
-    with nav_cols[0]:
-        st.markdown("<div class='nav-explorer-title' style='margin-top:8px;'>✨ EXPLORAR</div>", unsafe_allow_html=True)
-        
-    for idx, cat in enumerate(st.session_state.lista_categorias):
-        with nav_cols[idx + 1]:
-            if st.button(cat, key=f"nav_cli_{cat}", use_container_width=True):
-                st.session_state.categoria_activa = cat
-                st.rerun()
-                
-    with nav_cols[-1]:
-        busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja hoy?", label_visibility="collapsed", key="search_bar_cliente").strip().lower()
-    st.markdown("<br>", unsafe_allow_html=True)
-
-
-# 📊 CASO 2: BARRA HORIZONTAL COMPACTA EXCLUSIVA PARA EL ADMINISTRADOR (PANEL DE CONTROL)
-if es_admin:
-    num_cats_admin = len(st.session_state.lista_categorias)
-    nav_cols_admin = st.columns([1.2] + [1] * num_cats_admin + [2.5], gap="small")
+    # Dividimos en 2 bloques limpios: la izquierda para las pestañas y la derecha para la lupa
+    col_izq_tabs, col_der_search = st.columns([3.8, 1.2], gap="small")
     
-    with nav_cols_admin[0]:
-        st.markdown("<div class='nav-explorer-title' style='margin-top:8px;'>⚙️ FILTRAR</div>", unsafe_allow_html=True)
+    with col_izq_tabs:
+        # Título y selector horizontal encubierto para eliminar los bloques verticales rígidos
+        st.markdown("<span class='explorer-prefix'>✨ EXPLORAR:</span>", unsafe_allow_html=True)
         
-    for idx, cat in enumerate(st.session_state.lista_categorias):
-        with nav_cols_admin[idx + 1]:
-            if st.button(cat, key=f"nav_adm_{cat}", use_container_width=True):
-                st.session_state.categoria_activa = cat
-                st.rerun()
-                
-    with nav_cols_admin[-1]:
-        busqueda = st.text_input("🔍 Buscar en inventario...", placeholder="Buscar plato...", label_visibility="collapsed", key="search_bar_admin").strip().lower()
-    st.markdown("<br>", unsafe_allow_html=True)
+        # st.toggle_bar o st.radio horizontal puro sin labels decorativos externos
+        categoria_seleccionada = st.radio(
+            "Categorías Navegación",
+            options=st.session_state.lista_categorias,
+            index=st.session_state.lista_categorias.index(st.session_state.categoria_activa),
+            horizontal=True,
+            label_visibility="collapsed",
+            key="tabs_netflix_master_key"
+        )
+        if categoria_seleccionada != st.session_state.categoria_activa:
+            st.session_state.categoria_activa = categoria_seleccionada
+            st.rerun()
+            
+    with col_der_search:
+        # Caja de búsqueda con ID único para que no herede márgenes deformados
+        placeholder_txt = "Buscar plato..." if es_admin else "¿Qué se te antoja?"
+        busqueda = st.text_input(
+            "🔍 Buscar", 
+            placeholder=placeholder_txt, 
+            label_visibility="collapsed", 
+            key="search_bar_master_key"
+        ).strip().lower()
+        
+    st.markdown("</div><br>", unsafe_allow_html=True)
 
 
 # ============================================================================
