@@ -255,7 +255,7 @@ div:has(> .netflix-navbar-master),
     margin: 0 !important;
 }
 
-/* 2. Forzamos a que las columnas de los botones siempre vayan alineadas horizontalmente al costado */
+/* Forzamos a que las columnas de los botones siempre vayan alineadas horizontalmente al costado */
 div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
 div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
     display: flex !important;
@@ -266,10 +266,11 @@ div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    margin-top: 10px !important;
+    margin-top: 35px !important; /* CORRECCIÓN: Empuja la barra más abajo para no tapar tu nombre */
     padding: 5px 0 !important;
     gap: 8px !important;
 }
+
 
 /* 3. Convertimos los botones nativos de Streamlit en texto plano minimalista de streaming */
 button[key*="nav_cli_"], button[key*="nav_adm_"] {
