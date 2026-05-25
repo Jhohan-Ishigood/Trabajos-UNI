@@ -480,6 +480,9 @@ if es_admin:
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
     # PANTALLA 1: BIENVENIDA LIMPIA CON TEXTURIZACIÓN EN EL FONDO LOCAL
+            # Sello de autoría premium discreto para la esquina superior derecha
+        st.markdown("<div class='sello-creador'>✨ Desarrollado por Jhohan Guadalupe</div>", unsafe_allow_html=True)
+
     if st.session_state.pantalla_actual == "bienvenida":
         if os.path.exists(URL_BANNER_LOCAL):
             with open(URL_BANNER_LOCAL, "rb") as image_file:

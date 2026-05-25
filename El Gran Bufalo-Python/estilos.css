@@ -519,3 +519,26 @@ div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
         gap: 4px !important;
     }
 }
+
+/* ============================================================================
+    SELLO DE CREADOR INTERACTIVO Y TRANSLÚCIDO (MARCA DE AGUA)
+   ============================================================================ */
+.sello-creador {
+    position: absolute !important;
+    top: -45px !important; /* Lo ubica milimétricamente en la zona superior */
+    right: 15px !important; /* Alineado a la derecha extremo */
+    color: rgba(255, 255, 255, 0.35) !important; /* Blanco ultra-tenue translúcido */
+    font-size: 11.5px !important; /* Letra pequeña y esbelta */
+    font-weight: 600 !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    z-index: 999999 !important;
+    pointer-events: none !important; /* No interrumpe los clics en la página */
+    transition: color 0.3s ease !important;
+}
+
+/* Efecto Revelado: Si alguien pasa el mouse cerca, se aclara sutilmente */
+.sello-creador:hover {
+    color: rgba(243, 156, 18, 0.7) !important; /* Toma un destello Oro Búfalo suave */
+}
