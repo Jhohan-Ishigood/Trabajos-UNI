@@ -6,7 +6,7 @@ import pandas as pd  # Motor de analítica para el control de la bitácora
 import altair as alt  # Motor gráfico premium para el Dashboard corporativo
 import base64  # Motor multimedia para incrustar fotos locales en HTML y CSS
 
-# Configuración premium inicial de la página para que la barra lateral inicie colapsada/oculta
+# Configuración premium inicial para que la app se adapte a celulares y la barra lateral inicie oculta por defecto
 st.set_page_config(page_title="El Gran Búfalo - Sistema de Pedidos", page_icon="🥩", layout="wide", initial_sidebar_state="collapsed")
 
 # =========================================================
@@ -35,7 +35,7 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # Silueta vectorial por defecto en Base64 por seguridad
+    # Silueta vectorial en Base64 por defecto para evitar pantallas colapsadas
     FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
     
     menu_defecto = {
@@ -157,7 +157,6 @@ st.sidebar.markdown("---")
 
 # Sección 2: Botón de Soporte Técnico Directo por WhatsApp
 st.sidebar.markdown("#### 📞 ¿NECESITAS AYUDA?")
-# Enlace simulado profesional a la API de WhatsApp
 st.sidebar.markdown("""
     <a href="https://wa.me" target="_blank" style="text-decoration: none;">
         <button style="width: 100%; background-color: #25d366; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
@@ -238,7 +237,7 @@ if es_admin:
         with col_ed1:
             st.markdown(f"### {st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}")
             
-            # Previsualización de la foto actual estilizada
+            # Previsualización de la foto actual estilizada en la administración
             foto_actual_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
             if foto_actual_izq:
                 st.markdown(f"""<img src="{foto_actual_izq}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -264,13 +263,14 @@ if es_admin:
             
             if st.button(f"❌ Eliminar {p_izq}", key=f"del_{p_izq}", use_container_width=True):
                 eliminar_producto = p_izq
+                
         # Producto Derecha (Si existe en el índice)
         if i + 1 < len(productos_lista):
             p_der = productos_lista[i+1]
             with col_ed2:
                 st.markdown(f"### {st.session_state.menu_dinamico[p_der]['icono']} {p_der}")
                 
-                # Previsualización de la foto actual estilizada
+                # Previsualización de la foto actual estilizada en la administración
                 foto_actual_der = st.session_state.menu_dinamico[p_der].get("foto", "")
                 if foto_actual_der:
                     st.markdown(f"""<img src="{foto_actual_der}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -297,7 +297,6 @@ if es_admin:
                 if st.button(f"❌ Eliminar {p_der}", key=f"del_{p_der}", use_container_width=True):
                     eliminar_producto = p_der
         st.markdown("---")
-        
     # Lógica de eliminación inmediata física
     if eliminar_producto is not None:
         del st.session_state.menu_dinamico[eliminar_producto]
@@ -357,7 +356,7 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-    # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL EN FONDO COMPLETO
+    # PANTALLA 1: BIENVENIDA LIMPIA CON BANNER Y BOTÓN DE MENÚ COLAPSABLE
     if st.session_state.pantalla_actual == "bienvenida":
         if os.path.exists(URL_BANNER_LOCAL):
             with open(URL_BANNER_LOCAL, "rb") as image_file:
@@ -376,6 +375,13 @@ else:
             """, unsafe_allow_html=True)
             
         st.markdown("<br>", unsafe_allow_html=True)
+        
+        # Botón premium superior para desplegar el menú de la izquierda con las 3 rayitas
+        col_menu_btn, _ = st.columns()
+        with col_menu_btn:
+            if st.button("☰ Menú de Opciones", use_container_width=True, key="btn_abrir_sidebar"):
+                st.toast("⬅️ Haz clic en la flecha '>' arriba a la izquierda para desplegar el menú completo.", icon="📱")
+        
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         
         st.markdown("<br><p style='text-align: center; font-size: 24px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
@@ -386,7 +392,7 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-        # NUEVO: Pie de página de Redes Sociales (Footer) estilizado y centrado
+        # Pie de página de Redes Sociales (Footer)
         st.markdown("<br><br><br>", unsafe_allow_html=True)
         st.markdown("""
             <div class='social-footer'>
@@ -396,7 +402,6 @@ else:
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
-            
     # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS PREMIUM)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
@@ -420,10 +425,10 @@ else:
                 if info["disponible"]:
                     url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
                     
-                    # RENDERIZADO PREMIUM: Imagen con sombreado y bordes perfectos
+                    # Imagen con sombreado y bordes perfectos
                     st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
                     
-                    # TARJETA INFERIOR: Estilizado completo con textos gigantes y precio dorado resaltado
+                    # Estilizado completo con textos gigantes y precio dorado resaltado
                     st.markdown(f"""
                         <div class='product-card-bottom'>
                             <span class='product-title'>{info['icono']} {prod}</span>
@@ -440,144 +445,3 @@ else:
                 else:
                     st.markdown(f"""<div style="width:100%; height:200px; background-color:#222; border-radius:12px 12px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:50px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
                     st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
-        st.markdown("---")
-        
-        if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
-            st.session_state.carrito = []
-            st.session_state.total_acumulado = 0.0
-            
-            for prod, cant in cantidades_ingresadas.items():
-                if cant > 0:
-                    sub = cant * st.session_state.menu_dinamico[prod]["precio"]
-                    st.session_state.carrito.append({"producto": prod, "cantidad": cant, "subtotal": sub})
-                    st.session_state.total_acumulado += sub
-            
-            if st.session_state.total_acumulado > 0:
-                st.session_state.pedido_guardado = True
-                st.rerun()
-            else:
-                st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-                
-    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
-    else:
-        st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
-        
-        st.markdown("**Resumen de artículos solicitados:**")
-        for item in st.session_state.carrito:
-            icono_p = st.session_state.menu_dinamico[item['producto']]['icono']
-            st.text(f"• {icono_p} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']:.2f}")
-        
-        st.markdown("---")
-        
-        opcion_delivery = st.radio("¿Desea delivery? (+ S/6.00)", ["NO", "SI"])
-        direccion_delivery = ""
-        costo_delivery = 0.0
-        tiene_delivery = False
-        
-        if opcion_delivery == "SI":
-            tiene_delivery = True
-            costo_delivery = 6.0
-            direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...").strip()
-                
-        total_con_delivery = st.session_state.total_acumulado + costo_delivery
-        st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.2f}")
-
-        metodo_pago = st.selectbox("Seleccione método de pago:", ["Efectivo", "Yape", "Tarjeta"])
-        
-        pago_usuario = total_con_delivery
-        vuelto = 0.0
-        titular_tarjeta = ""
-        ultimos_digitos = ""
-        formulario_valido = True
-
-        if metodo_pago == "Yape":
-            st.info(f"--- PROCESANDO PAGO CON YAPE ---\nMonto total a yapear: S/{total_con_delivery:.2f}")
-            st.caption("[!] Abriendo tu ventana de Yape con titular: Jhohan Antoni...")
-            if os.path.exists("mi_qr_yape.png"):
-                st.image("mi_qr_yape.png", caption="Código QR de Yape oficial", width=250)
-            else:
-                st.warning("[Aviso] No se encontró el archivo 'mi_qr_yape.png' en la carpeta.")
-
-        elif metodo_pago == "Tarjeta":
-            st.info("--- PROCESANDO TRANSMISIÓN POS ---")
-            titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
-            ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4)
-            if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
-                st.error("Error: Complete los datos obligatorios de la tarjeta de manera válida (4 dígitos).")
-                formulario_valido = False
-
-        else:
-            st.warning("⚠️ ¡ALERTA DE CAJA: SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
-            pago_usuario = st.number_input("Ingrese monto de pago: S/", min_value=0.0, value=total_con_delivery, step=1.0)
-            if pago_usuario < total_con_delivery:
-                st.error("Pago insuficiente")
-                formulario_valido = False
-            else:
-                vuelto = pago_usuario - total_con_delivery
-
-        if st.button("💾 EMITIR BOLETA DE VENTA", use_container_width=True):
-            if tiene_delivery and not direccion_delivery:
-                st.error("⚠️ Error: Llenar este campo obligatorio (Ingrese su dirección de entrega).")
-            elif not formulario_valido:
-                st.error("⚠️ Error: Complete correctamente los datos del formulario de pago antes de continuar.")
-            else:
-                st.success("PAGO REALIZADO CORRECTAMENTE - Pedido registrado exitosamente")
-                st.balloons()
-                st.markdown("### 🧾 COMPROBANTE EMITIDO")
-                
-                correlativo_sunat = f"B001-{st.session_state.numero_boleta:06d}"
-                
-                detalle_productos_txt = ""
-                items_resumen_lista = []
-                for item in st.session_state.carrito:
-                    detalle_productos_txt += f"{item['cantidad']}x {item['producto']:<18} S/{item['subtotal']:.2f}\n"
-                    items_resumen_lista.append(f"{item['cantidad']}x {item['producto']}")
-                
-                if tiene_delivery:
-                    detalle_productos_txt += f"1x Costo de Envío        S/6.00\n"
-                    items_resumen_lista.append("1x Delivery")
-                
-                resumen_articulos_linea = ", ".join(items_resumen_lista)
-                tipo_entrega_txt = f"DELIVERY ({direccion_delivery})" if tiene_delivery else "LOCAL"
-                
-                st.session_state.historial_ordenes.append({
-                    "Fecha y Hora": fecha_actual,
-                    "Nro. Boleta": correlativo_sunat,
-                    "Detalle Artículos": resumen_articulos_linea,
-                    "Entrega": tipo_entrega_txt,
-                    "Método Pago": metodo_pago,
-                    "Total": f"S/{total_con_delivery:.2f}"
-                })
-                
-                guardar_historial_en_archivo(st.session_state.historial_ordenes)
-                
-                if metodo_pago == "Tarjeta":
-                    metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
-                elif metodo_pago == "Yape":
-                    metodo_pago_txt = "YAPE (PAGO ELECTRÓNICO)\nVuelto:       S/ 0.00 (Monto exacto)"
-                else:
-                    metodo_pago_txt = f"EFECTIVO\nEfectivo Recibido: S/{pago_usuario:.2f}\nVuelto:            S/{vuelto:.2f}"
-                
-                if os.path.exists(RUTA_HTML):
-                    with open(RUTA_HTML, "r", encoding="utf-8") as archivo_html:
-                        plantilla_contenido = archivo_html.read()
-                    
-                    html_final = plantilla_contenido
-                    html_final = html_final.replace("{{ SERIE_BOLETA }}", correlativo_sunat)
-                    html_final = html_final.replace("{{ FECHA_HORA }}", fecha_actual)
-                    html_final = html_final.replace("{{ TIPO_ENTREGA }}", tipo_entrega_txt)
-                    html_final = html_final.replace("{{ METODO_PAGO }}", metodo_pago_txt)
-                    html_final = html_final.replace("{{ DETALLE_PRODUCTOS }}", detalle_productos_txt.strip())
-                    html_final = html_final.replace("{{ TOTAL_FINAL }}", f"{total_con_delivery:.2f}")
-                    
-                    components.html(html_final, height=650)
-                else:
-                    st.error("⚠️ Error: No se pudo encontrar 'boleta_plantilla.html'.")
-                
-        if st.session_state.pedido_guardado:
-            if st.button("🔄 Crear una nueva orden", use_container_width=True):
-                st.session_state.carrito = []
-                st.session_state.total_acumulado = 0.0
-                st.session_state.pedido_guardado = False
-                st.session_state.pantalla_actual = "bienvenida"
-                st.rerun()
