@@ -156,3 +156,79 @@ button[key="button"] {
     max-width: 600px !important;
     margin: 40px auto 0 auto !important;
 }
+
+/* =========================================================
+   DISEÑO PREMIUM PARA LA BARRA LATERAL (SIDEBAR MULTIUSO)
+   ========================================================= */
+
+/* 1. Oculta el icono nativo de flechas (<<) y lo reemplaza por un botón limpio de cerrar */
+section[data-testid="stSidebar"] button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
+
+section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
+    background-color: #c0392b !important; /* Rojo elegante */
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 4px 12px !important;
+    transition: 0.3s !important;
+}
+
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after {
+    content: "✕ Cerrar" !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+}
+
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]:hover {
+    background-color: #e74c3c !important;
+    box-shadow: 0px 0px 8px rgba(231, 76, 60, 0.6) !important;
+}
+
+/* 2. Tarjetas independientes (Card Style) para segmentar la información */
+section[data-testid="stSidebar"] .element-container:has(p), 
+section[data-testid="stSidebar"] .element-container:has(h4) {
+    background-color: #1a1a1a !important;
+    padding: 12px 15px !important;
+    border-radius: 8px !important;
+    border-left: 3px solid #f39c12 !important; /* Línea guía naranja búfalo */
+    margin-bottom: 10px !important;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.4) !important;
+}
+
+/* 3. Animación y estilizado premium para el botón de Soporte por WhatsApp */
+section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
+    background: linear-gradient(135deg, #25d366, #128c7e) !important;
+    color: white !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0px 4px 10px rgba(37, 211, 102, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+section[data-testid="stSidebar"] button:has(span:contains("Chatear")):hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0px 6px 15px rgba(37, 211, 102, 0.5) !important;
+    filter: brightness(1.1) !important;
+}
+
+/* 4. Brillo interactivo corporativo para los cuadros de inicio de sesión (Login) */
+section[data-testid="stSidebar"] input[type="text"], 
+section[data-testid="stSidebar"] input[type="password"] {
+    background-color: #121212 !important;
+    border: 1px solid #333 !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+}
+
+section[data-testid="stSidebar"] input[type="text"]:focus, 
+section[data-testid="stSidebar"] input[type="password"]:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
+    background-color: #151515 !important;
+}
