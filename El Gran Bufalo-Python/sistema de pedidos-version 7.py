@@ -462,46 +462,14 @@ else:
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
-    # PANTALLA 2: CATÁLOGO CON NAV-BAR ESTILO NETFLIX (INTEGRADO)
+        
+    # PANTALLA 2: CATÁLOGO DE PRODUCTOS (VISTA DE CLIENTE CON FILTRADO OPERATIVO)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
-        # Inicializamos la pestaña activa por defecto
-        if "categoria_activa" not in st.session_state:
-            st.session_state.categoria_activa = "Todos"
-
-        # =========================================================
-        # BARRA DE NAVEGACIÓN HORIZONTAL (ESTILO NETFLIX) - CORREGIDO
-        # =========================================================
-        st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
-        
-        # Usamos un st.radio en formato horizontal para que los textos vayan SIEMPRE uno al costado del otro
-        categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
-        
-        # Creamos una fila limpia: a la izquierda el menú horizontal, a la derecha el buscador
-        col_nav, col_search = st.columns([3.5, 1.5], gap="small")
-        
-        with col_nav:
-            # st.radio con label oculto forzado a ir horizontalmente al costado
-            categoria_seleccionada = st.radio(
-                "Categorías",
-                options=categorias,
-                index=categorias.index(st.session_state.categoria_activa),
-                horizontal=True,
-                label_visibility="collapsed",
-                key="netflix_tabs"
-            )
-            if categoria_seleccionada != st.session_state.categoria_activa:
-                st.session_state.categoria_activa = categoria_seleccionada
-                st.rerun()
-                
-        with col_search:
-            busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja?", label_visibility="collapsed", key="search_bar").strip().lower()
-            
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
+        st.subheader(f"🍽️ SELECCIÓN DE {st.session_state.categoria_activa.upper()}")
+        st.info("Ingrese las cantidades de los productos que desea llevar:")
 
         # =========================================================
         # FILTRADO DINÁMICO DE PRODUCTOS EN TIEMPO REAL
@@ -510,7 +478,7 @@ else:
         productos_filtrados = []
 
         for prod in productos_lista:
-            # 1. Filtro por la barra de búsqueda superior
+            # 1. Filtro por la barra de búsqueda superior global
             if busqueda and busqueda not in prod.lower():
                 continue
                 
@@ -525,11 +493,11 @@ else:
             elif "combo" in prod.lower():
                 cat_prod = "Combos"
 
-            # Validamos si coincide con la categoría seleccionada
+            # Validamos si coincide con la categoría seleccionada en la barra superior
             if st.session_state.categoria_activa == "Todos" or st.session_state.categoria_activa == cat_prod:
                 productos_filtrados.append(prod)
 
-        # Rejilla responsiva forzada a 2 columnas
+        # Rejilla responsiva forzada a 2 columnas en celulares y PC
         col1, col2 = st.columns(2, gap="medium")
         cantidades_ingresadas = {}
         
@@ -580,6 +548,7 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
+
 
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
