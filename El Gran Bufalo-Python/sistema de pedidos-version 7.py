@@ -380,9 +380,6 @@ else:
                 # CORREGIDO: Se especifica el número de columna para evitar el TypeError
         if st.button("☰ Menú de Opciones", use_container_width=True, key="btn_abrir_sidebar"):
             st.toast("⬅️ Haz clic en la pequeña flecha '>' en la esquina superior izquierda para desplegar el menú.", icon="📱")
-        with col_menu_btn:
-            if st.button("☰ Menú de Opciones", use_container_width=True, key="btn_abrir_sidebar"):
-                st.toast("⬅️ Haz clic en la flecha '>' arriba a la izquierda para desplegar el menú completo.", icon="📱")
         
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         
