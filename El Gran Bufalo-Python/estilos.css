@@ -240,3 +240,61 @@ div.stAlert:has(p) {
     border-radius: 8px !important;
     background-color: #111a24 !important;
 }
+
+/* =========================================================
+    REDISEÑO DE ULTRA LUJO PARA LA BARRA LATERAL (SIDEBAR)
+   ========================================================= */
+
+/* Fondo general del sidebar más elegante y oscuro */
+section[data-testid="stSidebar"] {
+    background-color: #111113 !important;
+}
+
+/* Transformación de los bloques informativos en Tarjetas Premium */
+section[data-testid="stSidebar"] .element-container:has(p), 
+section[data-testid="stSidebar"] .element-container:has(h4) {
+    background-color: #18181c !important; /* Negro carbón profundo */
+    padding: 16px 18px !important; /* Más espacio interno para respirar */
+    border-radius: 10px !important; /* Bordes más suaves y modernos */
+    border-left: 4px solid #f39c12 !important; /* Línea de acento Oro Búfalo */
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important; /* Micro brillo superior */
+    margin-bottom: 14px !important; /* Separación elegante entre bloques */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6) !important; /* Sombra con mayor profundidad */
+}
+
+/* Estilizado de los Títulos de las Secciones (Gestión, Horario, Ubicación) */
+section[data-testid="stSidebar"] h4, 
+section[data-testid="stSidebar"] b {
+    color: #ffffff !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+    font-size: 14px !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+}
+
+/* Estilizado de los Subtextos (Dirección, Horas) */
+section[data-testid="stSidebar"] p, 
+section[data-testid="stSidebar"] span {
+    color: #aeaeaf !important; /* Gris claro que no cansa la vista */
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+}
+
+/* Botón interactivo de WhatsApp Premium con degradado vivo */
+section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
+    background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%) !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0px 5px 15px rgba(37, 211, 102, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+section[data-testid="stSidebar"] button:has(span:contains("Chatear")):hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0px 8px 20px rgba(37, 211, 102, 0.5) !important;
+    filter: brightness(1.1) !important;
+}
