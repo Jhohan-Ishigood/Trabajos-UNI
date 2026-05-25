@@ -241,19 +241,31 @@ section[data-testid="stSidebar"] hr {
     PARTE 4: BARRA DE EXPLORACIÓN HORIZONTAL ESTILO NETFLIX (SIN CAJAS OSCURAS)
    ============================================================================ */
 
-/* 1. Ocultamos el bloque vacío sobrante que generaba la franja negra superior */
-div.netflix-navbar-master, 
-div:has(> .netflix-navbar-master),
-.netflix-container {
-    display: none !important;
+/* ============================================================================
+    EMPUJE MAESTRO DE LA BARRA DE NAVEGACIÓN PARA LIBERAR EL NOMBRE DEL CREADOR
+   ============================================================================ */
+.netflix-navbar-master {
     background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    height: 0 !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin-top: 40px !important; /* CORRECCIÓN: Empuja TODA la barra 40 píxeles hacia abajo */
+    margin-bottom: 15px !important;
+    display: block !important;
+    width: 100% !important;
 }
+
+/* Aseguramos que el bloque horizontal interno herede el empuje sin restricciones */
+.netflix-navbar-master div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    margin-top: 0 !important; /* Resetea márgenes internos */
+}
+
 
 /* Forzamos a que las columnas de los botones siempre vayan alineadas horizontalmente al costado */
 div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
