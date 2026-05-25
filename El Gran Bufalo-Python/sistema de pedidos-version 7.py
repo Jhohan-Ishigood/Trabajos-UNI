@@ -378,8 +378,6 @@ else:
         
         # Botón premium superior para desplegar el menú de la izquierda con las 3 rayitas
                         # RUTA CORRECTA: Forzamos a que el botón se acomode al lado izquierdo usando columnas estáticas
-        if st.button("☰ Menú de Opciones", key="btn_abrir_sidebar"):
-            st.toast("⬅️ Despliega el menú utilizando la zona táctil en la esquina superior izquierda de tu pantalla.", icon="📱")
 
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         

@@ -82,7 +82,24 @@ button[kind="headerNoPadding"] {
     width: auto !important;
 }
 
-/* Agrega el texto "☰ Menú de Opciones" directamente sobre la zona táctil */
+/* 1. Oculta el icono de las dos flechas nativas (<<) de la izquierda */
+button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
+
+/* 2. Diseña un botón elegante color negro y naranja sobre la esquina izquierda */
+button[kind="headerNoPadding"] {
+    background-color: #1e1e1e !important;
+    border: 1px solid #f39c12 !important;
+    border-radius: 6px !important;
+    padding: 6px 14px !important;
+    height: auto !important;
+    width: auto !important;
+    margin-left: 10px !important;
+    margin-top: 5px !important;
+}
+
+/* 3. Inyecta el texto limpio en el botón izquierdo */
 button[kind="headerNoPadding"]::after {
     content: "☰ Menú de Opciones" !important;
     color: #f39c12 !important;
@@ -91,7 +108,9 @@ button[kind="headerNoPadding"]::after {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-/* Desactiva el botón azul flotante anterior del centro para que no se duplique */
-.element-container:has(button[key="btn_abrir_sidebar"]) {
+/* 4. EVITA EL DUPLICADO DE LA DERECHA: Bloquea el texto alternativo en elementos secundarios de Streamlit */
+section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
+.stAppDeployDropdown button::after {
+    content: "" !important;
     display: none !important;
 }
