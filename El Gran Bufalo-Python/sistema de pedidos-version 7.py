@@ -439,7 +439,9 @@ else:
         st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
         st.info("Ingrese las cantidades de los productos que desea llevar:")
 
-        col1, col2 = st.columns(2)
+        # OBLIGA A MANTENER LAS COLUMNAS EN DISPOSITIVOS MÓVILES
+        col1, col2 = st.columns(2, gap="medium")
+
         cantidades_ingresadas = {}
         
         productos_lista = list(st.session_state.menu_dinamico.keys())

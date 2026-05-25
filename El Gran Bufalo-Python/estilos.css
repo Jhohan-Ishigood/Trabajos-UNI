@@ -300,3 +300,34 @@ div.stAlert:has(p) {
     border-radius: 8px !important;
     background-color: #111a24 !important;
 }
+
+/* =========================================================
+    FORZAR DISEÑO DE 2 COLUMNAS EN TELÉFONOS MÓVILES
+   ========================================================= */
+@media (max-width: 640px) {
+    /* Evita que Streamlit rompa el bloque de columnas en vertical */
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important; /* Mantiene la fila horizontal */
+        flex-wrap: wrap !important;
+    }
+    
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        width: calc(50% - 8px) !important; /* Asigna exactamente la mitad del espacio */
+        flex: 1 1 calc(50% - 8px) !important;
+        min-width: 45% !important;
+    }
+
+    /* Ajusta el tamaño de los textos de la tarjeta para pantallas pequeñas */
+    .product-title {
+        font-size: 15px !important; /* Letra un poco más chica para que no se corte */
+    }
+    .product-price {
+        font-size: 16px !important;
+    }
+    .product-card-bottom {
+        padding: 8px 10px !important; /* Menor espacio interno en celulares */
+    }
+}
+
+
