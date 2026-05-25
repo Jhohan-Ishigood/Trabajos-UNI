@@ -1,8 +1,8 @@
 /* =========================================================
-   PARTE 1: ESTILOS GLOBALES Y CABECERA (EL GRAN BÚFALO)
+    PARTE 1: ESTILOS GLOBALES Y CABECERA (EL GRAN BÚFALO)
    ========================================================= */
 
-/* Estilos Globals del Sistema El Gran Búfalo */
+/* Estilos Globales del Sistema El Gran Búfalo */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
@@ -62,7 +62,7 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
 }
 
 /* =========================================================
-   PARTE 2: BARRA LATERAL (SIDEBAR MULTIUSO) Y CATÁLOGO
+    PARTE 2: BARRA LATERAL (SIDEBAR MULTIUSO) Y CATÁLOGO
    ========================================================= */
 
 /* Botón rojo personalizado para cerrar la barra lateral */
@@ -91,17 +91,6 @@ section[data-testid="stSidebar"] .element-container:has(h4) {
     border-left: 3px solid #f39c12 !important;
     margin-bottom: 10px !important;
     box-shadow: 0px 2px 6px rgba(0,0,0,0.4) !important;
-}
-
-/* Botón interactivo premium de WhatsApp con degradado */
-section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
-    background: linear-gradient(135deg, #25d366, #128c7e) !important;
-    color: white !important;
-    font-size: 15px !important;
-    font-weight: bold !important;
-    border-radius: 8px !important;
-    border: none !important;
-    box-shadow: 0px 4px 10px rgba(37, 211, 102, 0.3) !important;
 }
 
 /* Brillo interactivo en los cuadros del inicio de sesión administrativo */
@@ -158,9 +147,8 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     text-decoration: none !important;
     font-weight: bold !important;
 }
-
 /* =========================================================
-   PARTE 3: GESTIÓN DE ENTREGA Y PAGO (CORREGIDO DE RAÍZ)
+   PARTE 3: GESTIÓN DE ENTREGA Y PAGO (OPTIMIZADO DE RAÍZ)
    ========================================================= */
 
 /* Monto Total a Procesar en Verde Esmeralda Neón Tridimensional */
@@ -183,7 +171,7 @@ div[data-testid="stMetricLabel"] p {
     font-weight: bold !important;
 }
 
-/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Buffalo Corporativo */
+/* BOTÓN DE EMISIÓN DE BOLETA Y GENERALES: Degradado de Fuego Buffalo Corporativo */
 .stButton > button {
     background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
     color: #ffffff !important;
@@ -204,8 +192,9 @@ div[data-testid="stMetricLabel"] p {
     filter: brightness(1.2) !important;
 }
 
-/* Exclusión para que el botón secundario de nueva orden mantenga su color sobrio nativo */
-.stButton:has(span:contains("nueva orden")) > button {
+/* Botón secundario de nueva orden: Mantiene un color sobrio e independiente */
+div[data-testid="element-container"]:has(iframe) + div.stButton > button,
+.stButton:has(button[key*="nueva_orden"]) > button {
     background: #222222 !important;
     color: #aaaaaa !important;
     font-size: 16px !important;
@@ -214,6 +203,10 @@ div[data-testid="stMetricLabel"] p {
     border: 1px solid #444444 !important;
     box-shadow: none !important;
     padding: 10px !important;
+}
+div[data-testid="element-container"]:has(iframe) + div.stButton > button:hover {
+    transform: none !important;
+    filter: brightness(1.4) !important;
 }
 
 /* Aclara los textos generales de los labels para que no se pierdan con el fondo */
@@ -235,9 +228,9 @@ div[data-testid="stMetricLabel"] p {
 }
 
 /* 2. Centra los textos informativos del Yape (Titular y subtítulo) */
-div[data-testid="stMarkdownContainer"] caption, 
-div.stMarkdown p:contains("Abriendo tu ventana"),
-div.stMarkdown p:contains("Código QR de Yape") {
+div[data-testid="stMarkdownContainer"] caption,
+div.stMarkdown text,
+.stMarkdown div[style*="text-align: center"] {
     text-align: center !important;
     font-weight: bold !important;
     color: #cccccc !important;
@@ -245,11 +238,10 @@ div.stMarkdown p:contains("Código QR de Yape") {
     margin-top: 8px !important;
 }
 
-/* 3. Estiliza el cuadro informativo azul de procesamiento para que sea compacto y centrado */
-div.stAlert:has(p:contains("PROCESANDO PAGO CON YAPE")) {
+/* 3. Estiliza el cuadro informativo de procesamiento de pago Yape */
+div.stAlert:has(div[data-testid="stMarkdownContainer"] p) {
     max-width: 600px !important;
     margin: 15px auto !important;
     border-radius: 8px !important;
-    border-left: 5px solid #8e44ad !important; /* Línea guía color morado Yape */
     background-color: #111a24 !important;
 }
