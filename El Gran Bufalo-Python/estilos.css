@@ -1,4 +1,8 @@
-/* Estilos Globales del Sistema El Gran Búfalo */
+/* =========================================================
+   PARTE 1: ESTILOS GLOBALES Y CABECERA (EL GRAN BÚFALO)
+   ========================================================= */
+
+/* Estilos Globals del Sistema El Gran Búfalo */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
@@ -8,86 +12,23 @@
     margin-bottom: 10px;
 }
 
-/* NUEVO: Tarjeta inferior de producto con textos gigantes y precio resaltado */
-.product-card-bottom {
-    background-color: #1e1e1e;
-    padding: 15px;
-    border-radius: 0px 0px 12px 12px;
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
-}
-
-.product-title {
-    font-size: 22px !important;
-    font-weight: bold !important;
-    color: #ffffff !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.product-price {
-    font-size: 24px !important;
-    font-weight: 1000 !important;
-    color: #f39c12 !important; /* Dorado Premium */
-    font-family: 'Impact', Charcoal, sans-serif;
-}
-
-/* NUEVO: Pie de página de Redes Sociales (Footer) */
-.social-footer {
-    text-align: center;
-    background-color: rgba(15, 15, 15, 0.85);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #222;
-    margin-top: 40px;
-    box-shadow: 0px -4px 15px rgba(0,0,0,0.5);
-}
-
-.social-icon {
-    font-size: 16px !important;
-    color: #f39c12 !important;
-    text-decoration: none !important;
-    font-weight: bold !important;
-    transition: 0.3s;
-}
-
-.social-icon:hover {
-    color: #ffffff !important;
-    text-shadow: 0px 0px 8px #f39c12;
-}
-
-/* Estilizado para resaltar la zona de apertura en la esquina superior izquierda */
-button[kind="headerNoPadding"] {
-    background-color: rgba(243, 156, 18, 0.2) !important;
-    border-radius: 50% !important;
-    box-shadow: 0px 0px 8px #f39c12 !important;
-    transition: 0.3s;
-}
-
-/* Oculta el icono de la flecha gris nativa de Streamlit */
-button[kind="headerNoPadding"] svg {
+/* Oculta por completo el menú original de tres puntos de Streamlit a la derecha */
+#MainMenu {
     display: none !important;
 }
 
-/* Transforma el contenedor de la esquina izquierda en tu botón personalizado */
-button[kind="headerNoPadding"] {
-    background-color: #1e1e1e !important;
-    border: 1px solid #f39c12 !important;
-    border-radius: 4px !important;
-    padding: 5px 15px !important;
-    height: auto !important;
-    width: auto !important;
+/* Oculta toda la barra de herramientas superior del servidor de Streamlit */
+div[data-testid="stHeader"] {
+    background-color: transparent !important;
 }
-
-/* 1. Oculta el icono de las dos flechas nativas (<<) de la izquierda */
-button[kind="headerNoPadding"] svg {
+div[data-testid="stHeader"] > div:first-child {
     display: none !important;
 }
 
-/* 2. Diseña un botón elegante color negro y naranja sobre la esquina izquierda */
+/* Diseña el botón personalizado "☰ Menú de Opciones" en la esquina izquierda */
+button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
 button[kind="headerNoPadding"] {
     background-color: #1e1e1e !important;
     border: 1px solid #f39c12 !important;
@@ -98,150 +39,135 @@ button[kind="headerNoPadding"] {
     margin-left: 10px !important;
     margin-top: 5px !important;
 }
-
-/* 3. Inyecta el texto limpio en el botón izquierdo */
 button[kind="headerNoPadding"]::after {
     content: "☰ Menú de Opciones" !important;
     color: #f39c12 !important;
     font-weight: bold !important;
     font-size: 14px !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-family: 'Segoe UI', sans-serif !important;
 }
 
-/* 4. EVITA EL DUPLICADO DE LA DERECHA: Bloquea el texto alternativo en elementos secundarios de Streamlit */
+/* Evita que el texto del botón se duplique en subelementos de la barra */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
 .stAppDeployDropdown button::after {
     content: "" !important;
     display: none !important;
 }
 
-/* 1. OCULTA POR COMPLETO EL MENÚ DE LOS TRES PUNTOS DE LA DERECHA */
-#MainMenu {
-    display: none !important;
-}
-
-/* 2. OCULTA TODA LA BARRA DE HERRAMIENTAS DE STREAMLIT DE LA DERECHA (COMPARTIR, ICONO DE GIT, ETC.) */
-div[data-testid="stHeader"] {
-    background-color: transparent !important;
-}
-
-div[data-testid="stHeader"] > div:first-child {
-    display: none !important;
-}
-
-/* 3. ASEGURA QUE SOLO SE VEA EL BOTÓN INTEGRADO DE LA IZQUIERDA */
-button[kind="headerNoPadding"] {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 999999 !important;
-}
-
-/* 1. CENTRA Y ACOTA TODO EL CONTENIDO PRINCIPAL DE LA PÁGINA */
+/* Centrado Premium del contenido en el medio de la pantalla */
 .block-container {
-    max-width: 800px !important; /* Limita el ancho para que no se estire a los lados */
-    margin: 0 auto !important;   /* Lo centra matemáticamente en la pantalla */
+    max-width: 800px !important;
+    margin: 0 auto !important;
     padding-top: 60px !important;
 }
 
-/* 2. OPTIMIZA EL DISEÑO DEL BOTÓN "EMPEZAR MI PEDIDO" */
-button[key="button"] {
-    max-width: 500px !important;
-    margin: 0 auto !important;
-    display: block !important;
-}
-
-/* 3. ESTILIZA EL CONTENEDOR DE REDES SOCIALES PARA QUE QUEDE COMPACTO */
-.social-footer {
-    max-width: 600px !important;
-    margin: 40px auto 0 auto !important;
-}
-
 /* =========================================================
-   DISEÑO PREMIUM PARA LA BARRA LATERAL (SIDEBAR MULTIUSO)
+   PARTE 2: BARRA LATERAL (SIDEBAR MULTIUSO) Y CATÁLOGO
    ========================================================= */
 
-/* 1. Oculta el icono nativo de flechas (<<) y lo reemplaza por un botón limpio de cerrar */
-section[data-testid="stSidebar"] button[kind="headerNoPadding"] svg {
-    display: none !important;
-}
-
+/* Botón rojo personalizado para cerrar la barra lateral */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
-    background-color: #c0392b !important; /* Rojo elegante */
+    background-color: #c0392b !important;
     border: none !important;
     border-radius: 4px !important;
     padding: 4px 12px !important;
-    transition: 0.3s !important;
 }
-
 section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after {
     content: "✕ Cerrar" !important;
     color: #ffffff !important;
-    font-weight: bold !important;
     font-size: 12px !important;
 }
-
 section[data-testid="stSidebar"] button[kind="headerNoPadding"]:hover {
     background-color: #e74c3c !important;
     box-shadow: 0px 0px 8px rgba(231, 76, 60, 0.6) !important;
 }
 
-/* 2. Tarjetas independientes (Card Style) para segmentar la información */
+/* Separadores informativos en formato de tarjetas oscuras independientes */
 section[data-testid="stSidebar"] .element-container:has(p), 
 section[data-testid="stSidebar"] .element-container:has(h4) {
     background-color: #1a1a1a !important;
     padding: 12px 15px !important;
     border-radius: 8px !important;
-    border-left: 3px solid #f39c12 !important; /* Línea guía naranja búfalo */
+    border-left: 3px solid #f39c12 !important;
     margin-bottom: 10px !important;
     box-shadow: 0px 2px 6px rgba(0,0,0,0.4) !important;
 }
 
-/* 3. Animación y estilizado premium para el botón de Soporte por WhatsApp */
+/* Botón interactivo premium de WhatsApp con degradado */
 section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     background: linear-gradient(135deg, #25d366, #128c7e) !important;
     color: white !important;
     font-size: 15px !important;
     font-weight: bold !important;
-    letter-spacing: 0.5px !important;
     border-radius: 8px !important;
     border: none !important;
     box-shadow: 0px 4px 10px rgba(37, 211, 102, 0.3) !important;
-    transition: all 0.3s ease !important;
 }
 
-section[data-testid="stSidebar"] button:has(span:contains("Chatear")):hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0px 6px 15px rgba(37, 211, 102, 0.5) !important;
-    filter: brightness(1.1) !important;
-}
-
-/* 4. Brillo interactivo corporativo para los cuadros de inicio de sesión (Login) */
+/* Brillo interactivo en los cuadros del inicio de sesión administrativo */
 section[data-testid="stSidebar"] input[type="text"], 
 section[data-testid="stSidebar"] input[type="password"] {
     background-color: #121212 !important;
     border: 1px solid #333 !important;
     border-radius: 6px !important;
-    color: #ffffff !important;
-    transition: all 0.3s ease !important;
 }
-
 section[data-testid="stSidebar"] input[type="text"]:focus, 
 section[data-testid="stSidebar"] input[type="password"]:focus {
     border-color: #f39c12 !important;
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
-    background-color: #151515 !important;
+}
+
+/* Tarjeta inferior de producto con textos gigantes y precio dorado */
+.product-card-bottom {
+    background-color: #1e1e1e !important;
+    padding: 15px;
+    border-radius: 0px 0px 12px 12px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+}
+.product-title {
+    font-size: 22px !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+}
+.product-price {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    color: #f39c12 !important;
+    font-family: 'Impact', Charcoal, sans-serif;
+}
+
+/* Pie de página de Redes Sociales (Footer) */
+.social-footer {
+    text-align: center;
+    background-color: rgba(15, 15, 15, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    margin-top: 40px;
+    max-width: 600px !important;
+    margin: 40px auto 0 auto !important;
+}
+.social-icon {
+    font-size: 16px !important;
+    color: #f39c12 !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
 }
 
 /* =========================================================
-   DISEÑO VISUAL DEFINITIVO PARA LA PANTALLA DE PAGOS
+   PARTE 3: GESTIÓN DE ENTREGA Y PAGO (CORREGIDO DE RAÍZ)
    ========================================================= */
 
-/* 1. SECTOR METRIC: Monto Total a Procesar en Verde Esmeralda Neón */
+/* Monto Total a Procesar en Verde Esmeralda Neón Tridimensional */
 div[data-testid="stMetricValue"] {
     font-size: 46px !important;
     font-weight: 900 !important;
-    color: #2ecc71 !important; /* Verde Neón */
+    color: #2ecc71 !important;
     font-family: 'Impact', Charcoal, sans-serif !important;
     text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important;
     background-color: #0f0f0f !important;
@@ -251,19 +177,17 @@ div[data-testid="stMetricValue"] {
     border: 2px solid #2ecc71 !important;
     margin-top: 5px !important;
 }
-
-/* Título de la métrica (Monto Total a Procesar) */
 div[data-testid="stMetricLabel"] p {
     font-size: 22px !important;
     color: #ffffff !important;
     font-weight: bold !important;
 }
 
-/* 2. BOTÓN DE EMISIÓN: Degradado de Fuego Buffalo Corporativo */
+/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Buffalo Corporativo */
 .stButton > button {
     background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
     color: #ffffff !important;
-    font-size: 24px !important; /* Letras de gran escala */
+    font-size: 24px !important;
     font-weight: 900 !important;
     font-family: 'Arial Black', Gadget, sans-serif !important;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.6) !important;
@@ -274,14 +198,13 @@ div[data-testid="stMetricLabel"] p {
     transition: all 0.3s ease-in-out !important;
     width: 100% !important;
 }
-
 .stButton > button:hover {
     transform: translateY(-3px) !important;
     box-shadow: 0px 8px 25px rgba(211, 84, 0, 0.7) !important;
     filter: brightness(1.2) !important;
 }
 
-/* Filtro exclusivo para que el botón secundario no herede el color naranja */
+/* Exclusión para que el botón secundario de nueva orden mantenga su color sobrio nativo */
 .stButton:has(span:contains("nueva orden")) > button {
     background: #222222 !important;
     color: #aaaaaa !important;
@@ -292,58 +215,8 @@ div[data-testid="stMetricLabel"] p {
     box-shadow: none !important;
     padding: 10px !important;
 }
-.stButton:has(span:contains("nueva orden")) > button:hover {
-    background: #333333 !important;
-    color: #ffffff !important;
-    transform: none !important;
-    box-shadow: none !important;
-}
 
-/* 3. FORMULARIOS: Textos y preguntas del cuestionario más grandes y claros */
+/* Aclara los textos generales de los labels para que no se pierdan con el fondo */
 .stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
-    font-size: 19px !important;
     color: #ffffff !important;
-    font-weight: bold !important;
-}
-
-/* 4. CAMPOS DE ENTRADA: Selectores de texto e inputs oscurecidos e iluminados */
-input, div[data-baseweb="select"] > div {
-    background-color: #1a1a1a !important;
-    border: 2px solid #444444 !important;
-    border-radius: 8px !important;
-    color: #ffffff !important;
-    font-size: 18px !important;
-    padding: 8px !important;
-}
-
-/* =========================================================
-   CORRECCIÓN COMPLETA DE VISIBILIDAD PARA EL SELECTOR DE PAGO
-   ========================================================= */
-
-/* Limpia y arregla las líneas raras o textos ocultos en el cuadro principal */
-div[data-baseweb="select"] div {
-    color: #ffffff !important; /* Fuerza a que la opción elegida sea blanca y visible */
-    font-size: 18px !important;
-    font-weight: bold !important;
-}
-
-/* Estiliza la lista desplegable que se abre abajo (Efectivo, Yape, Tarjeta) */
-ul[role="listbox"] {
-    background-color: #1a1a1a !important; /* Fondo oscuro premium para la lista */
-    border: 1px solid #444444 !important;
-}
-
-/* Estiliza cada opción individual dentro de la lista cuando pasas el mouse */
-ul[role="listbox"] li {
-    color: #ffffff !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    transition: background 0.2s ease !important;
-}
-
-/* Color naranja corporativo cuando seleccionas o pasas el cursor sobre Efectivo/Yape/Tarjeta */
-ul[role="listbox"] li:hover, 
-ul[role="listbox"] li[aria-selected="true"] {
-    background-color: #f39c12 !important; /* Fondo naranja bújalo */
-    color: #000000 !important; /* Letras negras para máximo contraste */
 }
