@@ -483,3 +483,41 @@ button[key*="btn_delete_cat"]:hover {
     transform: translateY(-2px) !important;
 }
 
+/* =========================================================
+    ELIMINACIÓN DE ERRORES VISUALES Y ACABADO PREMIUM
+   ========================================================= */
+
+/* 1. Borramos cualquier residuo de las cajas fantasmas anteriores */
+.admin-cat-card, .active-card, .delete-card {
+    display: none !important;
+}
+
+/* 2. Estilizamos las nuevas tarjetas nativas para que se vean unificadas y limpias */
+div[data-testid="stExpander"] div[data-testid="stVerticalBlockBorderWrapper"] {
+    background-color: #18181c !important; /* Gris carbón profundo */
+    border-radius: 12px !important;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 18px !important;
+    height: 100% !important;
+}
+
+/* 3. Borde Izquierdo Dorado elegante para la tarjeta de Crear (Columna 1) */
+div[data-testid="stExpander"] div[data-testid="stHorizontalBlock"] > div:first-child div[data-testid="stVerticalBlockBorderWrapper"] {
+    border-left: 4px solid #f39c12 !important; 
+}
+
+/* 4. Borde Izquierdo Rojo carmesí de advertencia para la tarjeta de Eliminar (Columna 2) */
+div[data-testid="stExpander"] div[data-testid="stHorizontalBlock"] > div:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
+    border-left: 4px solid #c0392b !important; 
+}
+
+/* 5. Estilizado premium de los títulos internos H5 de cada bloque */
+div[data-testid="stExpander"] h5 {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
