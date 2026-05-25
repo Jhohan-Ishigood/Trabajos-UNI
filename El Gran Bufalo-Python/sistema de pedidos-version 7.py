@@ -158,6 +158,44 @@ if st.sidebar.button("🔑 Ingresar como Administrador", use_container_width=Tru
     st.session_state.mostrar_login_admin = not st.session_state.mostrar_login_admin
 
 es_admin = False
+# Inicializamos las variables vacías por defecto para que siempre existan
+usuario_input = ""
+clave_input = ""
+es_admin = False
+
+# Si el botón fue presionado, desplegamos los campos de Login de forma interactiva
+if st.session_state.mostrar_login_admin:
+    st.sidebar.markdown("<div style='background-color: #121212; padding: 12px; border-radius: 6px; border: 1px solid #333;'>", unsafe_allow_html=True)
+    usuario_input = st.sidebar.text_input("Nombre de Usuario:", key="user_login").strip()
+    clave_input = st.sidebar.text_input("Contraseña:", type="password", key="pass_login").strip()
+    st.sidebar.markdown("</div>", unsafe_allow_html=True)
+
+    es_admin = (usuario_input == "Grupo 5" and clave_input == "jhohan-2026")
+
+    if es_admin:
+        st.sidebar.success("✔ Modo Administrador Activo")
+    elif usuario_input or clave_input:
+        st.sidebar.error("❌ Credenciales incorrectas")
+
+st.sidebar.markdown("---")
+
+# Secciones Comerciales e Informativas (Ahora posicionadas abajo del botón de login)
+st.sidebar.markdown("#### 🕒 HORARIO DE ATENCIÓN")
+st.sidebar.caption("Lunes a Domingo: 12:00 PM - 11:00 PM")
+
+st.sidebar.markdown("#### 📍 NUESTRA UBICACIÓN")
+st.sidebar.caption("Av. Principal El Gran Búfalo 742, Trujillo, Perú")
+st.sidebar.markdown("---")
+
+# Sección de Soporte Técnico por WhatsApp
+st.sidebar.markdown("#### 📞 ¿NECESITAS AYUDA?")
+st.sidebar.markdown("""
+    <a href="https://wa.me" target="_blank" style="text-decoration: none;">
+        <button style="width: 100%; background-color: #25d366; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
+            💬 Chatear con Soporte
+        </button>
+    </a>
+""", unsafe_allow_html=True)
 
 # FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
 # =========================================================
