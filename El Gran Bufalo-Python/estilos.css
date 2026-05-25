@@ -302,39 +302,41 @@ div.stAlert:has(p) {
 }
 
 /* =========================================================
-    FUERZA BRUTA PARA CONSERVAR 2 COLUMNAS EN SMARTPHONES
+    REFORZAMIENTO MÓVIL: 2 COLUMNAS EN SMARTPHONES (PROD)
    ========================================================= */
 @media (max-width: 768px) {
-    /* Desactivamos el colapso forzado de filas de Streamlit */
-    div[data-testid="stHorizontalBlock"][data-mobile-expanded="true"] {
+    /* Seleccionamos el bloque contenedor horizontal de Streamlit */
+    div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important; /* Fuerza la posición horizontal */
-        flex-wrap: nowrap !important; /* Evita que salte de línea antes de tiempo */
-        gap: 12px !important; /* Mantiene la separación entre las dos tarjetas */
+        flex-wrap: wrap !important; /* Permite que salten de fila en pares */
+        gap: 10px !important; /* Separación limpia entre las tarjetas */
+        width: 100% !important;
     }
     
-    /* Obliga a cada columna a ocupar exactamente el 50% de la pantalla táctil */
-    div[data-testid="stHorizontalBlock"][data-mobile-expanded="true"] > div[data-testid="column"] {
-        width: 50% !important;
-        min-width: 50% !important;
-        flex: 1 1 50% !important;
+    /* Forzamos a cada columna a ocupar exactamente la mitad del espacio disponible */
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        width: calc(50% - 5px) !important;
+        min-width: calc(50% - 5px) !important;
+        max-width: calc(50% - 5px) !important;
+        flex: 1 1 calc(50% - 5px) !important;
     }
 
-    /* Ajuste milimétrico de las fuentes para que quepan en pantallas angostas */
+    /* Ajuste milimétrico de las fuentes para que todo quepa sin cortarse */
     .product-title {
-        font-size: 14px !important; /* Evita que el nombre se corte */
+        font-size: 13.5px !important; /* Tamaño compacto para smartphones */
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
     }
     .product-price {
-        font-size: 16px !important; /* Precio estilizado compacto */
+        font-size: 15px !important; /* Precio oro estilizado */
     }
     .product-card-bottom {
         padding: 8px 10px !important;
-        flex-direction: column !important; /* Título arriba y precio abajo sólo en el bloque interno móvil */
+        flex-direction: column !important; /* Título arriba y precio abajo en celular */
         align-items: flex-start !important;
-        gap: 4px !important;
+        gap: 2px !important;
     }
 }
 
