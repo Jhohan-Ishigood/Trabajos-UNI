@@ -302,19 +302,19 @@ div.stAlert:has(p) {
 }
 
 /* =========================================================
-    REFORZAMIENTO MÓVIL: 2 COLUMNAS EN PRODUCCIÓN STREAMLIT
+    REFORZAMIENTO MÓVIL: 2 COLUMNAS CON LETRAS MÁS GRANDES
    ========================================================= */
 @media (max-width: 768px) {
-    /* Seleccionamos el bloque contenedor y anulamos el salto de línea automático */
+    /* Mantiene el contenedor horizontal forzado en fila */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
-        flex-direction: row !important; /* Fuerza la alineación horizontal */
-        flex-wrap: wrap !important;     /* Permite la cuadrícula por pares */
-        gap: 10px !important;           /* Separación limpia entre tarjetas */
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
         width: 100% !important;
     }
     
-    /* IMPACTO DIRECTO: Forzamos a CUALQUIER elemento columna interno a encogerse al 50% */
+    /* Mantiene las dos columnas perfectas al 50% */
     [data-testid="stHorizontalBlock"] > div,
     [data-testid="stHorizontalBlock"] > div[data-testid="column"],
     [data-testid="stHorizontalBlock"] * .stColumn {
@@ -324,21 +324,27 @@ div.stAlert:has(p) {
         flex: 1 1 calc(50% - 6px) !important;
     }
 
-    /* Reducción milimétrica de empaquetado para que quepa todo en smartphones */
+    /* ¡MEJORA!: Letra del título del producto más grande y legible */
     .product-title {
-        font-size: 13.5px !important; /* Tamaño compacto anti-cortes */
+        font-size: 16px !important; /* Subió de 13.5px a 16px */
+        font-weight: 800 !important; /* Más gruesa para que impacte */
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
     }
+
+    /* ¡MEJORA!: Letra del precio en Oro Búfalo más grande */
     .product-price {
-        font-size: 15px !important;
+        font-size: 18px !important; /* Subió de 15px a 18px */
+        font-weight: 900 !important;
     }
+
+    /* Ajuste de márgenes internos de la tarjeta móvil */
     .product-card-bottom {
-        padding: 8px 10px !important;
-        flex-direction: column !important; /* Título arriba y precio abajo sólo en pantallas móviles */
+        padding: 10px 12px !important;
+        flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 2px !important;
+        gap: 4px !important;
     }
 }
 
