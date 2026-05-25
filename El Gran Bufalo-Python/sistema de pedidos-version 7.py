@@ -203,13 +203,46 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
+# FLUJO DE PANTALLAS CON BARRA DE FILTRADO GLOBAL
 # =========================================================
+
+# Inicializamos la pestaña activa por defecto a nivel global si no existe
+if "categoria_activa" not in st.session_state:
+    st.session_state.categoria_activa = "Todos"
+
+# Renderizamos la Barra Netflix arriba de todo si estás en Catálogo o eres Admin
+if es_admin or (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
+    st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
+    categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
+    
+    col_nav, col_search = st.columns([3.5, 1.5], gap="small")
+    with col_nav:
+        categoria_seleccionada = st.radio(
+            "Categorías",
+            options=categorias,
+            index=categorias.index(st.session_state.categoria_activa),
+            horizontal=True,
+            label_visibility="collapsed",
+            key="netflix_tabs"
+        )
+        if categoria_seleccionada != st.session_state.categoria_activa:
+            st.session_state.categoria_activa = categoria_seleccionada
+            st.rerun()
+            
+    with col_search:
+        busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué buscas?", label_visibility="collapsed", key="search_bar").strip().lower()
+        
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+else:
+    busqueda = ""
+
+# 📊 VISTA DEL ADMINISTRADOR (CON FILTRADO OPERATIVO)
 if es_admin:
     st.markdown("<h1 class='titulo-principal'>📊 PANEL DE AUDITORÍA Y CAJA CHICA</h1>", unsafe_allow_html=True)
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
-    
+
     # MÓDULO MULTIMEDIA: Formulario para añadir nuevos productos con foto local
     with st.expander("➕ 🛠️ AÑADIR NUEVO PRODUCTO CON FOTO", expanded=False):
         st.caption("Complete los datos para agregar un plato nuevo subiendo una imagen desde su dispositivo.")
