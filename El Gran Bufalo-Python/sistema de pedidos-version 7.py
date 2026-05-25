@@ -203,39 +203,59 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# FLUJO DE PANTALLAS CON BARRA DE FILTRADO GLOBAL
+# BARRA DE EXPLORACIÓN GLOBAL (ESTILO NETFLIX PREMIUM)
 # =========================================================
 
-# Inicializamos la pestaña activa por defecto a nivel global si no existe
+# Inicializamos estados globales de pestañas si no existen
 if "categoria_activa" not in st.session_state:
     st.session_state.categoria_activa = "Todos"
+if "lista_categorias" not in st.session_state:
+    st.session_state.lista_categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
 
-# Renderizamos la Barra Netflix arriba de todo si estás en Catálogo o eres Admin
-if es_admin or (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
+# Inicializamos la variable de búsqueda limpia por defecto
+busqueda = ""
+
+# CASO 1: BARRA EXCLUSIVA PARA EL CLIENTE (EN EL CATÁLOGO)
+if not es_admin and (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
     st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
-    categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
+    col_title, col_nav, col_search = st.columns([1.2, 2.5, 1.3], gap="small")
     
-    col_nav, col_search = st.columns([3.5, 1.5], gap="small")
+    with col_title:
+        st.markdown("<div class='nav-explorer-title'>✨ EXPLORAR</div>", unsafe_allow_html=True)
     with col_nav:
         categoria_seleccionada = st.radio(
-            "Categorías",
-            options=categorias,
-            index=categorias.index(st.session_state.categoria_activa),
-            horizontal=True,
-            label_visibility="collapsed",
-            key="netflix_tabs"
+            "Categorías Cliente", options=st.session_state.lista_categorias,
+            index=st.session_state.lista_categorias.index(st.session_state.categoria_activa),
+            horizontal=True, label_visibility="collapsed", key="netflix_tabs_cliente"
         )
         if categoria_seleccionada != st.session_state.categoria_activa:
             st.session_state.categoria_activa = categoria_seleccionada
             st.rerun()
-            
     with col_search:
-        busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué buscas?", label_visibility="collapsed", key="search_bar").strip().lower()
-        
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-else:
-    busqueda = ""
+        busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja?", label_visibility="collapsed", key="search_bar_cliente").strip().lower()
+    st.markdown("</div><br>", unsafe_allow_html=True)
+
+
+# 📊 CASO 2: BARRA EXCLUSIVA PARA EL ADMINISTRADOR (PANEL DE CONTROL)
+if es_admin:
+    st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
+    col_title, col_nav, col_search = st.columns([1.2, 2.5, 1.3], gap="small")
+    
+    with col_title:
+        st.markdown("<div class='nav-explorer-title'>⚙️ FILTRAR</div>", unsafe_allow_html=True)
+    with col_nav:
+        categoria_seleccionada_admin = st.radio(
+            "Categorías Admin", options=st.session_state.lista_categorias,
+            index=st.session_state.lista_categorias.index(st.session_state.categoria_activa),
+            horizontal=True, label_visibility="collapsed", key="netflix_tabs_admin"
+        )
+        if categoria_seleccionada_admin != st.session_state.categoria_activa:
+            st.session_state.categoria_activa = categoria_seleccionada_admin
+            st.rerun()
+    with col_search:
+        busqueda = st.text_input("🔍 Buscar en inventario...", placeholder="Buscar plato...", label_visibility="collapsed", key="search_bar_admin").strip().lower()
+    st.markdown("</div><br>", unsafe_allow_html=True)
+
 
 # 📊 VISTA DEL ADMINISTRADOR (CON FILTRADO OPERATIVO)
 if es_admin:
