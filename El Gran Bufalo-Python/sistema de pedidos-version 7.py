@@ -147,7 +147,35 @@ st.sidebar.markdown("<h2 style='text-align: center; color: #f39c12;'>🥩 El Gra
 st.sidebar.markdown("<p style='text-align: center; font-size: 13px; color: #aaa;'>Especialistas en carnes y parrillas premium al carbón de manera artesanal.</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# Sección 1: Datos de Atención e Información del Local
+# Inicializamos el estado del botón desplegable administrativo si no existe
+if "mostrar_login_admin" not in st.session_state:
+    st.session_state.mostrar_login_admin = False
+
+# NUEVO: Botón administrativo posicionado en primer lugar en la lista de opciones
+st.sidebar.markdown("#### ⚙️ GESTIÓN INTERNA")
+if st.sidebar.button("🔑 Ingresar como Administrador", use_container_width=True, key="btn_toggle_admin_login"):
+    # Cambia el estado para abrir o cerrar los campos de texto al hacer clic
+    st.session_state.mostrar_login_admin = not st.session_state.mostrar_login_admin
+
+es_admin = False
+
+# Si el botón fue presionado, desplegamos los campos de Login de forma interactiva
+if st.session_state.mostrar_login_admin:
+    st.sidebar.markdown("<div style='background-color: #121212; padding: 12px; border-radius: 6px; border: 1px solid #333;'>", unsafe_allow_html=True)
+    usuario_input = st.sidebar.text_input("Nombre de Usuario:", key="user_login").strip()
+    clave_input = st.sidebar.text_input("Contraseña:", type="password", key="pass_login").strip()
+    st.sidebar.markdown("</div>", unsafe_allow_html=True)
+
+    es_admin = (usuario_input == "Grupo 5" and clave_input == "jhohan-2026")
+
+    if es_admin:
+        st.sidebar.success("✔ Modo Administrador Activo")
+    elif usuario_input or clave_input:
+        st.sidebar.error("❌ Credenciales incorrectas")
+
+st.sidebar.markdown("---")
+
+# Secciones Comerciales e Informativas (Ahora posicionadas abajo del botón de login)
 st.sidebar.markdown("#### 🕒 HORARIO DE ATENCIÓN")
 st.sidebar.caption("Lunes a Domingo: 12:00 PM - 11:00 PM")
 
@@ -155,7 +183,7 @@ st.sidebar.markdown("#### 📍 NUESTRA UBICACIÓN")
 st.sidebar.caption("Av. Principal El Gran Búfalo 742, Trujillo, Perú")
 st.sidebar.markdown("---")
 
-# Sección 2: Botón de Soporte Técnico Directo por WhatsApp
+# Sección de Soporte Técnico por WhatsApp
 st.sidebar.markdown("#### 📞 ¿NECESITAS AYUDA?")
 st.sidebar.markdown("""
     <a href="https://wa.me" target="_blank" style="text-decoration: none;">
@@ -164,14 +192,6 @@ st.sidebar.markdown("""
         </button>
     </a>
 """, unsafe_allow_html=True)
-st.sidebar.markdown("---")
-
-# Sección 3: Acceso Administrativo (Oculto discretamente al final)
-st.sidebar.markdown("### 🔒 ACCESO ADMINISTRATIVO")
-usuario_input = st.sidebar.text_input("Nombre de Usuario:", key="user_login").strip()
-clave_input = st.sidebar.text_input("Contraseña:", type="password", key="pass_login").strip()
-
-es_admin = (usuario_input == "Grupo 5" and clave_input == "jhohan-2026")
 
 if es_admin:
     st.sidebar.success("✔ Modo Administrador Activo")
