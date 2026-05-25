@@ -554,3 +554,38 @@ div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
     margin-top: 10px !important;
     padding: 5px 0 !important;
 }
+
+/* ============================================================================
+    AJUSTE MILIMÉTRICO DEL SIDEBAR (COMPACTO Y ELEGANTE, SIN APRETAR)
+   ============================================================================ */
+
+/* 1. Reducimos el espacio exagerado entre las tarjetas del menú lateral */
+section[data-testid="stSidebar"] .element-container {
+    margin-bottom: 6px !important; /* Espaciado intermedio ideal */
+}
+
+/* 2. Compactamos el relleno interno de las tarjetas para que no floten tanto */
+section[data-testid="stSidebar"] .element-container:has(p), 
+section[data-testid="stSidebar"] .element-container:has(h4) {
+    padding: 10px 14px !important; /* Un respiro limpio, ni muy ancho ni muy pegado */
+    margin-bottom: 6px !important;
+}
+
+/* 3. PEGAR GESTIÓN INTERNA CON SU BOTÓN: Forzamos proximidad entre el título y la llave */
+section[data-testid="stSidebar"] .element-container:has(button[key*="btn_toggle_admin_login"]) {
+    margin-top: -4px !important; /* Lo acerca sutilmente a la caja de Gestión Interna */
+}
+
+/* Reducimos el grosor y el aire interno del botón naranja de administrador */
+section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
+    padding: 8px !important; /* Botón más estilizado y esbelto */
+}
+
+/* 4. SEPARADORES FINOS: Cambiamos las líneas grises gruesas por hilos Oro Búfalo discretos */
+section[data-testid="stSidebar"] hr {
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+    border: 0 !important;
+    height: 1px !important;
+    background: linear-gradient(to right, transparent, rgba(243, 156, 18, 0.3), transparent) !important;
+}
