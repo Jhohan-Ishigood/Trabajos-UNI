@@ -302,31 +302,39 @@ div.stAlert:has(p) {
 }
 
 /* =========================================================
-    FORZAR DISEÑO DE 2 COLUMNAS EN TELÉFONOS MÓVILES
+    FUERZA BRUTA PARA CONSERVAR 2 COLUMNAS EN SMARTPHONES
    ========================================================= */
-@media (max-width: 640px) {
-    /* Evita que Streamlit rompa el bloque de columnas en vertical */
-    div[data-testid="stHorizontalBlock"] {
+@media (max-width: 768px) {
+    /* Desactivamos el colapso forzado de filas de Streamlit */
+    div[data-testid="stHorizontalBlock"][data-mobile-expanded="true"] {
         display: flex !important;
-        flex-direction: row !important; /* Mantiene la fila horizontal */
-        flex-wrap: wrap !important;
+        flex-direction: row !important; /* Fuerza la posición horizontal */
+        flex-wrap: nowrap !important; /* Evita que salte de línea antes de tiempo */
+        gap: 12px !important; /* Mantiene la separación entre las dos tarjetas */
     }
     
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-        width: calc(50% - 8px) !important; /* Asigna exactamente la mitad del espacio */
-        flex: 1 1 calc(50% - 8px) !important;
-        min-width: 45% !important;
+    /* Obliga a cada columna a ocupar exactamente el 50% de la pantalla táctil */
+    div[data-testid="stHorizontalBlock"][data-mobile-expanded="true"] > div[data-testid="column"] {
+        width: 50% !important;
+        min-width: 50% !important;
+        flex: 1 1 50% !important;
     }
 
-    /* Ajusta el tamaño de los textos de la tarjeta para pantallas pequeñas */
+    /* Ajuste milimétrico de las fuentes para que quepan en pantallas angostas */
     .product-title {
-        font-size: 15px !important; /* Letra un poco más chica para que no se corte */
+        font-size: 14px !important; /* Evita que el nombre se corte */
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     .product-price {
-        font-size: 16px !important;
+        font-size: 16px !important; /* Precio estilizado compacto */
     }
     .product-card-bottom {
-        padding: 8px 10px !important; /* Menor espacio interno en celulares */
+        padding: 8px 10px !important;
+        flex-direction: column !important; /* Título arriba y precio abajo sólo en el bloque interno móvil */
+        align-items: flex-start !important;
+        gap: 4px !important;
     }
 }
 
