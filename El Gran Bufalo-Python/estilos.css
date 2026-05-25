@@ -529,3 +529,28 @@ div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
     font-size: 13px !important;
     padding: 6px 10px !important;
 }
+/* ============================================================================
+    DESTRUCCIÓN ABSOLUTA DE LA CAJA VACÍA FANTASMA SUPERIOR
+   ============================================================================ */
+
+/* 1. Ocultamos el bloque vacío sobrante que genera Streamlit por el div maestro */
+div.netflix-navbar-master, 
+div:has(> .netflix-navbar-master) {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 2. Forzamos a que el bloque real de las columnas ocupe el espacio sin cajas negras flotantes */
+div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
+div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
+    background-color: transparent !important; /* Mantiene el fondo limpio */
+    border: none !important;
+    box-shadow: none !important;
+    margin-top: 10px !important;
+    padding: 5px 0 !important;
+}
