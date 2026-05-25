@@ -523,13 +523,13 @@ div[data-testid="stExpander"] h5 {
 }
 
 /* ============================================================================
-    ENCAPSULADO DE ULTRA LUJO: METE TODO ADENTRO DE LA CAJA OSCURA SUPERIOR
+    ENCAPSULADO DE MÁXIMA PRIORIDAD: REORDENAMIENTO HORIZONTAL EN LA NUBE
    ============================================================================ */
 
-/* 1. Forzamos a la caja contenedora a ser una barra fija, delgada y compacta */
+/* 1. Caja contenedora principal forzada a ser una barra delgada */
 .netflix-container {
-    background-color: #141414 !important; /* Fondo negro sólido Netflix */
-    padding: 6px 16px !important; /* Reducimos el margen interno al mínimo */
+    background-color: #141414 !important; /* Fondo negro sólido de Netflix */
+    padding: 8px 18px !important; /* Margen interno súper compacto */
     border-radius: 8px !important;
     border: 1px solid #222222 !important;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
@@ -537,54 +537,54 @@ div[data-testid="stExpander"] h5 {
     width: 100% !important;
 }
 
-/* 2. Forzamos a las columnas internas a alinearse milimétricamente en una sola fila */
-.netflix-container div[data-testid="stHorizontalBlock"] {
+/* 2. FUERZA BRUTA HORIZONTAL: Alineamos las 3 columnas principales en una sola fila estricta */
+.netflix-container div[data-testid="stHorizontalBlock"],
+.netflix-container [data-testid="stHorizontalBlock"] {
     display: flex !important;
-    flex-direction: row !important; /* Asegura posición al costado obligatoria */
+    flex-direction: row !important; /* Fuerza la posición al costado */
     align-items: center !important; /* Centrado vertical perfecto dentro de la caja */
     justify-content: space-between !important;
-    flex-wrap: nowrap !important; /* Bloquea por completo el salto hacia abajo */
-    gap: 12px !important;
+    flex-wrap: nowrap !important; /* Prohíbe por completo el salto de línea */
+    gap: 14px !important;
     width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
 }
 
-/* 3. Forzamos a que las columnas de los componentes hijos no tengan márgenes que las empujen */
-.netflix-container div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-    padding: 0 !important;
-    margin: 0 !important;
+/* 3. Evitamos que Streamlit le dé un ancho del 100% a las subcolumnas en celulares y web */
+.netflix-container div[data-testid="stHorizontalBlock"] > div,
+.netflix-container [data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    width: auto !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    flex: unset !important;
     display: flex !important;
     align-items: center !important;
 }
 
-/* 4. ELIMINACIÓN DE RESIDUOS: Borramos el espacio vacío incómodo superior */
+/* 4. ELIMINACIÓN DE ETIQUETAS E INSTANCIAS VACÍAS DE ENCIMA */
 .netflix-container label[data-testid="stWidgetLabel"],
 .netflix-container div[data-testid="stRadioHorizontal"] > div:first-child,
-.netflix-container div[data-testid="stVerticalBlock"] > div:first-child:has(p) {
+.netflix-container div[data-testid="stMarkdownContainer"] p:empty {
     display: none !important;
     height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
 }
 
-/* 5. CONTROL DE TEXTOS HORIZONTALES: Alineamos las pestañas una al lado de la otra */
+/* 5. CONTROL DE TEXTOS: Desaparecemos los círculos y alineamos las opciones al costado */
 .netflix-container div[role="radiogroup"] {
     display: flex !important;
     flex-direction: row !important; /* Pestañas una al costado de otra */
-    flex-wrap: nowrap !important;
-    gap: 14px !important; /* Separación compacta estilo streaming */
+    flex-wrap: nowrap !important; /* Evita que salte hacia abajo */
+    gap: 16px !important; /* Espaciado elegante entre categorías */
     align-items: center !important;
-    padding: 0 !important;
-    margin: 0 !important;
 }
 
-/* Desactivamos los círculos de opción nativos de Streamlit */
+/* Borrado de los círculos del botón de opción nativo */
 .netflix-container div[role="radiogroup"] label div[data-testid="stMarker"] {
     display: none !important;
 }
 
-/* Convertimos las etiquetas de selección en texto plano de menú */
+/* Transformación de los labels en texto plano minimalista */
 .netflix-container div[role="radiogroup"] label {
     background: transparent !important;
     background-color: transparent !important;
@@ -594,31 +594,31 @@ div[data-testid="stExpander"] h5 {
     margin: 0 !important;
 }
 
-/* Texto Inactivo */
+/* Texto Inactivo (Gris clásico de Netflix) */
 .netflix-container div[role="radiogroup"] label p {
     color: #aaaaaa !important;
-    font-size: 14.5px !important;
+    font-size: 15px !important;
     font-weight: 600 !important;
     font-family: 'Segoe UI', system-ui, sans-serif !important;
     margin: 0 !important;
-    padding: 2px 0 !important;
+    padding: 4px 0 !important;
 }
 
-/* Hover interactivo */
+/* Hover: Cambia a Oro Búfalo al pasar el cursor */
 .netflix-container div[role="radiogroup"] label:hover p {
     color: #f39c12 !important;
 }
 
-/* PESTAÑA ACTIVA: Resalta en blanco brillante con línea inferior dorada */
+/* PESTAÑA ACTIVA SELECCIONADA: Resalta en blanco brillante con línea inferior dorada */
 .netflix-container div[role="radiogroup"] div[data-checked="true"] label p {
     color: #ffffff !important;
     font-weight: 800 !important;
     border-bottom: 2px solid #f39c12 !important;
 }
 
-/* 6. Centrado milimétrico del título "✨ EXPLORAR" a la izquierda */
+/* 6. Diseño e integración del título "✨ EXPLORAR" a la izquierda */
 .nav-explorer-title {
-    color: #f39c12 !important;
+    color: #f39c12 !important; /* Oro Búfalo */
     font-family: 'Arial Black', Gadget, sans-serif !important;
     font-size: 14.5px !important;
     font-weight: 900 !important;
@@ -626,16 +626,18 @@ div[data-testid="stExpander"] h5 {
     text-transform: uppercase !important;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
     white-space: nowrap !important;
-    margin: 0 !important;
 }
 
-/* 7. Caja de búsqueda ultra-compacta alineada al extremo derecho */
+/* 7. Caja de búsqueda estilizada y alineada al extremo derecho */
 .netflix-container div[data-testid="stTextInput"] input {
     background-color: rgba(0, 0, 0, 0.75) !important;
     border: 1px solid #333333 !important;
     border-radius: 4px !important;
     color: #ffffff !important;
     font-size: 13px !important;
-    padding: 4px 8px !important;
-    margin: 0 !important;
+    padding: 6px 10px !important;
+}
+.netflix-container div[data-testid="stTextInput"] input:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
 }
