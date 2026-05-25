@@ -315,3 +315,35 @@ input, div[data-baseweb="select"] > div {
     font-size: 18px !important;
     padding: 8px !important;
 }
+
+/* =========================================================
+   CORRECCIÓN COMPLETA DE VISIBILIDAD PARA EL SELECTOR DE PAGO
+   ========================================================= */
+
+/* Limpia y arregla las líneas raras o textos ocultos en el cuadro principal */
+div[data-baseweb="select"] div {
+    color: #ffffff !important; /* Fuerza a que la opción elegida sea blanca y visible */
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+/* Estiliza la lista desplegable que se abre abajo (Efectivo, Yape, Tarjeta) */
+ul[role="listbox"] {
+    background-color: #1a1a1a !important; /* Fondo oscuro premium para la lista */
+    border: 1px solid #444444 !important;
+}
+
+/* Estiliza cada opción individual dentro de la lista cuando pasas el mouse */
+ul[role="listbox"] li {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: background 0.2s ease !important;
+}
+
+/* Color naranja corporativo cuando seleccionas o pasas el cursor sobre Efectivo/Yape/Tarjeta */
+ul[role="listbox"] li:hover, 
+ul[role="listbox"] li[aria-selected="true"] {
+    background-color: #f39c12 !important; /* Fondo naranja bújalo */
+    color: #000000 !important; /* Letras negras para máximo contraste */
+}
