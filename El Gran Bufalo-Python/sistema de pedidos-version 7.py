@@ -6,11 +6,11 @@ import pandas as pd  # Motor de analítica para el control de la bitácora
 import altair as alt  # Motor gráfico premium para el Dashboard corporativo
 import base64  # Motor multimedia para incrustar fotos locales en HTML y CSS
 
-# Configuración premium inicial para que la app se adapte a celulares y la barra lateral inicie oculta por defecto
+# Configuración premium inicial de pantalla responsiva con barra lateral colapsada por defecto
 st.set_page_config(page_title="El Gran Búfalo - Sistema de Pedidos", page_icon="🥩", layout="wide", initial_sidebar_state="collapsed")
 
 # =========================================================
-# RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
+# RUTAS DE CONTROL PARA ARCHIVOS FÍSIMOS PERMANENTES
 # =========================================================
 BASE_DIR = ""
 if os.path.exists("El Gran Buffalo-Python"):
@@ -35,7 +35,7 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # Silueta vectorial en Base64 por defecto para evitar pantallas colapsadas
+    # Silueta vectorial en Base64 por defecto por seguridad informática
     FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
     
     menu_defecto = {
@@ -130,14 +130,14 @@ for orden in st.session_state.historial_ordenes:
                 partes = detalle.split(", ")
                 for parte in partes:
                     if prod in parte:
-                        cant_txt = parte.split(f"x {prod}")[0].strip()
+                        cant_txt = parte.split(f"x {prod}").strip()
                         conteos_productos[prod] += int(cant_txt)
             except:
                 pass
 
 st.session_state.numero_boleta = total_pedidos + 1
 
-# Enlace dinámico local de la foto de la fachada de tu restaurante
+# Enlace de la ruta de la foto de tu restaurante para el fondo
 URL_BANNER_LOCAL = os.path.join(BASE_DIR, "Captura de pantalla 2026-05-24 090610.png")
 
 # =========================================================
@@ -154,11 +154,8 @@ if "mostrar_login_admin" not in st.session_state:
 # NUEVO: Botón administrativo posicionado en primer lugar en la lista de opciones
 st.sidebar.markdown("#### ⚙️ GESTIÓN INTERNA")
 if st.sidebar.button("🔑 Ingresar como Administrador", use_container_width=True, key="btn_toggle_admin_login"):
-    # Cambia el estado para abrir o cerrar los campos de texto al hacer clic
     st.session_state.mostrar_login_admin = not st.session_state.mostrar_login_admin
 
-es_admin = False
-# Inicializamos las variables vacías por defecto para que siempre existan
 usuario_input = ""
 clave_input = ""
 es_admin = False
@@ -196,7 +193,7 @@ st.sidebar.markdown("""
         </button>
     </a>
 """, unsafe_allow_html=True)
-
+# =========================================================
 # FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
 # =========================================================
 if es_admin:
@@ -256,7 +253,7 @@ if es_admin:
         with col_ed1:
             st.markdown(f"### {st.session_state.menu_dinamico[p_izq]['icono']} {p_izq}")
             
-            # Previsualización de la foto actual estilizada en la administración
+            # Previsualización de la foto actual estilizada
             foto_actual_izq = st.session_state.menu_dinamico[p_izq].get("foto", "")
             if foto_actual_izq:
                 st.markdown(f"""<img src="{foto_actual_izq}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -282,14 +279,13 @@ if es_admin:
             
             if st.button(f"❌ Eliminar {p_izq}", key=f"del_{p_izq}", use_container_width=True):
                 eliminar_producto = p_izq
-                
         # Producto Derecha (Si existe en el índice)
         if i + 1 < len(productos_lista):
             p_der = productos_lista[i+1]
             with col_ed2:
                 st.markdown(f"### {st.session_state.menu_dinamico[p_der]['icono']} {p_der}")
                 
-                # Previsualización de la foto actual estilizada en la administración
+                # Previsualización de la foto actual estilizada
                 foto_actual_der = st.session_state.menu_dinamico[p_der].get("foto", "")
                 if foto_actual_der:
                     st.markdown(f"""<img src="{foto_actual_der}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
@@ -316,6 +312,7 @@ if es_admin:
                 if st.button(f"❌ Eliminar {p_der}", key=f"del_{p_der}", use_container_width=True):
                     eliminar_producto = p_der
         st.markdown("---")
+        
     # Lógica de eliminación inmediata física
     if eliminar_producto is not None:
         del st.session_state.menu_dinamico[eliminar_producto]
@@ -395,9 +392,6 @@ else:
             
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Botón premium superior para desplegar el menú de la izquierda con las 3 rayitas
-                        # RUTA CORRECTA: Forzamos a que el botón se acomode al lado izquierdo usando columnas estáticas
-
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         
         st.markdown("<br><p style='text-align: center; font-size: 24px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
@@ -476,13 +470,20 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-        # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
+    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
-        # TRUCO TÉCNICO COMPARTIDO: Código en JavaScript para forzar al navegador a subir al inicio
+        # TRUCO DEFINITIVO: JavaScript reforzado que resetea el scroll de la ventana principal y de la app de Streamlit
         components.html(
             """
             <script>
-                window.parent.document.querySelector('.stApp').scrollTo({top: 0, behavior: 'smooth'});
+                window.scrollTo({top: 0, behavior: 'instant'});
+                if (window.parent) {
+                    window.parent.scrollTo({top: 0, behavior: 'instant'});
+                    var appContainer = window.parent.document.querySelector('.main') || window.parent.document.querySelector('.stApp');
+                    if (appContainer) {
+                        appContainer.scrollTo({top: 0, behavior: 'instant'});
+                    }
+                }
             </script>
             """,
             height=0,
