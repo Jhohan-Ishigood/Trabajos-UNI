@@ -203,7 +203,7 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# BARRA DE EXPLORACIÓN GLOBAL (ESTILO NETFLIX PREMIUM)
+# BARRA DE EXPLORACIÓN GLOBAL CON INYECCIÓN DIRECTA (PROD)
 # =========================================================
 
 # Inicializamos estados globales de pestañas si no existen
@@ -214,6 +214,99 @@ if "lista_categorias" not in st.session_state:
 
 # Inicializamos la variable de búsqueda limpia por defecto
 busqueda = ""
+
+# INYECCIÓN DIRECTA DE ESTILOS: Esto obliga al servidor a aplicar la barra plana horizontal
+st.markdown("""
+    <style>
+    /* Estructura general de la caja oscura de la barra */
+    .netflix-container {
+        background-color: #141414 !important;
+        padding: 8px 18px !important;
+        border-radius: 8px !important;
+        border: 1px solid #222222 !important;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
+    }
+    
+    /* Forza a las columnas a quedarse una al costado de otra */
+    .netflix-container div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 15px !important;
+    }
+    
+    /* Elimina el espacio vacío incómodo superior */
+    .netflix-container label[data-testid="stWidgetLabel"],
+    .netflix-container div[data-testid="stRadioHorizontal"] > div:first-child,
+    .netflix-container div[data-testid="stMarkdownContainer"] p:empty {
+        display: none !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Borra por completo los círculos rojos del radio button nativo */
+    .netflix-container div[role="radiogroup"] label div[data-testid="stMarker"] {
+        display: none !important;
+    }
+    
+    /* Alinea las pestañas de texto una al lado de la otra */
+    .netflix-container div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 16px !important;
+    }
+    
+    /* Convierte las opciones en texto minimalista estilo Netflix */
+    .netflix-container div[role="radiogroup"] label {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 4px 0 !important;
+        margin: 0 !important;
+    }
+    .netflix-container div[role="radiogroup"] label p {
+        color: #aaaaaa !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    .netflix-container div[role="radiogroup"] label:hover p {
+        color: #f39c12 !important;
+    }
+    
+    /* Pestaña seleccionada activa */
+    .netflix-container div[role="radiogroup"] div[data-checked="true"] label p {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        border-bottom: 2px solid #f39c12 !important;
+    }
+    
+    /* Título Explorar izquierdo */
+    .nav-explorer-title {
+        color: #f39c12 !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
+        font-size: 14.5px !important;
+        font-weight: 900;
+        text-transform: uppercase !important;
+        white-space: nowrap !important;
+    }
+    
+    /* Buscador derecho */
+    .netflix-container div[data-testid="stTextInput"] input {
+        background-color: rgba(0, 0, 0, 0.75) !important;
+        border: 1px solid #333333 !important;
+        border-radius: 4px !important;
+        color: #ffffff !important;
+        font-size: 13px !important;
+        padding: 6px 10px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # CASO 1: BARRA EXCLUSIVA PARA EL CLIENTE (EN EL CATÁLOGO)
 if not es_admin and (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
@@ -233,6 +326,26 @@ if not es_admin and (st.session_state.pantalla_actual == "catalogo" and not st.s
             st.rerun()
     with col_search:
         busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja?", label_visibility="collapsed", key="search_bar_cliente").strip().lower()
+    st.markdown("</div><br>", unsafe_allow_html=True)
+
+# 📊 CASO 2: BARRA EXCLUSIVA PARA EL ADMINISTRADOR (PANEL DE CONTROL)
+if es_admin:
+    st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
+    col_title, col_nav, col_search = st.columns([1.2, 2.5, 1.3], gap="small")
+    
+    with col_title:
+        st.markdown("<div class='nav-explorer-title'>⚙️ FILTRAR</div>", unsafe_allow_html=True)
+    with col_nav:
+        categoria_seleccionada_admin = st.radio(
+            "Categorías Admin", options=st.session_state.lista_categorias,
+            index=st.session_state.lista_categorias.index(st.session_state.categoria_activa),
+            horizontal=True, label_visibility="collapsed", key="netflix_tabs_admin"
+        )
+        if categoria_seleccionada_admin != st.session_state.categoria_activa:
+            st.session_state.categoria_activa = categoria_seleccionada_admin
+            st.rerun()
+    with col_search:
+        busqueda = st.text_input("🔍 Buscar en inventario...", placeholder="Buscar plato...", label_visibility="collapsed", key="search_bar_admin").strip().lower()
     st.markdown("</div><br>", unsafe_allow_html=True)
 
 
