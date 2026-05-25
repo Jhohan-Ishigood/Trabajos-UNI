@@ -635,39 +635,137 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
 }
 
 /* ============================================================================
-    DISEÑO MAESTRO UNIFICADO DE PUNTA A PUNTA PARA LA PASARELA DE PAGOS
+    BLOQUE INTEGRAL DE FUERZA BRUTA: REDISEÑO DE PASARELA EN PRODUCCIÓN
    ============================================================================ */
 
-/* 1. ESTILIZADO DE LOS TÍTULOS Y REQUISITOS GENERALES DE LA SECCIÓN */
-.stApp h3:contains("GESTIÓN DE ENTREGA"), 
-.stApp div[data-testid="stMarkdownContainer"] p strong:contains("Resumen de artículos") {
-    font-size: 20px !important;
-    font-weight: 800 !important;
-    color: #f39c12 !important; /* Oro Búfalo */
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    margin-top: 15px !important;
-}
-
-/* 2. DISEÑO PREMIUM PARA EL RESUMEN DE ARTÍCULOS SOLICITADOS */
-.stApp div[data-testid="stMarkdownContainer"] ul {
-    list-style: none !important; /* Quitamos los puntos nativos aburridos */
-    padding: 0 !important;
-    margin: 10px 0 !important;
-}
-.stApp div[data-testid="stMarkdownContainer"] li {
-    background-color: #1c1c22 !important; /* Caja carbón premium */
-    border-left: 4px solid #f39c12 !important; /* Hilo dorado de acento */
+/* 1. SECCIÓN RESUMEN DE ARTÍCULOS: Convertimos el texto suelto en Tarjetas Premium */
+div[data-testid="stMarkdownContainer"] p + ul li,
+div[data-testid="stMarkdownContainer"] ul li,
+.stApp [data-testid="stMarkdownContainer"] li {
+    background-color: #1e1e24 !important; /* Gris oscuro vivo del menú lateral */
+    border-left: 4px solid #f39c12 !important; /* El icónico hilo dorado Oro Búfalo */
     padding: 12px 16px !important;
     border-radius: 8px !important;
     color: #ffffff !important;
     font-size: 16px !important;
-    font-weight: 600 !important;
-    margin-bottom: 8px !important;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 700 !important;
+    list-style: none !important; /* ¡Adiós al punto blanco nativo aburrido! */
+    margin-bottom: 10px !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* 3. CAJAS DE ENTRADA DE TEXTO Y FORMULARIOS (DIRECCIÓN, TITULAR, DÍGITOS) */
+/* Forzamos a que la lista Markdown pierda el margen o punto izquierdo nativo */
+div[data-testid="stMarkdownContainer"] ul {
+    list-style-type: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Subimos el tamaño y grosor del texto guía "Resumen de artículos solicitados" */
+div[data-testid="stMarkdownContainer"] p:has(code), 
+div[data-testid="stMarkdownContainer"] p strong {
+    font-size: 16.5px !important;
+    color: #e0e0e0 !important;
+}
+
+/* 2. TRANSFORMACIÓN DE LOS BOTONES NO / SI (ELIMINAMOS LOS CÍRCULOS DE RADIO) */
+
+/* Agrandamos la pregunta de "¿Desea delivery?" */
+div[data-testid="stRadio"] label[data-testid="stWidgetLabel"] p {
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 12px !important;
+}
+
+/* Forzamos a que el NO y el SI se echen horizontalmente uno al costado del otro */
+div[data-testid="stRadio"] div[role="radiogroup"] {
+    display: flex !important;
+    flex-direction: row !important; /* Uno al costado del otro obligatoriamente */
+    gap: 16px !important;
+    align-items: center !important;
+}
+
+/* Desaparecemos por completo los círculos selectores nativos aburridos */
+div[data-testid="stRadio"] div[role="radiogroup"] label div[data-testid="stMarker"] {
+    display: none !important;
+}
+
+/* Convertimos las opciones de texto en verdaderas Pestañas Táctiles Modernas */
+div[data-testid="stRadio"] div[role="radiogroup"] label {
+    background-color: #1c1c22 !important; /* Caja oscura premium */
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    padding: 10px 28px !important; /* Espacio cómodo para presionar con el dedo */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    margin: 0 !important;
+}
+div[data-testid="stRadio"] div[role="radiogroup"] label p {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #aaaaaa !important; /* Gris inactivo por defecto */
+    margin: 0 !important;
+}
+
+/* Brillo interactivo al pasar el mouse por encima */
+div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
+    border-color: #f39c12 !important;
+}
+div[data-testid="stRadio"] div[role="radiogroup"] label:hover p {
+    color: #f39c12 !important;
+}
+
+/* 3. ILUMINACIÓN PREMIUM DE LA OPCIÓN ACTIVADA (DATA-CHECKED) */
+
+/* Si el cliente marca "NO": La pestaña se ilumina en un rojo carmesí de asador */
+div[data-testid="stRadio"] div[role="radiogroup"] div[data-checked="true"]:has(label p:contains("NO")) label {
+    background: linear-gradient(135deg, #7b1f15 0%, #4a100a 100%) !important;
+    border-color: #ff4b4b !important;
+    box-shadow: 0px 4px 15px rgba(231, 76, 60, 0.4) !important;
+}
+div[data-testid="stRadio"] div[role="radiogroup"] div[data-checked="true"]:has(label p:contains("NO")) label p {
+    color: #ffffff !important; /* Blanco brillante activo */
+}
+
+/* Si el cliente marca "SI": La pestaña se ilumina en un verde esmeralda corporativo */
+div[data-testid="stRadio"] div[role="radiogroup"] div[data-checked="true"]:has(label p:contains("SI")) label {
+    background: linear-gradient(135deg, #1e6b38 0%, #0f3d1e 100%) !important;
+    border-color: #2ecc71 !important;
+    box-shadow: 0px 4px 15px rgba(46, 204, 113, 0.4) !important;
+}
+div[data-testid="stRadio"] div[role="radiogroup"] div[data-checked="true"]:has(label p:contains("SI")) label p {
+    color: #ffffff !important;
+}
+
+/* 4. SECCIONES COMPLEMENTARIAS: Cajas de Texto, Selectores y Alertas del Final */
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stTextInput"] label p,
+div[data-testid="stNumberInput"] label p {
+    font-size: 16.5px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Diseño estilizado de la caja del selector de pagos (Efectivo/Yape/Tarjeta) */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    background-color: #1e1e24 !important;
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+}
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+}
+
+/* Entradas de texto (Dirección, Datos de tarjeta) */
 div[data-testid="stTextInput"] input, 
 div[data-testid="stNumberInput"] input {
     background-color: #141416 !important;
@@ -677,7 +775,6 @@ div[data-testid="stNumberInput"] input {
     padding: 10px 14px !important;
     font-size: 15px !important;
     font-weight: 600 !important;
-    transition: all 0.25s ease !important;
 }
 div[data-testid="stTextInput"] input:focus, 
 div[data-testid="stNumberInput"] input:focus {
@@ -685,49 +782,19 @@ div[data-testid="stNumberInput"] input:focus {
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
 }
 
-/* 4. TÍTULOS DE LOS SELECTORES Y CAJAS DE ENTRADA (MÉTODOS DE PAGO) */
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stTextInput"] label p,
-div[data-testid="stNumberInput"] label p {
-    font-size: 17px !important;
-    font-weight: 800 !important;
-    color: #ffffff !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    margin-bottom: 8px !important;
-}
-
-/* 5. SELECTOR DE MÉTODOS DE PAGO COMPACTO Y MODERNO (EFECTIVO/YAPE/TARJETA) */
-div[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #1c1c22 !important;
-    border: 1px solid #333333 !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4) !important;
-}
-div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: #ffffff !important;
-}
-
-/* 6. CAJAS DE ALERTA E INFORMACIÓN EN EL FLUJO FINAL (YAPE/TARJETA/ERRORES) */
+/* Cuadros informativos y alertas de procesamiento de boletas */
 div.stAlert {
-    background-color: #111a24 !important; /* Fondo azul/negro premium nocturno */
+    background-color: #111a24 !important;
     border: 1px solid #1f3347 !important;
-    border-left: 5px solid #f39c12 !important; /* Acento dorado */
+    border-left: 5px solid #f39c12 !important;
     border-radius: 10px !important;
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.6) !important;
-    padding: 15px !important;
 }
 div.stAlert p {
     color: #ffffff !important;
     font-size: 15px !important;
     font-weight: 600 !important;
-    line-height: 1.5 !important;
 }
-
-/* Si es una alerta de error nativa, le ponemos acento carmesí en lugar de dorado */
 div.stAlert:has(svg[data-testid="stNotificationIconError"]) {
     border-left: 5px solid #c0392b !important;
     background-color: #1a1111 !important;
