@@ -1,10 +1,17 @@
-/* =========================================================
-    PARTE 1: ARQUITECTURA VISUAL GLOBAL - EL GRAN BÚFALO
-   ========================================================= */
+/* ============================================================================
+    PARTE 1: ARQUITECTURA VISUAL GLOBAL Y TIPOGRAFÍA - EL GRAN BÚFALO
+   ============================================================================ */
 
-/* Estilos Generales y Tipografía del Sistema */
+/* Configuración del Lienzo y Fuentes del Sistema */
 .stApp {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Centrado Estructural y Espaciado de la Pantalla Principal */
+.block-container {
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding-top: 60px !important;
 }
 
 /* Titulado Principal con Degradado de Fuego Premium */
@@ -58,18 +65,11 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
     content: "" !important;
     display: none !important;
 }
+/* ============================================================================
+    PARTE 2: REDISEÑO DE LA BARRA LATERAL (SIDEBAR UNIFICADO Y LEGIBLE)
+   ============================================================================ */
 
-/* Centrado Estructural de la Pantalla Principal */
-.block-container {
-    max-width: 800px !important;
-    margin: 0 auto !important;
-    padding-top: 60px !important;
-}
-/* =========================================================
-    PARTE 2: BARRA LATERAL (SIDEBAR UNIFICADO) Y CATÁLOGO
-   ========================================================= */
-
-/* Fondo general del menú lateral */
+/* Fondo general de la barra lateral */
 section[data-testid="stSidebar"] {
     background-color: #111113 !important;
 }
@@ -96,8 +96,8 @@ section[data-testid="stSidebar"] .element-container:has(p),
 section[data-testid="stSidebar"] .element-container:has(h4) {
     background-color: #1e1e24 !important; /* Gris oscuro moderno y vivo */
     padding: 14px 16px !important;
-    border-radius: 12px !important; /* Bordes más redondeados */
-    border-left: 4px solid #f39c12 !important; /* Acento dorado del restaurante */
+    border-radius: 12px !important; /* Bordes redondeados premium */
+    border-left: 4px solid #f39c12 !important; /* Acento dorado */
     margin-bottom: 12px !important;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
@@ -165,8 +165,11 @@ section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     box-shadow: 0px 4px 12px rgba(37, 211, 102, 0.3) !important;
     border: none !important;
 }
+/* ============================================================================
+    PARTE 3: CATÁLOGO DE PRODUCTOS (FOOD CARDS PREMIUM) Y FOOTER ORIGINAL
+   ============================================================================ */
 
-/* Estructura inferior de las tarjetas de platos (Food Cards) */
+/* Estructura inferior de las tarjetas de platos en el catálogo */
 .product-card-bottom {
     background-color: #1e1e1e !important;
     padding: 15px;
@@ -178,20 +181,21 @@ section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     align-items: center;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
 }
+
+/* Títulos de los platos con tipografía gruesa e impactante */
 .product-title {
     font-size: 22px !important;
     font-weight: bold !important;
     color: #ffffff !important;
 }
+
+/* Precios gigantes en Oro Búfalo con tipografía de alto impacto */
 .product-price {
     font-size: 24px !important;
     font-weight: 900 !important;
     color: #f39c12 !important;
     font-family: 'Impact', Charcoal, sans-serif;
 }
-/* =========================================================
-    PARTE 3: PASARELA DE PAGOS Y REDES SOCIALES ORIGINALES
-   ========================================================= */
 
 /* Pie de página de Redes Sociales (Footer) ORIGINAL RESTAURADO */
 .social-footer {
@@ -204,12 +208,90 @@ section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     max-width: 600px !important;
     margin: 40px auto 0 auto !important;
 }
+
+/* Iconos y enlaces a las redes oficiales en color oro interactivo */
 .social-icon, .social-footer a {
     font-size: 16px !important;
-    color: #f39c12 !important; /* Letras Oro Búfalo original */
+    color: #f39c12 !important;
     text-decoration: none !important;
     font-weight: bold !important;
 }
+/* ============================================================================
+    PARTE 4: BARRA DE EXPLORACIÓN HORIZONTAL ESTILO NETFLIX (SIN CAJAS OSCURAS)
+   ============================================================================ */
+
+/* Eliminamos por completo cualquier residuo de la caja negra incómoda */
+.netflix-container {
+    display: none !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Forzamos a que las columnas de los botones siempre vayan alineadas horizontalmente al costado */
+div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
+div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
+    display: flex !important;
+    flex-direction: row !important; /* Fuerza la posición uno al costado del otro */
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important; /* Prohíbe por completo el salto de línea hacia abajo */
+    gap: 8px !important;
+}
+
+/* Convertimos los botones nativos de Streamlit en texto plano minimalista de streaming */
+button[key*="nav_cli_"], button[key*="nav_adm_"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #aaaaaa !important; /* Gris elegante para pestañas inactivas */
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    text-transform: none !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+    padding: 6px 12px !important;
+    height: auto !important;
+    width: auto !important;
+    transition: color 0.2s ease-in-out, transform 0.2s ease !important;
+}
+
+/* Hover: Cambia suavemente a Oro Búfalo cuando pasas el mouse por encima */
+button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
+    color: #f39c12 !important; /* Oro Búfalo interactivo */
+    background: transparent !important;
+    background-color: transparent !important;
+    transform: scale(1.05) !important;
+}
+
+/* Título premium integrado a la izquierda "✨ EXPLORAR" / "⚙️ FILTRAR" */
+.nav-explorer-title {
+    color: #f39c12 !important; /* Oro Búfalo corporativo */
+    font-family: 'Arial Black', Gadget, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
+    white-space: nowrap !important;
+}
+
+/* Rediseño estilizado para las cajas de búsqueda compactadas a la derecha */
+div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input {
+    background-color: rgba(30, 30, 35, 0.75) !important;
+    border: 1px solid #333333 !important;
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+}
+div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
+}
+/* ============================================================================
+    PARTE 5: PASARELA NEÓN, GESTOR DE SECCIONES COMPACTO Y RESPONSIVO MÓVIL
+   ============================================================================ */
 
 /* Monto Total a Procesar en Verde Esmeralda Neón Tridimensional */
 div[data-testid="stMetricValue"] {
@@ -254,7 +336,7 @@ div[data-testid="stMetricLabel"] p {
 
 /* Exclusión para que el botón de nueva orden mantenga su color sobrio nativo */
 div[data-testid="element-container"]:has(iframe) + div.stButton > button,
-.stButton:has(button[key*="nueva_orden"]) > button {
+.stButton:has(button[key*="btn_nueva_orden_final"]) > button {
     background: #222222 !important;
     color: #aaaaaa !important;
     font-size: 16px !important;
@@ -265,235 +347,13 @@ div[data-testid="element-container"]:has(iframe) + div.stButton > button,
     padding: 10px !important;
 }
 
-/* Aclara los textos generales de los labels de entrada del formulario */
+/* Aclara los textos generales de los labels de entrada del formulario para que no se pierdan */
 .stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
     color: #ffffff !important;
 }
 
-/* =========================================================
-    ESTILIZADO PREMIUM Y CENTRADO DE LA SECCIÓN DE YAPE
-   ========================================================= */
-
-/* 1. Centra la imagen del QR y le da un sombreado tridimensional elegante */
-[data-testid="stImage"] img, div[data-testid="element-container"] img {
-    margin: 0 auto !important;
-    display: block !important;
-    border-radius: 14px !important;
-    box-shadow: 0px 6px 20px rgba(142, 68, 173, 0.4) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 2. Centra los textos informativos del Yape (Titular y subtítulo) */
-div[data-testid="stMarkdownContainer"] caption, 
-div.stMarkdown p[style*="text-align: center"] {
-    text-align: center !important;
-    font-weight: bold !important;
-    color: #cccccc !important;
-    font-size: 15px !important;
-    margin-top: 8px !important;
-}
-
-/* 3. Estiliza el cuadro informativo azul de procesamiento para Yape */
-div.stAlert:has(p) {
-    max-width: 600px !important;
-    margin: 15px auto !important;
-    border-radius: 8px !important;
-    background-color: #111a24 !important;
-}
-
-/* =========================================================
-    REFORZAMIENTO MÓVIL: 2 COLUMNAS CON LETRAS MÁS GRANDES
-   ========================================================= */
-@media (max-width: 768px) {
-    /* Mantiene el contenedor horizontal forzado en fila */
-    [data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-        width: 100% !important;
-    }
-    
-    /* Mantiene las dos columnas perfectas al 50% */
-    [data-testid="stHorizontalBlock"] > div,
-    [data-testid="stHorizontalBlock"] > div[data-testid="column"],
-    [data-testid="stHorizontalBlock"] * .stColumn {
-        width: calc(50% - 6px) !important;
-        min-width: calc(50% - 6px) !important;
-        max-width: calc(50% - 6px) !important;
-        flex: 1 1 calc(50% - 6px) !important;
-    }
-
-    /* ¡MEJORA!: Letra del título del producto más grande y legible */
-    .product-title {
-        font-size: 16px !important; /* Subió de 13.5px a 16px */
-        font-weight: 800 !important; /* Más gruesa para que impacte */
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    /* ¡MEJORA!: Letra del precio en Oro Búfalo más grande */
-    .product-price {
-        font-size: 18px !important; /* Subió de 15px a 18px */
-        font-weight: 900 !important;
-    }
-
-    /* Ajuste de márgenes internos de la tarjeta móvil */
-    .product-card-bottom {
-        padding: 10px 12px !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 4px !important;
-    }
-}
-
-/* =========================================================
-    BARRA DE NAVEGACIÓN HORIZONTAL NETFLIX (UNIFICADA AL COSTADO)
-   ========================================================= */
-.netflix-container {
-    background-color: #141414 !important; /* Fondo oscuro de Netflix */
-    padding: 10px 20px !important;
-    border-radius: 8px !important;
-    border: 1px solid #222222 !important;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
-}
-
-/* Forzamos a que el contenedor de radio de Streamlit se alinee perfectamente de costado */
-.netflix-container div[data-testid="stWidgetLabel"] {
-    display: none !important;
-}
-
-/* Hackeo visual: Convertimos los círculos de opción en texto plano horizontal */
-.netflix-container div[data-testid="stRadioHorizontal"] div[role="radiogroup"] {
-    display: flex !important;
-    flex-direction: row !important; /* Asegura que vayan uno al costado del otro */
-    flex-wrap: nowrap !important;
-    gap: 20px !important; /* Distancia elegante entre pestañas */
-    align-items: center !important;
-}
-
-/* Ocultamos los círculos nativos del radio button de Streamlit */
-.netflix-container div[data-testid="stRadioHorizontal"] label div[text-align] {
-    display: none !important;
-}
-
-/* Estilizamos el texto para que actúe como las pestañas de Netflix */
-.netflix-container div[data-testid="stRadioHorizontal"] label {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 4px 0 !important;
-    cursor: pointer !important;
-    margin: 0 !important;
-}
-
-/* Estilo del texto inactivo */
-.netflix-container div[data-testid="stRadioHorizontal"] label p {
-    color: #aaaaaa !important; /* Gris tenue de Netflix */
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    transition: color 0.2s ease !important;
-}
-
-/* Efecto Hover: Cambia a tu Oro Búfalo cuando pasas el mouse por encima */
-.netflix-container div[data-testid="stRadioHorizontal"] label:hover p {
-    color: #f39c12 !important;
-}
-
-/* PESTAÑA ACTIVA: Resalta en blanco brillante con máxima prioridad */
-.netflix-container div[data-testid="stRadioHorizontal"] div[data-checked="true"] label p {
-    color: #ffffff !important; /* Blanco brillante para la sección activa */
-    font-weight: 800 !important;
-    border-bottom: 2px solid #f39c12 !important; /* Sutil línea dorada abajo */
-}
-
-/* Caja de búsqueda compactada al extremo derecho */
-.netflix-container div[data-testid="stTextInput"] input {
-    background-color: rgba(0, 0, 0, 0.75) !important;
-    border: 1px solid #333333 !important;
-    border-radius: 4px !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    padding: 6px 10px !important;
-    margin-top: 2px !important;
-}
-
-/* =========================================================
-    ESTILIZADO PREMIUM DEL GESTOR DE SECCIONES (ADMIN)
-   ========================================================= */
-.admin-cat-box {
-    background-color: #141416 !important; /* Fondo carbón profundo */
-    padding: 20px !important;
-    border-radius: 12px !important;
-    border: 1px solid #28282c !important;
-    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.8) !important;
-}
-
-/* Tarjetas internas para separar la creación de la eliminación */
-.admin-cat-card {
-    background-color: #1c1c22 !important;
-    padding: 20px !important;
-    border-radius: 10px !important;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-    height: 100% !important;
-}
-
-/* Tarjeta de creación: Toque Oro Búfalo elegante */
-.active-card {
-    border-left: 4px solid #f39c12 !important;
-}
-
-/* Tarjeta de eliminación: Toque rojo carmesí de advertencia */
-.delete-card {
-    border-left: 4px solid #c0392b !important;
-}
-
-/* Botón específico de crear sección (Verde esmeralda limpio) */
-button[key*="btn_create_cat"] {
-    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%) !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    border: 1px solid #2ecc71 !important;
-    border-radius: 6px !important;
-    box-shadow: 0px 4px 10px rgba(39, 174, 96, 0.3) !important;
-}
-button[key*="btn_create_cat"]:hover {
-    transform: translateY(-2px) !important;
-    filter: brightness(1.15) !important;
-}
-
-/* Botón específico de eliminar sección (Gris oscuro/Rojo sobrio anti-accidentes) */
-button[key*="btn_delete_cat"] {
-    background: linear-gradient(135deg, #7f8c8d 0%, #34495e 100%) !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    border: 1px solid #bdc3c7 !important;
-    border-radius: 6px !important;
-    box-shadow: none !important;
-}
-button[key*="btn_delete_cat"]:hover {
-    background: linear-gradient(135deg, #c0392b 0%, #962d00 100%) !important; /* Brilla en rojo al pasar el mouse */
-    border-color: #ff4b4b !important;
-    transform: translateY(-2px) !important;
-}
-
-/* =========================================================
-    ELIMINACIÓN DE ERRORES VISUALES Y ACABADO PREMIUM
-   ========================================================= */
-
-/* 1. Borramos cualquier residuo de las cajas fantasmas anteriores */
-.admin-cat-card, .active-card, .delete-card {
-    display: none !important;
-}
-
-/* 2. Estilizamos las nuevas tarjetas nativas para que se vean unificadas y limpias */
-div[data-testid="stExpander"] div[data-testid="stVerticalBlockBorderWrapper"] {
+/* ESTILIZADO COMPACTO Y PREMIUM DEL GESTOR DE SECCIONES (ADMIN) */
+div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stVerticalBlockBorderWrapper"] {
     background-color: #18181c !important; /* Gris carbón profundo */
     border-radius: 12px !important;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6) !important;
@@ -502,18 +362,18 @@ div[data-testid="stExpander"] div[data-testid="stVerticalBlockBorderWrapper"] {
     height: 100% !important;
 }
 
-/* 3. Borde Izquierdo Dorado elegante para la tarjeta de Crear (Columna 1) */
-div[data-testid="stExpander"] div[data-testid="stHorizontalBlock"] > div:first-child div[data-testid="stVerticalBlockBorderWrapper"] {
+/* Borde Izquierdo Dorado elegante para la tarjeta de Crear (Columna 1) */
+div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stHorizontalBlock"] > div:first-child div[data-testid="stVerticalBlockBorderWrapper"] {
     border-left: 4px solid #f39c12 !important; 
 }
 
-/* 4. Borde Izquierdo Rojo carmesí de advertencia para la tarjeta de Eliminar (Columna 2) */
-div[data-testid="stExpander"] div[data-testid="stHorizontalBlock"] > div:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
+/* Borde Izquierdo Rojo carmesí de advertencia para la tarjeta de Eliminar (Columna 2) */
+div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stHorizontalBlock"] > div:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
     border-left: 4px solid #c0392b !important; 
 }
 
-/* 5. Estilizado premium de los títulos internos H5 de cada bloque */
-div[data-testid="stExpander"] h5 {
+/* Estilizado premium de los títulos internos H5 de cada bloque del gestor */
+div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
     color: #ffffff !important;
     font-size: 14px !important;
     font-weight: 700 !important;
@@ -523,121 +383,48 @@ div[data-testid="stExpander"] h5 {
 }
 
 /* ============================================================================
-    ENCAPSULADO DE MÁXIMA PRIORIDAD: REORDENAMIENTO HORIZONTAL EN LA NUBE
+    REFORZAMIENTO RESPONSIVO MÓVIL BLINDADO: CUADRÍCULA DE 2X2 CON LETRA GRANDE
    ============================================================================ */
+@media (max-width: 768px) {
+    /* Forzamos al bloque contenedor horizontal del catálogo a quedarse de costado en smartphones */
+    [data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    
+    /* Obligamos a cada columna del catálogo a ocupar exactamente la mitad del espacio */
+    [data-testid="stHorizontalBlock"] > div,
+    [data-testid="stHorizontalBlock"] > div[data-testid="column"],
+    [data-testid="stHorizontalBlock"] * .stColumn {
+        width: calc(50% - 6px) !important;
+        min-width: calc(50% - 6px) !important;
+        max-width: calc(50% - 6px) !important;
+        flex: 1 1 calc(50% - 6px) !important;
+    }
 
-/* 1. Caja contenedora principal forzada a ser una barra delgada */
-.netflix-container {
-    background-color: #141414 !important; /* Fondo negro sólido de Netflix */
-    padding: 8px 18px !important; /* Margen interno súper compacto */
-    border-radius: 8px !important;
-    border: 1px solid #222222 !important;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
-    display: block !important;
-    width: 100% !important;
-}
+    /* Letra del título de los platos más grande, gruesa y legible en teléfonos táctiles */
+    .product-title {
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
 
-/* 2. FUERZA BRUTA HORIZONTAL: Alineamos las 3 columnas principales en una sola fila estricta */
-.netflix-container div[data-testid="stHorizontalBlock"],
-.netflix-container [data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-direction: row !important; /* Fuerza la posición al costado */
-    align-items: center !important; /* Centrado vertical perfecto dentro de la caja */
-    justify-content: space-between !important;
-    flex-wrap: nowrap !important; /* Prohíbe por completo el salto de línea */
-    gap: 14px !important;
-    width: 100% !important;
-}
+    /* Letra del precio en Oro Búfalo más grande para resaltar el valor en smartphones */
+    .product-price {
+        font-size: 18px !important;
+        font-weight: 900 !important;
+    }
 
-/* 3. Evitamos que Streamlit le dé un ancho del 100% a las subcolumnas en celulares y web */
-.netflix-container div[data-testid="stHorizontalBlock"] > div,
-.netflix-container [data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-    width: auto !important;
-    min-width: max-content !important;
-    max-width: none !important;
-    flex: unset !important;
-    display: flex !important;
-    align-items: center !important;
-}
-
-/* 4. ELIMINACIÓN DE ETIQUETAS E INSTANCIAS VACÍAS DE ENCIMA */
-.netflix-container label[data-testid="stWidgetLabel"],
-.netflix-container div[data-testid="stRadioHorizontal"] > div:first-child,
-.netflix-container div[data-testid="stMarkdownContainer"] p:empty {
-    display: none !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* 5. CONTROL DE TEXTOS: Desaparecemos los círculos y alineamos las opciones al costado */
-.netflix-container div[role="radiogroup"] {
-    display: flex !important;
-    flex-direction: row !important; /* Pestañas una al costado de otra */
-    flex-wrap: nowrap !important; /* Evita que salte hacia abajo */
-    gap: 16px !important; /* Espaciado elegante entre categorías */
-    align-items: center !important;
-}
-
-/* Borrado de los círculos del botón de opción nativo */
-.netflix-container div[role="radiogroup"] label div[data-testid="stMarker"] {
-    display: none !important;
-}
-
-/* Transformación de los labels en texto plano minimalista */
-.netflix-container div[role="radiogroup"] label {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* Texto Inactivo (Gris clásico de Netflix) */
-.netflix-container div[role="radiogroup"] label p {
-    color: #aaaaaa !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    margin: 0 !important;
-    padding: 4px 0 !important;
-}
-
-/* Hover: Cambia a Oro Búfalo al pasar el cursor */
-.netflix-container div[role="radiogroup"] label:hover p {
-    color: #f39c12 !important;
-}
-
-/* PESTAÑA ACTIVA SELECCIONADA: Resalta en blanco brillante con línea inferior dorada */
-.netflix-container div[role="radiogroup"] div[data-checked="true"] label p {
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    border-bottom: 2px solid #f39c12 !important;
-}
-
-/* 6. Diseño e integración del título "✨ EXPLORAR" a la izquierda */
-.nav-explorer-title {
-    color: #f39c12 !important; /* Oro Búfalo */
-    font-family: 'Arial Black', Gadget, sans-serif !important;
-    font-size: 14.5px !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.5px !important;
-    text-transform: uppercase !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
-    white-space: nowrap !important;
-}
-
-/* 7. Caja de búsqueda estilizada y alineada al extremo derecho */
-.netflix-container div[data-testid="stTextInput"] input {
-    background-color: rgba(0, 0, 0, 0.75) !important;
-    border: 1px solid #333333 !important;
-    border-radius: 4px !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    padding: 6px 10px !important;
-}
-.netflix-container div[data-testid="stTextInput"] input:focus {
-    border-color: #f39c12 !important;
-    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
+    /* Ajuste milimétrico de empaquetado para pantallas móviles angostas */
+    .product-card-bottom {
+        padding: 10px 12px !important;
+        flex-direction: column !important; /* Título arriba y precio abajo sólo en celulares */
+        align-items: flex-start !important;
+        gap: 4px !important;
+    }
 }
