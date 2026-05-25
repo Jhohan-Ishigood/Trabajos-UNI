@@ -6,6 +6,9 @@ import pandas as pd  # Motor de analítica para el control de la bitácora
 import altair as alt  # Motor gráfico premium para el Dashboard corporativo
 import base64  # Motor multimedia para incrustar fotos locales en HTML y CSS
 
+# Configuración premium inicial de la página para que la barra lateral inicie colapsada/oculta
+st.set_page_config(page_title="El Gran Búfalo - Sistema de Pedidos", page_icon="🥩", layout="wide", initial_sidebar_state="collapsed")
+
 # =========================================================
 # RUTAS DE CONTROL PARA ARCHIVOS FÍSICOS PERMANENTES
 # =========================================================
@@ -32,7 +35,7 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # Silueta vectorial en Base64 por defecto para evitar pantallas colapsadas
+    # Silueta vectorial por defecto en Base64 por seguridad
     FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
     
     menu_defecto = {
@@ -134,12 +137,37 @@ for orden in st.session_state.historial_ordenes:
 
 st.session_state.numero_boleta = total_pedidos + 1
 
-# Enlace de la ruta de la foto de tu restaurante para el fondo
+# Enlace dinámico local de la foto de la fachada de tu restaurante
 URL_BANNER_LOCAL = os.path.join(BASE_DIR, "Captura de pantalla 2026-05-24 090610.png")
 
 # =========================================================
-# BARRA LATERAL (SIDEBAR): LOGIN GRUPO 5
+# BARRA LATERAL (SIDEBAR): MENÚ MULTIUSO INTERACTIVO
 # =========================================================
+st.sidebar.markdown("<h2 style='text-align: center; color: #f39c12;'>🥩 El Gran Búfalo</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='text-align: center; font-size: 13px; color: #aaa;'>Especialistas en carnes y parrillas premium al carbón de manera artesanal.</p>", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+
+# Sección 1: Datos de Atención e Información del Local
+st.sidebar.markdown("#### 🕒 HORARIO DE ATENCIÓN")
+st.sidebar.caption("Lunes a Domingo: 12:00 PM - 11:00 PM")
+
+st.sidebar.markdown("#### 📍 NUESTRA UBICACIÓN")
+st.sidebar.caption("Av. Principal El Gran Búfalo 742, Trujillo, Perú")
+st.sidebar.markdown("---")
+
+# Sección 2: Botón de Soporte Técnico Directo por WhatsApp
+st.sidebar.markdown("#### 📞 ¿NECESITAS AYUDA?")
+# Enlace simulado profesional a la API de WhatsApp
+st.sidebar.markdown("""
+    <a href="https://wa.me" target="_blank" style="text-decoration: none;">
+        <button style="width: 100%; background-color: #25d366; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 15px;">
+            💬 Chatear con Soporte
+        </button>
+    </a>
+""", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+
+# Sección 3: Acceso Administrativo (Oculto discretamente al final)
 st.sidebar.markdown("### 🔒 ACCESO ADMINISTRATIVO")
 usuario_input = st.sidebar.text_input("Nombre de Usuario:", key="user_login").strip()
 clave_input = st.sidebar.text_input("Contraseña:", type="password", key="pass_login").strip()
@@ -331,7 +359,6 @@ if es_admin:
 else:
     # PANTALLA 1: BIENVENIDA LIMPIA CON TÍTULO GIGANTE Y BANNER DEL LOCAL EN FONDO COMPLETO
     if st.session_state.pantalla_actual == "bienvenida":
-        # Transformación automática de tu foto local a formato web nativo estirado
         if os.path.exists(URL_BANNER_LOCAL):
             with open(URL_BANNER_LOCAL, "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode()
@@ -351,7 +378,7 @@ else:
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         
-        st.markdown("<br><p style='text-align: center; font-size: 22px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
+        st.markdown("<br><p style='text-align: center; font-size: 24px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         
@@ -359,7 +386,18 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-    # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS)
+        # NUEVO: Pie de página de Redes Sociales (Footer) estilizado y centrado
+        st.markdown("<br><br><br>", unsafe_allow_html=True)
+        st.markdown("""
+            <div class='social-footer'>
+                <p style='margin-bottom: 10px; font-size: 14px; letter-spacing: 2px; color: #888; font-weight: bold;'>SÍGUENOS EN REDES SOCIALES</p>
+                <a href='https://facebook.com' target='_blank' class='social-icon'>📘 Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href='https://instagram.com' target='_blank' class='social-icon'>📸 Instagram</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
+            </div>
+        """, unsafe_allow_html=True)
+            
+    # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS PREMIUM)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
         st.image(URL_BANNER_LOCAL, use_container_width=True)
@@ -371,31 +409,37 @@ else:
         col1, col2 = st.columns(2)
         cantidades_ingresadas = {}
         
-        # Bucle inteligente que dibuja las tarjetas con fotos según la base de datos JSON
         productos_lista = list(st.session_state.menu_dinamico.keys())
         
         for i in range(len(productos_lista)):
             prod = productos_lista[i]
             info = st.session_state.menu_dinamico[prod]
-            
-            # Repartir los platos simétricamente
             target_col = col1 if i % 2 == 0 else col2
             
             with target_col:
                 if info["disponible"]:
-                    # Uso seguro de .get() para evitar caídas por KeyError y asegurar carga fluida de tus fotos
                     url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
                     
-                    st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0px 0px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
+                    # RENDERIZADO PREMIUM: Imagen con sombreado y bordes perfectos
+                    st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
                     
-                    # La casilla numérica de Streamlit se acopla abajo con borde verde
+                    # TARJETA INFERIOR: Estilizado completo con textos gigantes y precio dorado resaltado
+                    st.markdown(f"""
+                        <div class='product-card-bottom'>
+                            <span class='product-title'>{info['icono']} {prod}</span>
+                            <span class='product-price'>S/{info['precio']:.2f}</span>
+                        </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Casilla de entrada numérica compacta acoplada debajo
                     cantidades_ingresadas[prod] = st.number_input(
-                        f"{info['icono']} {prod} — S/{info['precio']:.2f}", 
-                        min_value=0, step=1, key=f"cat_{prod}"
+                        f"Cantidad a llevar de {prod}:", 
+                        min_value=0, step=1, key=f"cat_{prod}", label_visibility="collapsed"
                     )
+                    st.markdown("<br>", unsafe_allow_html=True)
                 else:
-                    st.markdown(f"""<div style="width:100%; height:180px; background-color:#222; border-radius:8px 8px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:40px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
-                    st.markdown(f"<div style='background-color:#1c1c1c; padding:15px; border-radius:0px 0px 8px 8px; border:1px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
+                    st.markdown(f"""<div style="width:100%; height:200px; background-color:#222; border-radius:12px 12px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:50px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO POR HOY)</p></div>", unsafe_allow_html=True)
         st.markdown("---")
         
         if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):

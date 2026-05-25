@@ -1,109 +1,60 @@
-/* =========================================================
-   ESTILOS PREMIUM FINALES - EL GRAN BUFFALO RESTAURANTE
-   ========================================================= */
-
-/* 1. Fondo general de la aplicación (Color carbón oscuro) */
-.stApp {
-    background-color: #111111 !important;
-}
-
-/* 2. Personalización de los títulos en degradado de fuego */
-h1, h2, h3, .stSubheader {
-    color: #f39c12 !important;
-    font-family: 'Trebuchet MS', sans-serif !important;
-    font-weight: bold !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Hacer el título de bienvenida gigante y llamativo */
+/* Estilos Globales del Sistema El Gran Búfalo */
 .titulo-principal {
-    font-size: 42px !important;
-    font-family: 'Trebuchet MS', sans-serif !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    margin-top: 15px !important;
-    margin-bottom: 10px !important;
-    display: block !important;
+    text-align: center;
+    color: #f39c12;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 38px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 10px;
 }
 
-/* 3. Bloques informativos (Alertas del sistema) */
-div[data-testid="stNotification"] {
-    background-color: #1a1a1a !important;
-    border-left: 5px solid #d35400 !important;
-    border-radius: 4px !important;
+/* NUEVO: Tarjeta inferior de producto con textos gigantes y precio resaltado */
+.product-card-bottom {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 0px 0px 12px 12px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
 }
 
-/* 4. NUEVAS TARJETAS VERTICALES DE COMIDA (Food Cards Premium) */
-.stNumberInput {
-    background-color: #1c1c1c !important;
-    padding: 10px 15px 15px 15px !important;
-    border-radius: 0px 0px 8px 8px !important; /* Redondeado solo abajo para acoplarse a la foto */
-    border-left: 1px solid #2c2c2c !important;
-    border-right: 1px solid #2c2c2c !important;
-    border-bottom: 1px solid #2c2c2c !important;
-    border-top: none !important;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5) !important;
-    margin-bottom: 25px !important;
-    transition: all 0.3s ease;
-}
-
-/* 5. Estilo de las casillas de entrada (Contorno Verde) */
-div[data-baseweb="input"] {
-    background-color: #262626 !important;
-    border-color: #27ae60 !important; /* Verde esmeralda estable */
-    border-radius: 6px !important;
-}
-
-div[data-baseweb="input"] input {
+.product-title {
+    font-size: 22px !important;
+    font-weight: bold !important;
     color: #ffffff !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.product-price {
+    font-size: 24px !important;
+    font-weight: 1000 !important;
+    color: #f39c12 !important; /* Dorado Premium */
+    font-family: 'Impact', Charcoal, sans-serif;
+}
+
+/* NUEVO: Pie de página de Redes Sociales (Footer) */
+.social-footer {
+    text-align: center;
+    background-color: rgba(15, 15, 15, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    margin-top: 40px;
+    box-shadow: 0px -4px 15px rgba(0,0,0,0.5);
+}
+
+.social-icon {
+    font-size: 16px !important;
+    color: #f39c12 !important;
+    text-decoration: none !important;
     font-weight: bold !important;
+    transition: 0.3s;
 }
 
-div[data-baseweb="input"]:focus-within {
-    border-color: #2ecc71 !important;
-    box-shadow: 0 0 0 0.2rem rgba(46, 204, 113, 0.25) !important;
-}
-
-/* 6. Botones interactivos con degradado premium */
-button[data-testid="stBaseButton-secondary"] {
-    background-image: linear-gradient(135deg, #e67e22, #d35400) !important;
-    color: white !important;
-    font-weight: bold !important;
-    border: none !important;
-    border-radius: 6px !important;
-    padding: 12px 24px !important;
-    box-shadow: 0px 4px 15px rgba(211, 84, 0, 0.3) !important;
-    transition: all 0.3s ease !important;
-}
-
-button[data-testid="stBaseButton-secondary"]:hover {
-    background-image: linear-gradient(135deg, #f39c12, #e67e22) !important;
-    transform: scale(1.01) !important;
-    box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
-}
-
-/* 7. Barra lateral con efecto Glassmorphism traslúcido */
-section[data-testid="stSidebar"] {
-    background-color: #0f0f0f !important;
-    border-right: 1px solid #222222 !important;
-}
-
-/* 8. Estilización de la Tabla del Historial de Ventas (Pandas) */
-div[data-testid="stDataFrame"] {
-    background-color: #161616 !important;
-    border: 1px solid #2c2c2c !important;
-    border-radius: 8px !important;
-    padding: 10px !important;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5) !important;
-}
-
-div[data-testid="stDataFrame"] table {
-    font-family: 'Courier New', Courier, monospace !important;
+.social-icon:hover {
+    color: #ffffff !important;
+    text-shadow: 0px 0px 8px #f39c12;
 }
