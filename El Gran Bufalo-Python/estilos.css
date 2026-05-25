@@ -14,6 +14,18 @@
     padding-top: 60px !important;
 }
 
+/* Configuración de Fuentes Limpias y Nítidas */
+:app {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Centrado Estructural de la Pantalla Principal */
+.block-container {
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding-top: 25px !important; /* REDUCIDO: Quita el exceso de espacio negro de arriba */
+}
+
 /* Titulado Principal con Degradado de Fuego Premium - Altura Equilibrada */
 .titulo-principal {
     text-align: center;
@@ -21,8 +33,21 @@
     font-family: 'Arial Black', Gadget, sans-serif;
     font-size: 38px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    margin-top: 0px !important; /* CORRECCIÓN: Sube un poco el título al punto medio exacto */
-    padding: 30px 0px !important; /* Espaciado vertical equilibrado */
+    
+    /* CORRECCIÓN DE ALTURA VERTICAL: */
+    margin-top: -15px !important;            /* Elimina margen y tira el texto hacia arriba */
+    margin-bottom: 5px !important;            /* Reduce el espacio con el texto de la fecha */
+    transform: translateY(-10px) !important;  /* Ajuste milimétrico final hacia arriba */
+}
+
+/* Ocultación Absoluta del Menú de Tres Puntos Nativo de Streamlit */
+#MainMenu {
+    display: none !important;
+}
+
+/* Remoción de la Barra Superior Estándar del Servidor */
+div[data-testid="stHeader"] {
+    display: none !important;
 }
 
 
