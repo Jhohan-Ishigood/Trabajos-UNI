@@ -429,39 +429,83 @@ else:
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
-    # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS PREMIUM)
+    # PANTALLA 2: CATÁLOGO CON NAV-BAR ESTILO NETFLIX (INTEGRADO)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        
-        # CORRECCIÓN: Se eliminó st.image para limpiar la vista y entrar directo al menú
         st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
-        st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
+        # Inicializamos la pestaña activa por defecto
+        if "categoria_activa" not in st.session_state:
+            st.session_state.categoria_activa = "Todos"
+
+        # =========================================================
+        # BARRA DE NAVEGACIÓN HORIZONTAL (ESTILO NETFLIX)
+        # =========================================================
+        st.markdown("<div class='netflix-navbar'>", unsafe_allow_html=True)
+        
+        # Creamos 6 columnas en total: 5 para categorías y 1 ancha para el buscador
+        nav_cols = st.columns([1, 1, 1.2, 1, 1, 2.5], gap="small")
+        categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
+        
+        for idx, cat in enumerate(categorias):
+            with nav_cols[idx]:
+                if st.button(cat, key=f"nav_{cat}", use_container_width=True):
+                    st.session_state.categoria_activa = cat
+                    st.rerun()
+                    
+        # Buscador con lupa integrado al extremo derecho
+        with nav_cols[5]:
+            busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja hoy?", label_visibility="collapsed", key="search_bar").strip().lower()
+            
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        st.subheader(f"🍽️ SELECCIÓN DE {st.session_state.categoria_activa.upper()}")
         st.info("Ingrese las cantidades de los productos que desea llevar:")
 
-        # OBLIGA A MANTENER LAS COLUMNAS EN DISPOSITIVOS MÓVILES
-        col1, col2 = st.columns(2, gap="medium")
+        # =========================================================
+        # FILTRADO DINÁMICO DE PRODUCTOS EN TIEMPO REAL
+        # =========================================================
+        productos_lista = list(st.session_state.menu_dinamico.keys())
+        productos_filtrados = []
 
+        for prod in productos_lista:
+            # 1. Filtro por la barra de búsqueda superior
+            if busqueda and busqueda not in prod.lower():
+                continue
+                
+            # 2. Clasificación automática por palabras clave en los nombres
+            cat_prod = "Todos"
+            if "parrilla" in prod.lower() or "carne" in prod.lower():
+                cat_prod = "Parrillas"
+            elif "hamburguesa" in prod.lower():
+                cat_prod = "Hamburguesas"
+            elif "jugo" in prod.lower() or "gaseosa" in prod.lower() or "bebida" in prod.lower() or "café" in prod.lower():
+                cat_prod = "Bebidas"
+            elif "combo" in prod.lower():
+                cat_prod = "Combos"
+
+            # Validamos si coincide con la categoría seleccionada
+            if st.session_state.categoria_activa == "Todos" or st.session_state.categoria_activa == cat_prod:
+                productos_filtrados.append(prod)
+
+        # Rejilla responsiva forzada a 2 columnas
+        col1, col2 = st.columns(2, gap="medium")
         cantidades_ingresadas = {}
         
-        productos_lista = list(st.session_state.menu_dinamico.keys())
-        
-        for i in range(len(productos_lista)):
-            prod = productos_lista[i]
+        for i in range(len(productos_filtrados)):
+            prod = productos_filtrados[i]
             info = st.session_state.menu_dinamico[prod]
             target_col = col1 if i % 2 == 0 else col2
             
-            # REGLA DE SEGURIDAD: Evaluamos si el producto tiene porciones en cocina
             stock_actual = info.get("stock", 0)
             esta_disponible = info["disponible"] and stock_actual > 0
             
             with target_col:
                 if esta_disponible:
                     url_imagen_plato = info.get("foto", "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>")
-                    
                     st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
                     
-                    # DINÁMICO: Si quedan 3 porciones o menos, cambia por una alerta visual
                     texto_precio = f"S/{info['precio']:.2f}"
                     if stock_actual <= 3:
                         texto_precio = f"🔥 ¡SOLO QUEDAN {stock_actual}! 🔥"
@@ -469,27 +513,22 @@ else:
                     st.markdown(f"""
                         <div class='product-card-bottom'>
                             <span class='product-title'>{info['icono']} {prod}</span>
-                            <span class='product-price' style='font-size:16px;'>{texto_precio}</span>
+                            <span class='product-price'>{texto_precio}</span>
                         </div>
                     """, unsafe_allow_html=True)
                     
-                    # CONTROL: El cliente no puede pedir un número mayor al stock real de la cocina
                     cantidades_ingresadas[prod] = st.number_input(
-                        f"Cantidad a llevar de {prod}:", 
-                        min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
+                        f"Cantidad de {prod}:", min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
                     )
                     st.markdown("<br>", unsafe_allow_html=True)
                 else:
-                    # Bloqueo total si el plato llega a 0 porciones en la jornada
                     st.markdown(f"""<div style="width:100%; height:200px; background-color:#222; border-radius:12px 12px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:50px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
-                    st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO EN COCINA)</p></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO)</p></div>", unsafe_allow_html=True)
 
         st.markdown("---")
-        
         if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
             st.session_state.carrito = []
             st.session_state.total_acumulado = 0.0
-            
             for prod, cant in cantidades_ingresadas.items():
                 if cant > 0:
                     sub = cant * st.session_state.menu_dinamico[prod]["precio"]

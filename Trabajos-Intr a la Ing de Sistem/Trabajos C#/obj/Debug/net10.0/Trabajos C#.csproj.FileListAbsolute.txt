@@ -1,14 +1,5 @@
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\bin\Debug\net10.0\Trabajos C#.exe
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\bin\Debug\net10.0\Trabajos C#.deps.json
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\bin\Debug\net10.0\Trabajos C#.runtimeconfig.json
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\bin\Debug\net10.0\Trabajos C#.dll
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\bin\Debug\net10.0\Trabajos C#.pdb
 F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.GeneratedMSBuildEditorConfig.editorconfig
 F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.AssemblyInfoInputs.cache
 F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.AssemblyInfo.cs
 F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.csproj.CoreCompileInputs.cache
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.dll
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\refint\Trabajos C#.dll
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.pdb
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.genruntimeconfig.cache
-F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\ref\Trabajos C#.dll
+F:\📄Documentos\Trabajos UNI\Trabajos-Intr a la Ing de Sistem\Trabajos C#\obj\Debug\net10.0\Trabajos C#.sourcelink.json
