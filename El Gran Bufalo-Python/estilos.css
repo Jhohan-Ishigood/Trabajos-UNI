@@ -232,3 +232,80 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
     background-color: #151515 !important;
 }
+
+/* =========================================================
+   DISEÑO VISUAL PREMIUM PARA LA GESTIÓN DE ENTREGA Y PAGO
+   ========================================================= */
+
+/* 1. Caja contenedora para el Resumen de Artículos Solicitados */
+.stText:has(span:contains("•")) {
+    background-color: #1e1e1e !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    border-left: 4px solid #f39c12 !important; /* Detalle dorado */
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.4) !important;
+    margin-bottom: 20px !important;
+}
+
+/* 2. Estilizado del Selector de Delivery (Botones SI / NO) y Métodos de Pago */
+div[data-testid="stRadio"] > div, div[data-testid="stSelectbox"] {
+    background-color: #1a1a1a !important;
+    padding: 15px !important;
+    border-radius: 10px !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.5) !important;
+}
+
+/* Hace que los textos de las opciones (SI/NO) sean más grandes y legibles */
+div[data-testid="stRadio"] label p {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+}
+
+/* 3. Resaltado tridimensional del Monto Total a Procesar (S/. 76.00) */
+div[data-testid="stMetricValue"] {
+    font-size: 42px !important;
+    font-weight: 1000 !important;
+    color: #27ae60 !important; /* Verde dinero brillante */
+    font-family: 'Impact', Charcoal, sans-serif !important;
+    text-shadow: 0px 0px 12px rgba(39, 174, 96, 0.4) !important;
+    background-color: #111 !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    display: inline-block !important;
+    border: 1px solid #27ae60 !important;
+}
+
+/* 4. Alerta de Caja Chica estilizada (Solo moneda nacional) */
+div:has(> p:contains("ALERTA DE CAJA")) {
+    background-color: rgba(243, 156, 18, 0.15) !important;
+    border: 1px solid #f39c12 !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+}
+
+/* 5. Transformación Corporativa del Botón "EMITIR BOLETA DE VENTA" */
+button:has(span:contains("EMITIR BOLETA")) {
+    background: linear-gradient(135deg, #f39c12, #d35400) !important; /* Degradado Buffalo */
+    color: #ffffff !important;
+    font-size: 20px !important;
+    font-weight: 1000 !important;
+    font-family: 'Arial Black', Gadget, sans-serif !important;
+    letter-spacing: 1px !important;
+    padding: 14px 0px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0px 5px 15px rgba(243, 156, 18, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+button:has(span:contains("EMITIR BOLETA")):hover {
+    transform: translateY(-3px) !important; /* Efecto flotante al pasar el mouse */
+    box-shadow: 0px 8px 22px rgba(243, 156, 18, 0.6) !important;
+    filter: brightness(1.15) !important;
+    cursor: pointer !important;
+}
