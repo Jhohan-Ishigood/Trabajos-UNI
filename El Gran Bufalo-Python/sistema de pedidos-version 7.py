@@ -432,8 +432,8 @@ else:
     # PANTALLA 2: CATÁLOGO EN COLUMNAS CON IMÁGENES DINÁMICAS (FOOD CARDS PREMIUM)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
         st.markdown("<h1 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h1>", unsafe_allow_html=True)
-        if os.path.exists(URL_BANNER_LOCAL):
-            st.image(URL_BANNER_LOCAL, use_container_width=True)
+        
+        # CORRECCIÓN: Se eliminó st.image para limpiar la vista y entrar directo al menú
         st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
         st.subheader("🍽️ SELECCIÓN DE PRODUCTOS (EL MENÚ DE HOY)")
@@ -499,6 +499,7 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
+
     # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
     else:
         # TRUCO DEFINITIVO: JavaScript reforzado que resetea el scroll de la ventana principal y de la app de Streamlit
