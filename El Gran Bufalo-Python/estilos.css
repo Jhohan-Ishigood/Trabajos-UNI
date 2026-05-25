@@ -349,66 +349,76 @@ div.stAlert:has(p) {
 }
 
 /* =========================================================
-    BARRA DE NAVEGACIÓN SUPERIOR HORIZONTAL (ESTILO NETFLIX)
+    BARRA DE NAVEGACIÓN HORIZONTAL NETFLIX (UNIFICADA AL COSTADO)
    ========================================================= */
-.netflix-navbar {
-    background-color: #141414 !important; /* Fondo oscuro sólido de Netflix */
-    padding: 12px 20px !important;
+.netflix-container {
+    background-color: #141414 !important; /* Fondo oscuro de Netflix */
+    padding: 10px 20px !important;
     border-radius: 8px !important;
     border: 1px solid #222222 !important;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* Forzamos a que las columnas de Streamlit se queden en una sola línea horizontal siempre */
-.netflix-navbar div[data-testid="stHorizontalBlock"] {
+/* Forzamos a que el contenedor de radio de Streamlit se alinee perfectamente de costado */
+.netflix-container div[data-testid="stWidgetLabel"] {
+    display: none !important;
+}
+
+/* Hackeo visual: Convertimos los círculos de opción en texto plano horizontal */
+.netflix-container div[data-testid="stRadioHorizontal"] div[role="radiogroup"] {
     display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
+    flex-direction: row !important; /* Asegura que vayan uno al costado del otro */
     flex-wrap: nowrap !important;
-    gap: 15px !important;
+    gap: 20px !important; /* Distancia elegante entre pestañas */
+    align-items: center !important;
 }
 
-/* ANULACIÓN TOTAL: Forzamos el texto plano usando la máxima ruta CSS posible */
-div.netflix-navbar div[data-testid="stHorizontalBlock"] div[data-testid="column"] div.stButton > button {
-    background: transparent !important; /* APAGAMOS EL NARANJA GIGANTE */
-    background-color: transparent !important;
-    color: #e5e5e5 !important; /* Blanco suave clásico de Netflix */
-    border: none !important; /* Eliminamos bordes y sombras heredadas */
-    box-shadow: none !important;
-    text-shadow: none !important;
-    height: auto !important; /* Evita que se estiren verticalmente */
-    width: auto !important;
-    padding: 6px 12px !important;
-    margin: 0 !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    text-transform: none !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    transition: color 0.2s ease-in-out, transform 0.2s ease !important;
+/* Ocultamos los círculos nativos del radio button de Streamlit */
+.netflix-container div[data-testid="stRadioHorizontal"] label div[text-align] {
+    display: none !important;
 }
 
-/* Efecto Hover interactivo: Cambia a tu color corporativo Oro Búfalo */
-div.netflix-navbar div[data-testid="stHorizontalBlock"] div[data-testid="column"] div.stButton > button:hover {
-    color: #f39c12 !important; /* Oro Búfalo interactivo */
+/* Estilizamos el texto para que actúe como las pestañas de Netflix */
+.netflix-container div[data-testid="stRadioHorizontal"] label {
     background: transparent !important;
     background-color: transparent !important;
-    transform: scale(1.05) !important;
+    border: none !important;
     box-shadow: none !important;
+    padding: 4px 0 !important;
+    cursor: pointer !important;
+    margin: 0 !important;
 }
 
-/* Estilizado premium de la barra de búsqueda integrada a la derecha */
-.netflix-navbar div[data-testid="stTextInput"] input {
+/* Estilo del texto inactivo */
+.netflix-container div[data-testid="stRadioHorizontal"] label p {
+    color: #aaaaaa !important; /* Gris tenue de Netflix */
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+    transition: color 0.2s ease !important;
+}
+
+/* Efecto Hover: Cambia a tu Oro Búfalo cuando pasas el mouse por encima */
+.netflix-container div[data-testid="stRadioHorizontal"] label:hover p {
+    color: #f39c12 !important;
+}
+
+/* PESTAÑA ACTIVA: Resalta en blanco brillante con máxima prioridad */
+.netflix-container div[data-testid="stRadioHorizontal"] div[data-checked="true"] label p {
+    color: #ffffff !important; /* Blanco brillante para la sección activa */
+    font-weight: 800 !important;
+    border-bottom: 2px solid #f39c12 !important; /* Sutil línea dorada abajo */
+}
+
+/* Caja de búsqueda compactada al extremo derecho */
+.netflix-container div[data-testid="stTextInput"] input {
     background-color: rgba(0, 0, 0, 0.75) !important;
     border: 1px solid #333333 !important;
     border-radius: 4px !important;
     color: #ffffff !important;
     font-size: 13px !important;
     padding: 6px 10px !important;
-}
-.netflix-navbar div[data-testid="stTextInput"] input:focus {
-    border-color: #f39c12 !important;
-    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
+    margin-top: 2px !important;
 }
 
 

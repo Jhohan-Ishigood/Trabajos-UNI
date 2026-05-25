@@ -439,29 +439,36 @@ else:
             st.session_state.categoria_activa = "Todos"
 
         # =========================================================
-        # BARRA DE NAVEGACIÓN HORIZONTAL (ESTILO NETFLIX)
+        # BARRA DE NAVEGACIÓN HORIZONTAL (ESTILO NETFLIX) - CORREGIDO
         # =========================================================
-        st.markdown("<div class='netflix-navbar'>", unsafe_allow_html=True)
+        st.markdown("<div class='netflix-container'>", unsafe_allow_html=True)
         
-        # Creamos 6 columnas en total: 5 para categorías y 1 ancha para el buscador
-        nav_cols = st.columns([1, 1, 1.2, 1, 1, 2.5], gap="small")
+        # Usamos un st.radio en formato horizontal para que los textos vayan SIEMPRE uno al costado del otro
         categorias = ["Todos", "Parrillas", "Hamburguesas", "Bebidas", "Combos"]
         
-        for idx, cat in enumerate(categorias):
-            with nav_cols[idx]:
-                if st.button(cat, key=f"nav_{cat}", use_container_width=True):
-                    st.session_state.categoria_activa = cat
-                    st.rerun()
-                    
-        # Buscador con lupa integrado al extremo derecho
-        with nav_cols[5]:
-            busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja hoy?", label_visibility="collapsed", key="search_bar").strip().lower()
+        # Creamos una fila limpia: a la izquierda el menú horizontal, a la derecha el buscador
+        col_nav, col_search = st.columns([3.5, 1.5], gap="small")
+        
+        with col_nav:
+            # st.radio con label oculto forzado a ir horizontalmente al costado
+            categoria_seleccionada = st.radio(
+                "Categorías",
+                options=categorias,
+                index=categorias.index(st.session_state.categoria_activa),
+                horizontal=True,
+                label_visibility="collapsed",
+                key="netflix_tabs"
+            )
+            if categoria_seleccionada != st.session_state.categoria_activa:
+                st.session_state.categoria_activa = categoria_seleccionada
+                st.rerun()
+                
+        with col_search:
+            busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja?", label_visibility="collapsed", key="search_bar").strip().lower()
             
         st.markdown("</div>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
-        
-        st.subheader(f"🍽️ SELECCIÓN DE {st.session_state.categoria_activa.upper()}")
-        st.info("Ingrese las cantidades de los productos que desea llevar:")
+
 
         # =========================================================
         # FILTRADO DINÁMICO DE PRODUCTOS EN TIEMPO REAL
