@@ -523,7 +523,7 @@ else:
 
     # PANTALLA 2: CATÁLOGO DE PRODUCTOS (VISTA DE CLIENTE CON FILTRADO OPERATIVO)
     elif st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado:
-        st.markdown("<h2 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h2>", unsafe_allow_html=True)
+        st.markdown("\n<h2 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BUFFALO</h2>", unsafe_allow_html=True)
         st.text(f"Fecha y hora oficial de Perú (GMT-5): {fecha_actual}\n")
         
         st.subheader(f"🍽️ SELECCIÓN DE {st.session_state.categoria_activa.upper()}")
