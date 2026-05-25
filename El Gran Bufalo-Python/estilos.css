@@ -302,39 +302,41 @@ div.stAlert:has(p) {
 }
 
 /* =========================================================
-    REFORZAMIENTO MÓVIL: 2 COLUMNAS EN SMARTPHONES (PROD)
+    REFORZAMIENTO MÓVIL: 2 COLUMNAS EN PRODUCCIÓN STREAMLIT
    ========================================================= */
 @media (max-width: 768px) {
-    /* Seleccionamos el bloque contenedor horizontal de Streamlit */
-    div[data-testid="stHorizontalBlock"] {
+    /* Seleccionamos el bloque contenedor y anulamos el salto de línea automático */
+    [data-testid="stHorizontalBlock"] {
         display: flex !important;
-        flex-direction: row !important; /* Fuerza la posición horizontal */
-        flex-wrap: wrap !important; /* Permite que salten de fila en pares */
-        gap: 10px !important; /* Separación limpia entre las tarjetas */
+        flex-direction: row !important; /* Fuerza la alineación horizontal */
+        flex-wrap: wrap !important;     /* Permite la cuadrícula por pares */
+        gap: 10px !important;           /* Separación limpia entre tarjetas */
         width: 100% !important;
     }
     
-    /* Forzamos a cada columna a ocupar exactamente la mitad del espacio disponible */
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-        width: calc(50% - 5px) !important;
-        min-width: calc(50% - 5px) !important;
-        max-width: calc(50% - 5px) !important;
-        flex: 1 1 calc(50% - 5px) !important;
+    /* IMPACTO DIRECTO: Forzamos a CUALQUIER elemento columna interno a encogerse al 50% */
+    [data-testid="stHorizontalBlock"] > div,
+    [data-testid="stHorizontalBlock"] > div[data-testid="column"],
+    [data-testid="stHorizontalBlock"] * .stColumn {
+        width: calc(50% - 6px) !important;
+        min-width: calc(50% - 6px) !important;
+        max-width: calc(50% - 6px) !important;
+        flex: 1 1 calc(50% - 6px) !important;
     }
 
-    /* Ajuste milimétrico de las fuentes para que todo quepa sin cortarse */
+    /* Reducción milimétrica de empaquetado para que quepa todo en smartphones */
     .product-title {
-        font-size: 13.5px !important; /* Tamaño compacto para smartphones */
+        font-size: 13.5px !important; /* Tamaño compacto anti-cortes */
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
     }
     .product-price {
-        font-size: 15px !important; /* Precio oro estilizado */
+        font-size: 15px !important;
     }
     .product-card-bottom {
         padding: 8px 10px !important;
-        flex-direction: column !important; /* Título arriba y precio abajo en celular */
+        flex-direction: column !important; /* Título arriba y precio abajo sólo en pantallas móviles */
         align-items: flex-start !important;
         gap: 2px !important;
     }
