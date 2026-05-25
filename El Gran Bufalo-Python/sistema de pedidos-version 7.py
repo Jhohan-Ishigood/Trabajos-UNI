@@ -158,6 +158,10 @@ if st.sidebar.button("🔑 Ingresar como Administrador", use_container_width=Tru
     st.session_state.mostrar_login_admin = not st.session_state.mostrar_login_admin
 
 es_admin = False
+# Inicializamos las variables vacías por defecto para que siempre existan
+usuario_input = ""
+clave_input = ""
+es_admin = False
 
 # Si el botón fue presionado, desplegamos los campos de Login de forma interactiva
 if st.session_state.mostrar_login_admin:
@@ -193,11 +197,6 @@ st.sidebar.markdown("""
     </a>
 """, unsafe_allow_html=True)
 
-if es_admin:
-    st.sidebar.success("✔ Modo Administrador Activo")
-elif usuario_input or clave_input:
-    st.sidebar.error("❌ Credenciales incorrectas")
-# =========================================================
 # FLUJO DE PANTALLAS (MODO ADMINISTRADOR INTEGRAL)
 # =========================================================
 if es_admin:
