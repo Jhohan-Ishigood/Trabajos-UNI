@@ -137,8 +137,6 @@ for orden in st.session_state.historial_ordenes:
 
 st.session_state.numero_boleta = total_pedidos + 1
 
-# Enlace dinámico local de la foto de la fachada de tu restaurante
-URL_BANNER_LOCAL = os.path.join(BASE_DIR, "Captura de pantalla 2026-05-24 090610.png")
 
 # =========================================================
 # BARRA LATERAL (SIDEBAR): MENÚ MULTIUSO INTERACTIVO
