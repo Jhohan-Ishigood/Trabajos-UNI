@@ -1,12 +1,12 @@
 import streamlit as st
-from datetime import datetime, timedelta, timezone  # Reloj oficial para Perú (GMT-5)
+from datetime import datetime, timedelta, timezone  # Sincronización oficial horaria
 import os
 import streamlit.components.v1 as components
-import pandas as pd  # Motor de analítica para el control de la bitácora
-import altair as alt  # Motor gráfico premium para el Dashboard corporativo
-import base64  # Motor multimedia para incrustar fotos locales en HTML y CSS
+import pandas as pd  # Motor de analítica comercial para la bitácora
+import altair as alt  # Gráficas premium para el panel gerencial
+import base64  # Codificación multimedia para imágenes en HTML locales
 
-# Configuración premium inicial de pantalla responsiva con barra lateral colapsada por defecto
+# Configuración premium inicial del lienzo responsivo con menú colapsado por defecto
 st.set_page_config(
     page_title="El Gran Búfalo - Sistema de Pedidos", 
     page_icon="🥩", 
@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ============================================================================
-# DETERMINACIÓN DINÁMICA DE LA RUTA RAÍZ PARA EVITAR ERRORES EN LA NUBE
+# DETERMINACIÓN DINÁMICA DE LA RUTA RAÍZ EN SERVIDORES DE PRODUCCIÓN
 # ============================================================================
 BASE_DIR = ""
 if os.path.exists("El Gran Buffalo-Python"):
@@ -32,11 +32,11 @@ RUTA_HTML = os.path.join(BASE_DIR, "boleta_plantilla.html")
 RUTA_JSON_MENU = os.path.join(BASE_DIR, "menu_config.json")
 RUTA_JSON_HISTORIAL = os.path.join(BASE_DIR, "historial_config.json")  
 
-# Enlace de la ruta de la foto de tu restaurante para el fondo premium
+# Ruta del banner corporativo de fondo para la pantalla de bienvenida
 URL_BANNER_LOCAL = os.path.join(BASE_DIR, "Captura de pantalla 2026-05-24 090610.png")
 
 # ============================================================================
-# LECTURA Y CARGA EN TIEMPO REAL DE LA HOJA DE ESTILOS CSS
+# LECTURA Y ACOPLAMIENTO DE LA HOJA DE ESTILOS CSS EN TIEMPO REAL
 # ============================================================================
 if os.path.exists(RUTA_CSS):
     with open(RUTA_CSS, "r", encoding="utf-8") as f:
@@ -49,7 +49,6 @@ def guardar_menu_en_archivo(menu_data):
 
 def cargar_menu_desde_archivo():
     import json
-    # Silueta vectorial en Base64 por defecto por seguridad informática
     FOTO_DEFECTO = "data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>"
     
     menu_defecto = {
@@ -107,8 +106,6 @@ def cargar_historial_desde_archivo():
         except:
             return []
     return []
-
-
 # ============================================================================
 # INICIALIZACIÓN DE VARIABLES REACTIVAS DE SESIÓN (ESTADOS CRÍTICOS)
 # ============================================================================
@@ -150,7 +147,7 @@ for orden in st.session_state.historial_ordenes:
                 partes = detalle.split(", ")
                 for parte in partes:
                     if prod in parte:
-                        # Extraemos de forma segura la cantidad numérica
+                        # Extraemos de forma segura la cantidad numérica removiendo el texto del plato
                         cant_txt = parte.split(f"x {prod}")[0].strip()
                         conteos_productos[prod] += int(cant_txt)
             except:
@@ -159,7 +156,7 @@ for orden in st.session_state.historial_ordenes:
 st.session_state.numero_boleta = total_pedidos + 1
 
 # ============================================================================
-# BARRA LATERAL (SIDEBAR): MENÚ MULTIUSO INTERACTIVO
+# BARRA LATERAL (SIDEBAR): MENÚ MULTIUSO INTERACTIVO Y COMPACTO
 # ============================================================================
 st.sidebar.markdown("<h2 style='text-align: center; color: #f39c12;'>🥩 El Gran Búfalo</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; font-size: 13px; color: #aaa;'>Especialistas en carnes y parrillas premium al carbón de manera artesanal.</p>", unsafe_allow_html=True)
@@ -205,7 +202,6 @@ st.sidebar.markdown("""
         </button>
     </a>
 """, unsafe_allow_html=True)
-
 # =========================================================
 # BARRA DE EXPLORACIÓN GLOBAL MAESTRA (ESTILO NETFLIX REAL)
 # =========================================================
@@ -219,41 +215,42 @@ if "lista_categorias" not in st.session_state:
 # Inicializamos la variable de búsqueda limpia por defecto
 busqueda = ""
 
-# Renderizamos la barra horizontal si estás en Catálogo o eres Admin
-if es_admin or (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
-    st.markdown("<div class='netflix-navbar-master'>", unsafe_allow_html=True)
+# CASO 1: BARRA EXCLUSIVA PARA EL CLIENTE (EN EL CATÁLOGO HORIZONTAL COMPACTO)
+if not es_admin and (st.session_state.pantalla_actual == "catalogo" and not st.session_state.pedido_guardado):
+    num_cats = len(st.session_state.lista_categorias)
+    nav_cols = st.columns([1.2] + [1.0] * num_cats + [2.5], gap="small")
     
-    # Dividimos en 2 bloques limpios: la izquierda para las pestañas y la derecha para la lupa
-    col_izq_tabs, col_der_search = st.columns([3.8, 1.2], gap="small")
+    with nav_cols[0]:
+        st.markdown("<div class='nav-explorer-title' style='margin-top:8px;'>✨ EXPLORAR</div>", unsafe_allow_html=True)
+        
+    for idx, cat in enumerate(st.session_state.lista_categorias):
+        with nav_cols[idx + 1]:
+            if st.button(cat, key=f"nav_cli_{cat}", use_container_width=True):
+                st.session_state.categoria_activa = cat
+                st.rerun()
+                
+    with nav_cols[-1]:
+        busqueda = st.text_input("🔍 Buscar...", placeholder="¿Qué se te antoja?", label_visibility="collapsed", key="search_bar_cliente").strip().lower()
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+# 📊 CASO 2: BARRA EXCLUSIVA PARA EL ADMINISTRADOR (PANEL DE CONTROL HORIZONTAL COMPACTO)
+if es_admin:
+    num_cats_admin = len(st.session_state.lista_categorias)
+    nav_cols_admin = st.columns([1.2] + [1.0] * num_cats_admin + [2.5], gap="small")
     
-    with col_izq_tabs:
-        # Título y selector horizontal encubierto para eliminar los bloques verticales rígidos
-        st.markdown("<span class='explorer-prefix'>✨ EXPLORAR:</span>", unsafe_allow_html=True)
+    with nav_cols_admin[0]:
+        st.markdown("<div class='nav-explorer-title' style='margin-top:8px;'>⚙️ FILTRAR</div>", unsafe_allow_html=True)
         
-        # st.toggle_bar o st.radio horizontal puro sin labels decorativos externos
-        categoria_seleccionada = st.radio(
-            "Categorías Navegación",
-            options=st.session_state.lista_categorias,
-            index=st.session_state.lista_categorias.index(st.session_state.categoria_activa),
-            horizontal=True,
-            label_visibility="collapsed",
-            key="tabs_netflix_master_key"
-        )
-        if categoria_seleccionada != st.session_state.categoria_activa:
-            st.session_state.categoria_activa = categoria_seleccionada
-            st.rerun()
-            
-    with col_der_search:
-        # Caja de búsqueda con ID único para que no herede márgenes deformados
-        placeholder_txt = "Buscar plato..." if es_admin else "¿Qué se te antoja?"
-        busqueda = st.text_input(
-            "🔍 Buscar", 
-            placeholder=placeholder_txt, 
-            label_visibility="collapsed", 
-            key="search_bar_master_key"
-        ).strip().lower()
-        
-    st.markdown("</div><br>", unsafe_allow_html=True)
+    for idx, cat in enumerate(st.session_state.lista_categorias):
+        with nav_cols_admin[idx + 1]:
+            if st.button(cat, key=f"nav_adm_{cat}", use_container_width=True):
+                st.session_state.categoria_activa = cat
+                st.rerun()
+                
+    with nav_cols_admin[-1]:
+        busqueda = st.text_input("🔍 Buscar en inventario...", placeholder="Buscar plato...", label_visibility="collapsed", key="search_bar_admin").strip().lower()
+    st.markdown("<br>", unsafe_allow_html=True)
 
 
 # ============================================================================
@@ -264,7 +261,7 @@ if es_admin:
     st.info(f"📋 **Reporte Gerencial del Grupo 5** — Sincronizado en tiempo real: {fecha_actual}")
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # CONFIGURACIÓN COMPACTA Y MODERNA DE GESTIÓN DE SECCIONES (SIN CAJAS FANTASMA)
+    # CONFIGURACIÓN COMPACTA Y MODERNA DE GESTIÓN DE SECCIONES (SIN CAJAS FANTASMA NI TEXTOS SUELES)
     with st.expander("📁 ⚙️ CONFIGURACIÓN DE SECCIONES EN LA CARTA", expanded=False):
         st.caption("Añada nuevas pestañas al menú horizontal o elimine las secciones que ya no utilice en la jornada.")
         st.markdown("<br>", unsafe_allow_html=True)
@@ -484,7 +481,7 @@ if es_admin:
         st.markdown(f"<div style='background-color:#1a1a1a; padding:15px; border-radius:6px; border:1px solid #333; text-align:center;'><span style='font-size:24px;'>💳</span><p style='margin:5px 0 0 0; font-size:13px; color:#888;'>TARJETA</p><h4 style='margin:5px 0 0 0; color:#27ae60;'>S/{metodos_pagos['Tarjeta']:.2f}</h4></div>", unsafe_allow_html=True)
     st.markdown("<br><hr><br>", unsafe_allow_html=True)
 else:
-    # PANTALLA 1: BIENVENIDA LIMPIA CON BANNER Y BANNER DE FONDO
+    # PANTALLA 1: BIENVENIDA LIMPIA CON TEXTURIZACIÓN EN EL FONDO LOCAL
     if st.session_state.pantalla_actual == "bienvenida":
         if os.path.exists(URL_BANNER_LOCAL):
             with open(URL_BANNER_LOCAL, "rb") as image_file:
@@ -511,7 +508,7 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
-        # Pie de página de Redes Sociales (Footer)
+        # Pie de página de Redes Sociales (Footer Original)
         st.markdown("<br><br><br>", unsafe_allow_html=True)
         st.markdown("""
             <div class='social-footer'>
@@ -606,9 +603,9 @@ else:
                 st.rerun()
             else:
                 st.error("⚠️ Error: Debe seleccionar al menos 1 producto.")
-    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT
+    # PANTALLA 3: PROCESAMIENTO DE DELIVERY, PASARELA Y COMPROBANTE SUNAT (VERSIÓN INTEGRAL REFORZADA)
     else:
-        # Inyección JavaScript reforzada para resetear el scroll superior en la nube
+        # Inyección JavaScript para forzar el reinicio del scroll superior en la nube
         components.html(
             """
             <script>
@@ -626,10 +623,16 @@ else:
         )
         
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
-        st.markdown("**Resumen de artículos solicitados:**")
+        st.markdown("### Resumen de artículos solicitados:")
+        
+        # INYECCIÓN DIRECTA: Convertimos el resumen Markdown en tarjetas premium oscuras con hilo dorado
         for item in st.session_state.carrito:
             icono_p = st.session_state.menu_dinamico[item['producto']]['icono']
-            st.text(f"• {icono_p} {item['producto']} x{item['cantidad']} - Subtotal: S/{item['subtotal']:.2f}")
+            st.markdown(f"""
+                <div style="background-color: #1e1e24; border-left: 4px solid #f39c12; padding: 12px 16px; border-radius: 8px; color: #ffffff; font-size: 16px; font-weight: 700; margin-bottom: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);">
+                    {icono_p} {item['producto']} x{item['cantidad']} &nbsp;|&nbsp; Subtotal: S/{item['subtotal']:.2f}
+                </div>
+            """, unsafe_allow_html=True)
         
         st.markdown("---")
         opcion_delivery = st.radio("¿Desea delivery? (+ S/6.00)", ["NO", "SI"])
@@ -649,27 +652,28 @@ else:
         
         pago_usuario = total_con_delivery
         vuelto = 0.0
-        titular_tarjeta = ""
+        titital_tarjeta = ""
         ultimos_digitos = ""
         formulario_valido = True
 
         if metodo_pago == "Yape":
             st.info(f"--- PROCESANDO PAGO CON YAPE ---\nMonto total a yapear: S/{total_con_delivery:.2f}")
-            # Generación remota blindada del código QR oficial para evitar caídas de servidores locales
-            url_qr_remoto = f"https://qrserver.com"
+            
+            # CONTROL QR BLINDADO: Usamos la API de QuickChart para evitar bloqueos por strings largos
+            url_qr_remoto = f"https://quickchart.io"
             st.markdown(f"""
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 25px auto; max-width: 450px; background-color: #1e1e1e; padding: 25px; border-radius: 16px; border: 2px solid #8e44ad; box-shadow: 0px 8px 25px rgba(142, 68, 173, 0.25); text-align: center;">
-                    <p style="color: #aaaaaa; font-size: 14px; margin-bottom: 15px; font-weight: bold;">[!] Abriendo ventana de Yape corporativo...</p>
-                    <img src="{url_qr_remoto}" style="width: 280px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;" />
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 25px auto; max-width: 450px; background-color: #1e1e24; padding: 25px; border-radius: 16px; border: 2px solid #8e44ad; box-shadow: 0px 8px 25px rgba(142, 68, 173, 0.25); text-align: center;">
+                    <p style="color: #aaaaaa; font-size: 14px; margin-bottom: 15px; font-weight: bold;">[!] Escanee con la cámara de su celular para pagar:</p>
+                    <img src="{url_qr_remoto}" style="width: 260px; height: 260px; border-radius: 12px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;" />
                     <span style="color: #8e44ad; font-size: 14px; font-weight: bold; letter-spacing: 1px;">🟣 CÓDIGO QR DE YAPE OFICIAL</span>
                 </div>
             """, unsafe_allow_html=True)
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
-            titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
+            titital_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
             ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4)
-            if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
+            if not titital_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
                 st.error("Error: Complete los datos obligatorios de la tarjeta de manera válida (4 dígitos).")
                 formulario_valido = False
         else:
@@ -715,18 +719,18 @@ else:
                     "Total": f"S/{total_con_delivery:.2f}"
                 })
                 
-                # DESCUENTO AUTOMÁTICO DE STOCK EN COCINA EN TIEMPO REAL
+                # DESCUENTO REAL AUTOMÁTICO EN INVENTARIO
                 for item in st.session_state.carrito:
                     prod_comprado = item["producto"]
                     cant_comprada = item["cantidad"]
                     st.session_state.menu_dinamico[prod_comprado]["stock"] = max(0, st.session_state.menu_dinamico[prod_comprado].get("stock", 10) - cant_comprada)
                 
-                # Sincronización física inmediata de las bases de datos transaccionales
+                # Escritura física y guardado en archivos locales
                 guardar_menu_en_archivo(st.session_state.menu_dinamico)
                 guardar_historial_en_archivo(st.session_state.historial_ordenes)
                 
                 if metodo_pago == "Tarjeta":
-                    metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titular_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
+                    metodo_pago_txt = f"TARJETA (APROBADA)\nTitular:      {titital_tarjeta}\nNro. Tarjeta: ************{ultimos_digitos}"
                 elif metodo_pago == "Yape":
                     metodo_pago_txt = "YAPE (PAGO ELECTRÓNICO)\nVuelto:       S/ 0.00 (Monto exacto)"
                 else:
@@ -755,3 +759,4 @@ else:
                 st.session_state.pedido_guardado = False
                 st.session_state.pantalla_actual = "bienvenida"
                 st.rerun()
+
