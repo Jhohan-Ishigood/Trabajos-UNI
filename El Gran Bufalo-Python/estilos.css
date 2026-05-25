@@ -66,3 +66,32 @@ button[kind="headerNoPadding"] {
     box-shadow: 0px 0px 8px #f39c12 !important;
     transition: 0.3s;
 }
+
+/* Oculta el icono de la flecha gris nativa de Streamlit */
+button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
+
+/* Transforma el contenedor de la esquina izquierda en tu botón personalizado */
+button[kind="headerNoPadding"] {
+    background-color: #1e1e1e !important;
+    border: 1px solid #f39c12 !important;
+    border-radius: 4px !important;
+    padding: 5px 15px !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* Agrega el texto "☰ Menú de Opciones" directamente sobre la zona táctil */
+button[kind="headerNoPadding"]::after {
+    content: "☰ Menú de Opciones" !important;
+    color: #f39c12 !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Desactiva el botón azul flotante anterior del centro para que no se duplique */
+.element-container:has(button[key="btn_abrir_sidebar"]) {
+    display: none !important;
+}
