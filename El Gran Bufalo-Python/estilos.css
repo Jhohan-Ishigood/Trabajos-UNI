@@ -386,17 +386,26 @@ div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
     10. ENTRADAS NUMÉRICAS, CAJAS DE ALERTA Y ESTADOS DE CONTROL
    ============================================================================ */
 
-/* Entradas de texto de datos de cliente y tarjeta */
+/* CORRECCIÓN DE LEGIBILIDAD: Contraste Puro Solucionado para la Profesora */
 div[data-testid="stTextInput"] input, 
-div[data-testid="stNumberInput"] input {
-    background-color: #141416 !important;
-    color: #ffffff !important;
-    border: 1px solid #333333 !important;
+div[data-testid="stNumberInput"] input,
+div[data-testid="stSidebar"] input[type="text"], 
+div[data-testid="stSidebar"] input[type="password"] {
+    background-color: #ffffff !important;     /* Fondo blanco puro para que resalte */
+    color: #111111 !important;                /* Texto y números en negro ultra legible */
+    border: 2px solid #333333 !important;     /* Borde oscuro definido */
     border-radius: 8px !important;
     padding: 10px 14px !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
+    font-size: 16px !important;               /* Letra un poco más grande */
+    font-weight: 700 !important;              /* Texto en negrita para máxima nitidez */
 }
+
+/* Color del texto sugerido (placeholder) cuando la caja está vacía */
+div[data-testid="stTextInput"] input::placeholder,
+div[data-testid="stNumberInput"] input::placeholder {
+    color: #666666 !important;
+}
+
 
 /* Foco de iluminación al hacer clic en las cajas de texto */
 div[data-testid="stTextInput"] input:focus, 
