@@ -430,3 +430,16 @@ div[data-testid="stRadio"] div[role="radiogroup"] span {
     color: #ffffff !important;
     font-weight: 600 !important;
 }
+/* ============================================================================
+    BLINDAJE MÁSTER: VISIBILIDAD PARA LA ETIQUETA DEL MONTO TOTAL
+   ============================================================================ */
+
+/* Fuerza a que el texto "Monto Total a Procesar" sea blanco brillante en cualquier modo */
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] > div,
+div[data-testid="stMetricLabel"] p,
+[data-testid="stMetricLabel"] {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    opacity: 1 !important;
+}
