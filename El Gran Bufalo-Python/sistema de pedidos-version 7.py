@@ -680,18 +680,11 @@ else:
 
         elif metodo_pago == "Tarjeta":
             st.info("--- PROCESANDO TRANSMISIÓN POS ---")
-            titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:", key="titular_pos").strip().upper()
-    
-            # Captura reactiva de los 4 dígitos
-            ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4, key="digitos_pos").strip()
-    
-    # Validación reactiva e inteligente para ocultar la alerta en tiempo real
-    if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
-        formulario_valido = False
-        # Solo muestra el error si el usuario ya empezó a escribir pero está incompleto
-        if titular_tarjeta or ultimos_digitos:
-            st.error("⚠️ Complete los datos de la tarjeta de manera válida (4 dígitos).")
-
+            titular_tarjeta = st.text_input("Ingrese nombre del titular de la tarjeta:").strip().upper()
+            ultimos_digitos = st.text_input("Ingrese los últimos 4 dígitos de la tarjeta:", max_chars=4)
+            if not titular_tarjeta or len(ultimos_digitos) != 4 or not ultimos_digitos.isdigit():
+                st.error("Complete los datos de la tarjeta de manera válida (4 dígitos).")
+                formulario_valido = False
                 
         else:
             st.warning("SOLO SE ACEPTA MONEDA NACIONAL!\nEste establecimiento NO recibe dólares ni euros.")
