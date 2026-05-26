@@ -2,7 +2,7 @@
     1. BLINDAJE ANTI-MODO CLARO Y ARQUITECTURA VISUAL GLOBAL
    ============================================================================ */
 
-/* Bloqueo absoluto de fondo oscuro en todo el árbol de renderizado de la App */
+/* Forzado absoluto de fondo oscuro en todo el lienzo para anular el Modo Claro */
 html, body, .stApp, 
 [data-testid="stAppViewContainer"], 
 [data-testid="stMainBlockContainer"], 
@@ -47,6 +47,7 @@ div[data-testid="stHeader"] {
 div[data-testid="stHeader"] > div:first-child {
     display: none !important;
 }
+
 /* ============================================================================
     2. REDISEÑO TOTAL DEL BOTÓN DE CABECERA (MENÚ DE OPCIONES)
    ============================================================================ */
@@ -79,6 +80,7 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
     content: "" !important;
     display: none !important;
 }
+
 /* ============================================================================
     3. REDISEÑO PREMIUM DE LA BARRA LATERAL (SIDEBAR POS)
    ============================================================================ */
@@ -120,9 +122,6 @@ section[data-testid="stSidebar"] .element-container:has(h4) {
     margin-bottom: 6px !important;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
-/* ============================================================================
-    4. GESTIÓN DE TEXTOS DEL SIDEBAR Y ENTRADAS DE ACCESO INTERNO
-   ============================================================================ */
 
 /* Títulos internos de la barra lateral en blanco puro destacado */
 section[data-testid="stSidebar"] h4, 
@@ -150,41 +149,6 @@ section[data-testid="stSidebar"] .element-container:has(button[key*="btn_toggle_
     margin-top: -4px !important; 
 }
 
-/* Botón con degradado de fuego corporativo para activar modo admin */
-section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
-    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
-    color: #ffffff !important; 
-    font-size: 14px !important;
-    font-weight: bold !important;
-    border-radius: 8px !important;
-    border: 1px solid #ff9f43 !important; 
-    padding: 8px !important; 
-    box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
-    transition: transform 0.2s ease, filter 0.2s ease !important;
-}
-section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"]:hover {
-    transform: translateY(-2px) !important;
-    filter: brightness(1.15) !important;
-    color: #ffffff !important;
-}
-
-/* Entradas de login con respuesta oscura e iluminación focalizada */
-section[data-testid="stSidebar"] input[type="text"], 
-section[data-testid="stSidebar"] input[type="password"] {
-    background-color: #121212 !important;
-    border: 1px solid #333333 !important;
-    border-radius: 6px !important;
-    color: #ffffff !important;
-}
-section[data-testid="stSidebar"] input[type="text"]:focus, 
-section[data-testid="stSidebar"] input[type="password"]:focus {
-    border-color: #f39c12 !important;
-    box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
-}
-/* ============================================================================
-    5. BOTÓN DE SOPORTE, DIVISORES Y CATÁLOGO CON NÚMERO VERDE BRILLANTE
-   ============================================================================ */
-
 /* Botón interactivo de WhatsApp con degradado esmeralda */
 section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%) !important;
@@ -205,6 +169,9 @@ section[data-testid="stSidebar"] hr {
     height: 1px !important;
     background: linear-gradient(to right, transparent, rgba(243, 156, 18, 0.3), transparent) !important;
 }
+/* ============================================================================
+    4. CATÁLOGO DE PRODUCTOS (FOOD CARDS PREMIUM)
+   ============================================================================ */
 
 /* Bloque inferior de información para las tarjetas de los platos */
 .product-card-bottom {
@@ -234,38 +201,9 @@ section[data-testid="stSidebar"] hr {
     font-family: 'Impact', Charcoal, sans-serif;
 }
 
-/* 🟢 REGLA EXCLUSIVA SOLICITADA: Cambia únicamente el número ingresado del catálogo a Verde Brillante */
-div[data-testid="stColumn"] div[data-testid="stNumberInput"] input {
-    color: #2ecc71 !important;               /* Verde esmeralda brillante */
-    background-color: #1a1a1e !important;     /* Fondo oscuro corporativo */
-    font-size: 20px !important;               /* Más grande para destacar */
-    font-weight: 900 !important;              /* Ultra negrita para máxima nitidez */
-    text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.5) !important; /* Brillo neón */
-    border: 2px solid #333333 !important;
-}
 /* ============================================================================
-    6. PIE DE PÁGINA, NAVEGACIÓN NETFLIX Y FORMULARIOS DE CONTROL
+    5. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX)
    ============================================================================ */
-
-/* Contenedor centralizado traslúcido para enlaces oficiales */
-.social-footer {
-    text-align: center !important;
-    background-color: rgba(15, 15, 15, 0.85) !important;
-    padding: 20px !important;
-    border-radius: 10px !important;
-    border: 1px solid #222222 !important;
-    margin-top: 40px !important;
-    max-width: 600px !important;
-    margin: 40px auto 0 auto !important;
-}
-
-/* Enlaces multimedia con transición interactiva */
-.social-icon, .social-footer a {
-    font-size: 16px !important;
-    color: #f39c12 !important;
-    text-decoration: none !important;
-    font-weight: bold !important;
-}
 
 /* Contenedor principal alineado con empuje estructural para liberar la cabecera */
 .netflix-navbar-master {
@@ -289,10 +227,8 @@ div[data-testid="stColumn"] div[data-testid="stNumberInput"] input {
     flex-wrap: nowrap !important;
     margin-top: 0 !important; 
 }
-
 /* Forzado de flujo en línea recta para pestañas de navegación activas */
-div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
-div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
+div[data-testid="stHorizontalBlock"]:has(button[key*="tabs_netflix_master"]) {
     display: flex !important;
     flex-direction: row !important; 
     align-items: center !important;
@@ -306,50 +242,109 @@ div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
     gap: 8px !important;
 }
 
-/* Transformación de botones nativos de Streamlit en texto plano minimalista */
-button[key*="nav_cli_"], button[key*="nav_adm_"] {
-    background: transparent !important;
-    background-color: transparent !important;
-    color: #aaaaaa !important; 
-    border: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    text-transform: none !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
+/* Rediseño de las cajas de búsqueda compactadas a la derecha */
+div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input {
+    background-color: rgba(30, 30, 35, 0.75) !important;
+    border: 1px solid #333333 !important;
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+}
+div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input:focus {
+    border-color: #f39c12 !important;
+    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
+}
+
+/* Rediseño del combobox selector de formas de pago y cajas de selección */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    background-color: #1e1e24 !important; 
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
     padding: 6px 12px !important;
-    height: auto !important;
-    width: auto !important;
-    transition: color 0.2s ease-in-out, transform 0.2s ease !important;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+div[data-baseweb="select"] div {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
 }
 
-/* Efecto hover interactivo en color Oro Búfalo con micro-escala */
-button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
-    color: #f39c12 !important; 
-    background: transparent !important;
-    background-color: transparent !important;
-    transform: scale(1.05) !important;
-}
-
-/* Prefijos de control de sección en mayúscula sostenida */
-.nav-explorer-title, .explorer-prefix {
-    color: #f39c12 !important; 
-    font-family: 'Arial Black', Gadget, sans-serif !important;
-    font-size: 14.5px !important;
-    font-weight: 900 !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
-    white-space: nowrap !important;
-    margin-right: 15px !important;
-    display: inline-block !important;
-}
 /* ============================================================================
-    PARCHE DEFINITIVO UNIFICADO: BIENVENIDA Y SIDEBAR CALIBRADOS
+    6. ALERTAS, TOTALIZADOR NEÓN Y MEDIA QUERIES RESPONSIVAS
    ============================================================================ */
 
-/* 1. SELLO DEL AUTOR ALINEADO */
+/* Cuadros informativos de estados de procesamiento o avisos */
+div.stAlert {
+    background-color: #111a24 !important; 
+    border: 1px solid #1f3347 !important;
+    border-left: 5px solid #f39c12 !important; 
+    border-radius: 10px !important;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.6) !important;
+}
+div.stAlert p, div.stAlert span {
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+div.stAlert:has(svg[data-testid="stNotificationIconError"]) {
+    border-left: 5px solid #c0392b !important; 
+    background-color: #1a1111 !important;
+    border-color: #471f1f !important;
+}
+
+/* REFORZAMIENTO RESPONSIVO MÓVIL BLINDADO 2X2 */
+@media (max-width: 768px) {
+    [data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    [data-testid="stHorizontalBlock"] > div,
+    [data-testid="stHorizontalBlock"] > div[data-testid="column"],
+    [data-testid="stHorizontalBlock"] * .stColumn {
+        width: calc(50% - 6px) !important;
+        min-width: calc(50% - 6px) !important;
+        max-width: calc(50% - 6px) !important;
+        flex: 1 1 calc(50% - 6px) !important;
+    }
+    .product-title {
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    .product-card-bottom {
+        padding: 10px 12px !important;
+        flex-direction: column !important; 
+        align-items: flex-start !important;
+        gap: 4px !important;
+    }
+}
+/* Pie de página de redes sociales */
+.social-footer {
+    text-align: center !important;
+    background-color: rgba(15, 15, 15, 0.85) !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+    border: 1px solid #222222 !important;
+    margin-top: 40px !important;
+    max-width: 600px !important;
+    margin: 40px auto 0 auto !important;
+}
+.social-icon, .social-footer a {
+    color: #f39c12 !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+}
+
+/* ============================================================================
+    7. BLOQUE MAESTRO DE PARCHES UNIFICADOS (BOTONES, ETIQUETAS Y NEÓN)
+   ============================================================================ */
+
+/* SELLO DEL AUTOR CORREGIDO EN POSICIÓN */
 .sello-creador {
     position: relative !important;
     display: block !important;
@@ -366,7 +361,7 @@ button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
     z-index: 99999 !important;
 }
 
-/* 2. REPARACIÓN DEL BOTÓN CENTRAL (FUEGO FIJO DESDE EL INICIO) */
+/* BOTÓN CENTRAL DE BIENVENIDA (FUEGO ESTÁTICO PERMANENTE) */
 div[data-testid="stMainBlockContainer"] div.stButton > button {
     background-image: none !important;     
     background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
@@ -378,7 +373,7 @@ div[data-testid="stMainBlockContainer"] div.stButton > button {
     box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
 }
 
-/* 3. BLINDAJE EXCLUSIVO PARA EL BOTÓN ADMINISTRADOR (QUITA EL BLANCO) */
+/* BOTÓN ADMINISTRADOR EN LA BARRA LATERAL (BLINDADO CONTRA FONDO BLANCO) */
 section[data-testid="stSidebar"] div.stButton > button {
     background-image: none !important;                 
     background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
@@ -390,17 +385,36 @@ section[data-testid="stSidebar"] div.stButton > button {
     text-transform: uppercase !important;
 }
 
-/* EFECTOS HOVER PARA AMBOS BOTONES */
+/* EFECTOS HOVER COMPARTIDOS */
 div[data-testid="stMainBlockContainer"] div.stButton > button:hover,
 section[data-testid="stSidebar"] div.stButton > button:hover {
     filter: brightness(1.2) !important;
     color: #ffffff !important;
 }
-/* ============================================================================
-    PARCHE DE VISIBILIDAD DE TEXTOS: FORMULARIOS 100% VISIBLES EN MODO CLARO
-   ============================================================================ */
 
-/* Fuerza a que todos los títulos de preguntas, marcas de opción y subtítulos sean blanco puro */
+/* INPUTS NUMÉRICOS DEL CATÁLOGO (NÚMERO VERDE BRILLANTE CON EFECTO NEÓN) */
+div[data-testid="stColumn"] div[data-testid="stNumberInput"] input {
+    color: #2ecc71 !important;               
+    background-color: #1a1a1e !important;     
+    font-size: 20px !important;               
+    font-weight: 900 !important;              
+    text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.5) !important; 
+    border: 2px solid #333333 !important;
+}
+
+/* ENTRADAS DE TEXTO GENERALES Y CAJAS ADMINISTRATIVAS */
+div[data-testid="stTextInput"]:not(:has(input[key*="search_bar_"])) input, 
+div[data-testid="stNumberInput"]:not(:has(div[data-testid="stColumn"] *)) input {
+    background-color: #1a1a1e !important;     
+    color: #ffffff !important;                
+    border: 2px solid #333333 !important;     
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 16px !important;               
+    font-weight: 700 !important;              
+}
+
+/* BLINDAJE DE ETIQUETAS Y TEXTOS DE PREGUNTAS EN FORMULARIOS */
 div[data-testid="stRadio"] label,
 div[data-testid="stSelectbox"] label,
 div[data-testid="stTextInput"] label,
@@ -410,31 +424,14 @@ div[data-testid="stSelectbox"] p,
 div[data-testid="stTextInput"] p,
 div[data-testid="stNumberInput"] p,
 .stWidgetLabel p,
-label[data-testid="stWidgetLabel"] {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
-}
-
-/* Corrige el texto de "Monto Total a Procesar" (Etiqueta de la métrica) */
-div[data-testid="stMetricLabel"] p,
-div[data-testid="stMetricLabel"] span {
-    color: #ffffff !important;
-    font-weight: bold !important;
-    font-size: 16px !important;
-}
-
-/* Corrige el texto de los Radio Buttons (Las opciones del SI y NO del delivery) */
+label[data-testid="stWidgetLabel"],
 div[data-testid="stRadio"] div[role="radiogroup"] label span p,
 div[data-testid="stRadio"] div[role="radiogroup"] span {
     color: #ffffff !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
 }
-/* ============================================================================
-    BLINDAJE MÁSTER: VISIBILIDAD PARA LA ETIQUETA DEL MONTO TOTAL
-   ============================================================================ */
 
-/* Fuerza a que el texto "Monto Total a Procesar" sea blanco brillante en cualquier modo */
+/* TITULO DE LA MÉTRICA EN BLANCO */
 div[data-testid="stMetricLabel"],
 div[data-testid="stMetricLabel"] > div,
 div[data-testid="stMetricLabel"] p,
@@ -443,22 +440,21 @@ div[data-testid="stMetricLabel"] p,
     font-weight: bold !important;
     opacity: 1 !important;
 }
-/* ============================================================================
-    BLINDAJE MÁSTER ABSOLUTO: FORZADO DE COLOR VERDE NEÓN PARA EL MONTO
-   ============================================================================ */
 
-/* Ataca directamente a todos los contenedores y sub-elementos del número métrico */
+/* VALOR DE LA MÉTRICA (TOTAL EN VERDE ESMERALDA NEÓN TRIDIMENSIONAL) */
 div[data-testid="stMetricValue"],
 div[data-testid="stMetricValue"] > div,
 div[data-testid="stMetricValue"] span,
 [data-testid="stMetricValue"] {
-    color: #2ecc71 !important; /* Fuerza el verde esmeralda brillante */
-    text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important; /* Devuelve el brillo neón */
-    opacity: 1 !important; /* Cancela cualquier transparencia que le meta el Modo Claro */
-}
-/* ============================================================================
-    BLINDAJE DE SEGURIDAD PARA EL BOTÓN VERDE DE DESCARGA DEL HTML
-   ============================================================================ */
-iframe + div, button[onclick="descargarTicket()"], .stHtmlBlock button {
-    color: #ffffff !important; /* Asegura letras blancas en el botón verde */
+    font-size: 46px !important;
+    font-weight: 900 !important;
+    color: #2ecc71 !important;
+    font-family: 'Impact', Charcoal, sans-serif !important;
+    text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important;
+    background-color: #0f0f0f !important;
+    padding: 12px 25px !important;
+    border-radius: 8px !important;
+    display: inline-block !important;
+    border: 2px solid #2ecc71 !important;
+    opacity: 1 !important;
 }
