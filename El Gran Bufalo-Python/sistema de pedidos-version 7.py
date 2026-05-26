@@ -565,15 +565,19 @@ else:
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
+        # Bloque de Redes Sociales Corporativas de El Gran Búfalo
         st.markdown("<br><br><br>", unsafe_allow_html=True)
         st.markdown("""
             <div class='social-footer'>
                 <p style='margin-bottom: 10px; font-size: 14px; letter-spacing: 2px; color: #888; font-weight: bold;'>SÍGUENOS EN REDES SOCIALES</p>
+                
+                <!-- REEMPLAZA LAS URLS DE ABAJO POR LOS ENLACES DE TU RESTAURANTE -->
                 <a href='https://facebook.com' target='_blank' class='social-icon'>📘 Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href='https://instagram.com' target='_blank' class='social-icon'>📸 Instagram</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
+
 
     # ============================================================================
     # 16. ENTORNO CLIENTE - PANTALLA 2: CATÁLOGO DINÁMICO DE PRODUCTOS
