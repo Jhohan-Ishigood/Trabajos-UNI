@@ -569,9 +569,9 @@ else:
         st.markdown("""
             <div class='social-footer'>
                 <p style='margin-bottom: 10px; font-size: 14px; letter-spacing: 2px; color: #888; font-weight: bold;'>SÍGUENOS EN REDES SOCIALES</p>
-                <a href='https://www.facebook.com/jhohan.guadalupecusquipoma/directory_intro?locale=es_LA' target='_blank' class='social-icon'>📘 Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href='https://www.facebook.com' target='_blank' class='social-icon'>📘 Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href='https://instagram.com' target='_blank' class='social-icon'>📸 Instagram</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
+                <a href='https://web.whatsapp.com/' target='_blank' class='social-icon'>🟢 WhatsApp</a>
             </div>
         """, unsafe_allow_html=True)
 
