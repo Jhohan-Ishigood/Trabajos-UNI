@@ -655,7 +655,6 @@ else:
     # 17. ENTORNO CLIENTE - PANTALLA 3: PASARELA Y COMPROBACIÓN DE DATOS
     # ============================================================================
     else:
-        st.html("<div style='height: 50px;'></div>")
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
         
         for item in st.session_state.carrito:

@@ -512,3 +512,8 @@ div[data-testid="stMetricValue"] span,
     font-weight: bold !important;
     color: #ffffff !important;
 }
+/* Quita el espacio excesivo superior en los títulos de los formularios */
+h3, [data-testid="stMarkdownContainer"] h3 {
+    margin-top: -10px !important;
+    padding-top: 0 !important;
+}
