@@ -1,7 +1,7 @@
 <!-- ============================================================================
     1. CABECERA MULTIMEDIA E IMPORTACIÓN DE DEPENDENCIAS (CDN OFICIAL)
     ============================================================================ -->
-<!-- CORREGIDO: Librería oficial HTML2Canvas para capturar y renderizar el ticket gráfico nítido -->
+<!-- CORREGIDO: Enlace máster oficial para cargar html2canvas sin errores en consola -->
 <script src="https://cloudflare.com"></script>
 
 <!-- ============================================================================
@@ -42,6 +42,7 @@ TOTAL A PAGAR:            S/{{ TOTAL_FINAL }}
 ==============================================
 Muchas gracias por su compra, vuelva pronto!😎
 </div>
+
 <!-- ============================================================================
     3. PASARELA DIGITAL: BOTÓN DE DESCARGA MULTIMEDIA PREMIUM
     ============================================================================ -->
@@ -69,7 +70,7 @@ Muchas gracias por su compra, vuelva pronto!😎
     4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO UNIFICADO)
     ============================================================================ -->
 <script>
-// SEPARACIÓN LOGRADA: Forzado nativo de scroll superior al renderizar la boleta
+// Forzado nativo de scroll superior al renderizar la boleta para el usuario
 window.scrollTo({top: 0, behavior: 'instant'});
 if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
@@ -79,11 +80,11 @@ if (window.parent) {
     }
 }
 
-// Motor de captura y exportación visual de la boleta electrónica
+// Motor corregido de captura y exportación visual de la boleta electrónica
 function descargarTicket() {
     const elemento = document.getElementById('ticket');
     
-    // El factor scale: 3 triplica los píxeles para que la imagen no salga borrosa
+    // El factor scale: 3 triplica la densidad de píxeles para máxima nitidez
     html2canvas(elemento, { 
         scale: 3,
         backgroundColor: "#fffdf6",

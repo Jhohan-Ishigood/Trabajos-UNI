@@ -1,33 +1,39 @@
 /* ============================================================================
-    1. ARQUITECTURA VISUAL GLOBAL, TIPOGRAFÍA Y LIENZO PRINCIPAL
+    1. BLINDAJE ANTI-MODO CLARO Y ARQUITECTURA VISUAL GLOBAL
    ============================================================================ */
+
+/* Bloqueo absoluto de fondo oscuro en todo el árbol de renderizado de la App */
+html, body, .stApp, 
+[data-testid="stAppViewContainer"], 
+[data-testid="stMainBlockContainer"], 
+[data-testid="stVerticalBlock"] {
+    background-color: #0e0e10 !important;
+    color: #ffffff !important;
+}
 
 /* Configuración unificada de fuentes nítidas para toda la aplicación */
 .stApp, :app {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Centrado estructural optimizado de la pantalla principal (Remueve excesos negros) */
+/* Centrado estructural optimizado del bloque principal de contenido */
 .block-container {
     max-width: 800px !important;
     margin: 0 auto !important;
     padding-top: 25px !important; 
 }
 
-/* Titulado Principal con Degradado - Altura Corregida para No Tapar el Nombre */
+/* Titulado Principal con Degradado - Espaciado y Altura Balanceada */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
     font-family: 'Arial Black', Gadget, sans-serif;
     font-size: 38px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    
-    /* SOLUCCIÓN: Bajamos el título lo suficiente para liberar el nombre del creador */
-    margin-top: 15px !important;            /* Cambiado de negativo a positivo */
-    margin-bottom: 10px !important;           /* Espaciado inferior controlado */
-    transform: translateY(0px) !important;    /* Reseteado el desplazamiento vertical */
+    margin-top: 15px !important;            
+    margin-bottom: 10px !important;           
+    transform: translateY(0px) !important;    
 }
-
 
 /* Ocultación absoluta del menú nativo de tres puntos de Streamlit */
 #MainMenu {
@@ -41,7 +47,6 @@ div[data-testid="stHeader"] {
 div[data-testid="stHeader"] > div:first-child {
     display: none !important;
 }
-
 /* ============================================================================
     2. REDISEÑO TOTAL DEL BOTÓN DE CABECERA (MENÚ DE OPCIONES)
    ============================================================================ */
@@ -115,11 +120,15 @@ section[data-testid="stSidebar"] .element-container:has(h4) {
     margin-bottom: 6px !important;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
+/* ============================================================================
+    4. GESTIÓN DE TEXTOS DEL SIDEBAR Y ENTRADAS DE ACCESO INTERNO
+   ============================================================================ */
 
 /* Títulos internos de la barra lateral en blanco puro destacado */
 section[data-testid="stSidebar"] h4, 
 section[data-testid="stSidebar"] b,
-section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong {
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong,
+section[data-testid="stSidebar"] h2 {
     color: #ffffff !important;
     font-size: 15px !important;
     font-weight: 700 !important;
@@ -129,7 +138,8 @@ section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong {
 /* Textos planos informativos de la barra lateral en alta nitidez */
 section[data-testid="stSidebar"] p, 
 section[data-testid="stSidebar"] span,
-section[data-testid="stSidebar"] caption {
+section[data-testid="stSidebar"] caption,
+section[data-testid="stSidebar"] div {
     color: #e0e0e0 !important;
     font-size: 13.5px !important;
     font-weight: 500 !important;
@@ -139,10 +149,6 @@ section[data-testid="stSidebar"] caption {
 section[data-testid="stSidebar"] .element-container:has(button[key*="btn_toggle_admin_login"]) {
     margin-top: -4px !important; 
 }
-
-/* ============================================================================
-    4. COMPONENTES INTERACTIVOS DE ACCESO INTERNO (LOGIN SIDEBAR)
-   ============================================================================ */
 
 /* Botón con degradado de fuego corporativo para activar modo admin */
 section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
@@ -155,7 +161,6 @@ section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
     padding: 8px !important; 
     box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
     transition: transform 0.2s ease, filter 0.2s ease !important;
-    text-transform: none !important;
 }
 section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"]:hover {
     transform: translateY(-2px) !important;
@@ -163,11 +168,11 @@ section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"]:hover {
     color: #ffffff !important;
 }
 
-/* Entradas de login con respuesta luminosa focalizada */
+/* Entradas de login con respuesta oscura e iluminación focalizada */
 section[data-testid="stSidebar"] input[type="text"], 
 section[data-testid="stSidebar"] input[type="password"] {
     background-color: #121212 !important;
-    border: 1px solid #333 !important;
+    border: 1px solid #333333 !important;
     border-radius: 6px !important;
     color: #ffffff !important;
 }
@@ -177,7 +182,7 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
 }
 /* ============================================================================
-    5. BOTÓN DE SOPORTE Y DIVISORES DE LA BARRA LATERAL
+    5. BOTÓN DE SOPORTE, DIVISORES Y CATÁLOGO CON NÚMERO VERDE BRILLANTE
    ============================================================================ */
 
 /* Botón interactivo de WhatsApp con degradado esmeralda */
@@ -200,10 +205,6 @@ section[data-testid="stSidebar"] hr {
     height: 1px !important;
     background: linear-gradient(to right, transparent, rgba(243, 156, 18, 0.3), transparent) !important;
 }
-
-/* ============================================================================
-    6. CATÁLOGO DE PRODUCTOS (FOOD CARDS PREMIUM)
-   ============================================================================ */
 
 /* Bloque inferior de información para las tarjetas de los platos */
 .product-card-bottom {
@@ -233,8 +234,17 @@ section[data-testid="stSidebar"] hr {
     font-family: 'Impact', Charcoal, sans-serif;
 }
 
+/* 🟢 REGLA EXCLUSIVA SOLICITADA: Cambia únicamente el número ingresado del catálogo a Verde Brillante */
+div[data-testid="stColumn"] div[data-testid="stNumberInput"] input {
+    color: #2ecc71 !important;               /* Verde esmeralda brillante */
+    background-color: #1a1a1e !important;     /* Fondo oscuro corporativo */
+    font-size: 20px !important;               /* Más grande para destacar */
+    font-weight: 900 !important;              /* Ultra negrita para máxima nitidez */
+    text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.5) !important; /* Brillo neón */
+    border: 2px solid #333333 !important;
+}
 /* ============================================================================
-    7. PIE DE PÁGINA CORPORATIVO (FOOTER ORIGINAL)
+    6. PIE DE PÁGINA, NAVEGACIÓN NETFLIX Y FORMULARIOS DE CONTROL
    ============================================================================ */
 
 /* Contenedor centralizado traslúcido para enlaces oficiales */
@@ -256,9 +266,6 @@ section[data-testid="stSidebar"] hr {
     text-decoration: none !important;
     font-weight: bold !important;
 }
-/* ============================================================================
-    8. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX)
-   ============================================================================ */
 
 /* Contenedor principal alineado con empuje estructural para liberar la cabecera */
 .netflix-navbar-master {
@@ -337,246 +344,4 @@ button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
     white-space: nowrap !important;
     margin-right: 15px !important;
     display: inline-block !important;
-}
-
-/* ============================================================================
-    9. ENTRADAS DE TEXTO, SELECCIÓN Y FORMULARIOS DE NAVEGACIÓN
-   ============================================================================ */
-
-/* Rediseño estilizado para las cajas de búsqueda compactadas a la derecha */
-div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input {
-    background-color: rgba(30, 30, 35, 0.75) !important;
-    border: 1px solid #333333 !important;
-    border-radius: 4px !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-}
-div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input:focus {
-    border-color: #f39c12 !important;
-    box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
-}
-
-/* Títulos de etiquetas unificados en mayúsculas tipo comanda */
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stTextInput"] label p,
-div[data-testid="stNumberInput"] label p {
-    font-size: 16.5px !important;
-    font-weight: 800 !important;
-    color: #ffffff !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-}
-
-/* Rediseño del combobox selector de formas de pago */
-div[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #1e1e24 !important; 
-    border: 1px solid #333333 !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Texto interno de la opción seleccionada en el combobox */
-div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: #ffffff !important;
-}
-/* ============================================================================
-    10. ENTRADAS NUMÉRICAS, CAJAS DE ALERTA Y ESTADOS DE CONTROL
-   ============================================================================ */
-
-/* CORRECCIÓN DE LEGIBILIDAD: Contraste Puro Solucionado para la Profesora */
-div[data-testid="stTextInput"] input, 
-div[data-testid="stNumberInput"] input,
-div[data-testid="stSidebar"] input[type="text"], 
-div[data-testid="stSidebar"] input[type="password"] {
-    background-color: #ffffff !important;     /* Fondo blanco puro para que resalte */
-    color: #111111 !important;                /* Texto y números en negro ultra legible */
-    border: 2px solid #333333 !important;     /* Borde oscuro definido */
-    border-radius: 8px !important;
-    padding: 10px 14px !important;
-    font-size: 16px !important;               /* Letra un poco más grande */
-    font-weight: 700 !important;              /* Texto en negrita para máxima nitidez */
-}
-
-/* Color del texto sugerido (placeholder) cuando la caja está vacía */
-div[data-testid="stTextInput"] input::placeholder,
-div[data-testid="stNumberInput"] input::placeholder {
-    color: #666666 !important;
-}
-
-
-/* Foco de iluminación al hacer clic en las cajas de texto */
-div[data-testid="stTextInput"] input:focus, 
-div[data-testid="stNumberInput"] input:focus {
-    border-color: #f39c12 !important;
-    box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
-}
-
-/* Cuadros informativos de Yapeo o estados de procesamiento (Azul Premium) */
-div.stAlert {
-    background-color: #111a24 !important; 
-    border: 1px solid #1f3347 !important;
-    border-left: 5px solid #f39c12 !important; 
-    border-radius: 10px !important;
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.6) !important;
-}
-div.stAlert p {
-    color: #ffffff !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-}
-
-/* Variación exclusiva si la alerta en pantalla es un mensaje de error (Carmesí) */
-div.stAlert:has(svg[data-testid="stNotificationIconError"]) {
-    border-left: 5px solid #c0392b !important; 
-    background-color: #1a1111 !important;
-    border-color: #471f1f !important;
-}
-
-/* ============================================================================
-    11. TOTALIZADOR NEÓN Y BOTÓN MAESTRO DE CONTROL POS
-   ============================================================================ */
-
-/* Monto Total a Procesar (Metric Verde Esmeralda Neón Tridimensional) */
-div[data-testid="stMetricValue"] {
-    font-size: 46px !important;
-    font-weight: 900 !important;
-    color: #2ecc71 !important;
-    font-family: 'Impact', Charcoal, sans-serif !important;
-    text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important;
-    background-color: #0f0f0f !important;
-    padding: 12px 25px !important;
-    border-radius: 8px !important;
-    display: inline-block !important;
-    border: 2px solid #2ecc71 !important;
-    margin-top: 5px !important;
-}
-div[data-testid="stMetricLabel"] p {
-    font-size: 22px !important;
-    color: #ffffff !important;
-    font-weight: bold !important;
-}
-
-/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Búfalo Corporativo */
-.stButton > button {
-    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
-    color: #ffffff !important;
-    font-size: 24px !important;
-    font-weight: 900 !important;
-    font-family: 'Arial Black', Gadget, sans-serif !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6) !important;
-    padding: 16px 20px !important;
-    border-radius: 10px !important;
-    border: 1px solid #e67e22 !important;
-    box-shadow: 0px 5px 15px rgba(211, 84, 0, 0.4) !important;
-    transition: all 0.3s ease-in-out !important;
-    width: 100% !important;
-}
-.stButton > button:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0px 8px 25px rgba(211, 84, 0, 0.7) !important;
-    filter: brightness(1.2) !important;
-}
-
-/* Exclusión para botones secundarios (Nueva orden, etc.) para mantener tono sobrio */
-div[data-testid="element-container"]:has(iframe) + div.stButton > button,
-.stButton:has(button[key*="btn_nueva_orden_final"]) > button {
-    background: #222222 !important;
-    color: #aaaaaa !important;
-    font-size: 16px !important;
-    font-family: 'Segoe UI', sans-serif !important;
-    font-weight: normal !important;
-    border: 1px solid #444444 !important;
-    box-shadow: none !important;
-    padding: 10px !important;
-}
-
-/* Textos generales de etiquetas de entrada */
-.stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
-    color: #ffffff !important;
-}
-
-/* Estilizado compacto del gestor de secciones administrativas */
-div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stVerticalBlockBorderWrapper"] {
-    background-color: #18181c !important;
-    border-radius: 12px !important;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    padding: 18px !important;
-    height: 100% !important;
-}
-div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stHorizontalBlock"] > div:first-child div[data-testid="stVerticalBlockBorderWrapper"] {
-    border-left: 4px solid #f39c12 !important; 
-}
-div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stHorizontalBlock"] > div:last-child div[data-testid="stVerticalBlockBorderWrapper"] {
-    border-left: 4px solid #c0392b !important; 
-}
-div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    margin-bottom: 12px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-}
-
-/* ============================================================================
-    12. MEDIA QUERIES - REFORZAMIENTO RESPONSIVO MÓVIL BLINDADO 2X2
-   ============================================================================ */
-@media (max-width: 768px) {
-    [data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-        width: 100% !important;
-    }
-    
-    [data-testid="stHorizontalBlock"] > div,
-    [data-testid="stHorizontalBlock"] > div[data-testid="column"],
-    [data-testid="stHorizontalBlock"] * .stColumn {
-        width: calc(50% - 6px) !important;
-        min-width: calc(50% - 6px) !important;
-        max-width: calc(50% - 6px) !important;
-        flex: 1 1 calc(50% - 6px) !important;
-    }
-
-    .product-title {
-        font-size: 16px !important;
-        font-weight: 800 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    .product-price {
-        font-size: 18px !important;
-        font-weight: 900 !important;
-    }
-
-    .product-card-bottom {
-        padding: 10px 12px !important;
-        flex-direction: column !important; 
-        align-items: flex-start !important;
-        gap: 4px !important;
-    }
-}
-
-/* Sello de creador interactivo en la cabecera */
-.sello-creador {
-    position: absolute !important;
-    top: 50px !important; 
-    left: 20px !important; 
-    right: auto !important;
-    color: rgba(46, 204, 113, 0.95) !important; 
-    font-size: 11.5px !important;
-    font-weight: 700 !important;
-    font-family: 'Segoe UI', system-ui, sans-serif !important;
-    letter-spacing: 0.8px !important;
-    text-transform: uppercase !important;
-    text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.4) !important;
-    z-index: 0 !important; 
-    pointer-events: none !important;
 }
