@@ -346,44 +346,53 @@ button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
     display: inline-block !important;
 }
 /* ============================================================================
-    PARCHE MAESTRO FINAL: CALIBRACIÓN DE SELLO Y FORZADO ESTÁTICO DE BOTÓN
+    PARCHE DEFINITIVO UNIFICADO: BIENVENIDA Y SIDEBAR CALIBRADOS
    ============================================================================ */
 
-/* 1. ALINEACIÓN DEL SELLO DEL AUTOR (MÁS ABAJO Y HACIA LA IZQUIERDA) */
+/* 1. SELLO DEL AUTOR ALINEADO */
 .sello-creador {
     position: relative !important;
     display: block !important;
-    text-align: left !important;            /* Lo mueve a la izquierda */
-    color: #2ecc71 !important;             /* Verde esmeralda nítido */
+    text-align: left !important;            
+    color: #2ecc71 !important;             
     font-size: 13.5px !important;
     font-weight: 800 !important;
     letter-spacing: 1px !important;
     text-transform: uppercase !important;
-    margin-top: 40px !important;            /* Lo empuja hacia abajo para separarlo del borde */
-    margin-left: 20px !important;           /* Le da un margen limpio a la izquierda */
+    margin-top: 40px !important;            
+    margin-left: 20px !important;           
     margin-bottom: 5px !important;
     text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.5) !important;
     z-index: 99999 !important;
 }
 
-/* 2. REPARACIÓN TOTAL DEL BOTÓN CENTRAL (COLOR DE FUEGO DESDE EL INICIO) */
-.stButton > button[key="btn_empezar_pedido_master"],
+/* 2. REPARACIÓN DEL BOTÓN CENTRAL (FUEGO FIJO DESDE EL INICIO) */
 div[data-testid="stMainBlockContainer"] div.stButton > button {
-    background-image: none !important;     /* Borra la capa blanca nativa de Streamlit */
-    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; /* Fuego estático */
-    color: #ffffff !important;             /* Texto blanco visible siempre */
+    background-image: none !important;     
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
+    color: #ffffff !important;             
     font-size: 22px !important;
     font-weight: 900 !important;
     font-family: 'Arial Black', Gadget, sans-serif !important;
     border: 2px solid #e67e22 !important;
     box-shadow: 0px 6px 20px rgba(211, 84, 0, 0.5) !important;
-    opacity: 1 !important;                 /* Evita cualquier transparencia inicial */
 }
 
-/* Forzar que cuando se pase el mouse mantenga su comportamiento premium */
-.stButton > button[key="btn_empezar_pedido_master"]:hover,
-div[data-testid="stMainBlockContainer"] div.stButton > button:hover {
+/* 3. BLINDAJE EXCLUSIVO PARA EL BOTÓN ADMINISTRADOR (QUITA EL BLANCO) */
+section[data-testid="stSidebar"] div.stButton > button {
+    background-image: none !important;                 
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
+    color: #ffffff !important;                         
+    font-weight: 900 !important;
+    font-size: 13px !important;
+    border: 1px solid #ff9f43 !important;
+    box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
+    text-transform: uppercase !important;
+}
+
+/* EFECTOS HOVER PARA AMBOS BOTONES */
+div[data-testid="stMainBlockContainer"] div.stButton > button:hover,
+section[data-testid="stSidebar"] div.stButton > button:hover {
     filter: brightness(1.2) !important;
-    transform: translateY(-2px) !important;
     color: #ffffff !important;
 }
