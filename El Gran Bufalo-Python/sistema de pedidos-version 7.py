@@ -759,7 +759,8 @@ else:
                         .replace("{{ DETALLE_PRODUCTOS }}", detalle_productos_txt.strip())\
                         .replace("{{ TOTAL_FINAL }}", f"{total_con_delivery:.2f}")
                     
-                    components.html(html_final, height=650)
+                    components.html(html_final, height=850)
+
                 else:
                     st.error("⚠️ Error: No se pudo encontrar 'boleta_plantilla.html'.")
                 

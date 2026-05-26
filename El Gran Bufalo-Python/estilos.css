@@ -456,3 +456,9 @@ div[data-testid="stMetricValue"] span,
     text-shadow: 0px 0px 15px rgba(46, 204, 113, 0.6) !important; /* Devuelve el brillo neón */
     opacity: 1 !important; /* Cancela cualquier transparencia que le meta el Modo Claro */
 }
+/* ============================================================================
+    BLINDAJE DE SEGURIDAD PARA EL BOTÓN VERDE DE DESCARGA DEL HTML
+   ============================================================================ */
+iframe + div, button[onclick="descargarTicket()"], .stHtmlBlock button {
+    color: #ffffff !important; /* Asegura letras blancas en el botón verde */
+}
