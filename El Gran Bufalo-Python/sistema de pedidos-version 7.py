@@ -625,6 +625,10 @@ else:
             height=0,
         )
         
+        
+        st.html("<div style='height: 50px;'></div>")
+        st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
+        st.markdown("### Resumen de artículos solicitados:")
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
         st.markdown("### Resumen de artículos solicitados:")
         
