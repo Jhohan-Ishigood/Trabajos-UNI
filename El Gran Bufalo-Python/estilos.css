@@ -79,7 +79,7 @@ button[kind="headerNoPadding"] {
     margin-top: 5px !important;
 }
 button[kind="headerNoPadding"]::after {
-    content: "☰ Menú de Opciones" !important;
+    content: " Menú de Opciones" !important;
     color: #f39c12 !important;
     font-weight: bold !important;
     font-size: 14px !important;
