@@ -223,18 +223,18 @@ section[data-testid="stSidebar"] hr {
 
 
 /* ============================================================================
-    5. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX)
+    5. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX OPTIMIZADO)
    ============================================================================ */
 
-/* Contenedor principal alineado con empuje estructural para liberar la cabecera */
+/* Reducimos los márgenes para pegar el catálogo y el título hacia arriba */
 .netflix-navbar-master {
     background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    margin-top: 85px !important; 
-    margin-bottom: 15px !important;
+    margin-top: 5px !important;    /* Bajó de 85px a 5px para pegarse arriba */
+    margin-bottom: 5px !important;  /* Bajó de 15px a 5px para acercar el título */
     display: block !important;
     width: 100% !important;
 }
