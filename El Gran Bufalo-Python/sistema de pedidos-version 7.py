@@ -586,7 +586,8 @@ else:
             with target_col:
                 if esta_disponible:
                     url_imagen_plato = info.get("foto", "")
-                    # CORREGIDO: El precio se queda siempre limpio a la derecha en su tamaño original
+                    st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
+                    
                     texto_precio = f"S/{info['precio']:.2f}"
                     
                     st.markdown(f"""
@@ -596,7 +597,6 @@ else:
                         </div>
                     """, unsafe_allow_html=True)
                     
-                    # CORREGIDO: El aviso de stock se despliega abajo de la tarjeta en tamaño pequeño
                     if stock_actual <= 3:
                         st.markdown(f"<p class='mini-stock-alerta'>🔥 ¡Solo quedan {stock_actual} unidades! 🔥</p>", unsafe_allow_html=True)
                     else:
@@ -606,15 +606,9 @@ else:
                         f"Cantidad de {prod}:", min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
                     )
                     st.markdown("<br>", unsafe_allow_html=True)
-                    
-                    cantidades_ingresadas[prod] = st.number_input(
-                        f"Cantidad de {prod}:", min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
-                    )
-                    st.markdown("<br>", unsafe_allow_html=True)
                 else:
                     st.markdown(f"""<div style="width:100%; height:200px; background-color:#222; border-radius:12px 12px 0px 0px; display:flex; align-items:center; justify-content:center;"><span style="font-size:50px; filter:grayscale(100%);">{info['icono']}</span></div>""", unsafe_allow_html=True)
                     st.markdown(f"<div style='background-color:#1c1c1c; padding:20px; border-radius:0px 0px 12px 12px; border:2px solid #ff4b4b; text-align:center; margin-bottom:25px;'><p style='color: #ff4b4b; font-size:18px; font-weight: bold; margin:0;'>❌ {prod}<br>(AGOTADO)</p></div>", unsafe_allow_html=True)
-
         st.markdown("---")
         if st.button("🛒 ENVIAR PEDIDO Y CONFIGURAR PAGO", use_container_width=True):
             st.session_state.carrito = []
