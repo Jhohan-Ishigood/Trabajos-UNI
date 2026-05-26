@@ -186,20 +186,41 @@ section[data-testid="stSidebar"] hr {
     box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
 }
 
-/* Títulos de comida con tipografía robusta e imponente */
+/* ============================================================================
+    MEDIDAS CALIBRADAS PARA EL PANEL DE TARJETAS DE COMIDA
+   ============================================================================ */
+
+/* Reducimos el título para que quepa todo el texto del stock sin desbordar */
 .product-title {
-    font-size: 22px !important;
+    font-size: 15px !important;               
     font-weight: bold !important;
     color: #ffffff !important;
+    line-height: 1.3 !important;
+    padding-right: 10px !important;           
 }
 
-/* Precios destacados con tipografía Impact de alta conversión */
+/* Reducimos el precio para que no pise las letras de la comida */
 .product-price {
-    font-size: 24px !important;
+    font-size: 18px !important;               
     font-weight: 900 !important;
     color: #f39c12 !important;
     font-family: 'Impact', Charcoal, sans-serif;
+    white-space: nowrap !important;           
 }
+
+/* Ajustamos el contenedor para darle una distribución perfecta de lado a lado */
+.product-card-bottom {
+    background-color: #1e1e1e !important;
+    padding: 12px 15px !important;            
+    border-radius: 0px 0px 12px 12px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+}
+
 
 /* ============================================================================
     5. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX)
