@@ -152,7 +152,7 @@ if os.path.exists(RUTA_CSS):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Inyección limpia del sello de creador adaptado al flujo estructural
-st.markdown("<div class='sello-creador'> Desarrollado por Jhohan-Ptrick-Eros-Jack-Carlos 😎</div>", unsafe_allow_html=True)
+st.markdown("<div class='sello-creador'> Desarrollada por Jhohan-Patrick-Eros-Jack-Carlos (Grupo 5) 😎</div>", unsafe_allow_html=True)
 
 # ============================================================================
 # 6. BARRA LATERAL (SIDEBAR POS): GESTIÓN INTERNA Y AUTENTICACIÓN
