@@ -44,9 +44,9 @@ Muchas gracias por su compra, vuelva pronto!😎
 </div>
 
 <!-- ============================================================================
-    3. PASARELA DIGITAL: BOTÓN DE DESCARGA SEGURO A FOTO
+    3. PASARELA DIGITAL: BOTÓN DE CONVERSIÓN A FOTO EN PANTALLA
     ============================================================================ -->
-<button onclick="abrirComoFoto()" style="
+<button onclick="generarFotoAqui()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
@@ -64,10 +64,28 @@ Muchas gracias por su compra, vuelva pronto!😎
     display: block;
     box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
     transition: all 0.3s ease;
-">📸 ABRIR COMO FOTO PARA GUARDAR</button>
+">📸 CONVERTIR A FOTO PARA GUARDAR</button>
+
+<!-- Contenedor dinámico donde aparecerá la foto del ticket -->
+<div id="contenedor-foto" style="
+    display: none; 
+    text-align: center; 
+    margin-top: 25px; 
+    padding: 15px; 
+    background: rgba(255,255,255,0.05); 
+    border-radius: 8px;
+    max-width: 410px;
+    margin-left: auto;
+    margin-right: auto;
+">
+    <p style="color: #2ecc71; font-family: sans-serif; font-size: 14px; font-weight: bold; margin-bottom: 15px;">
+        📱 ¡FOTO GENERADA! Mantén presionado sobre la imagen de abajo para "Guardar en tu galería" o descargarla.
+    </p>
+    <img id="foto-ticket" style="max-width: 100%; height: auto; box-shadow: 0px 5px 15px rgba(0,0,0,0.5); border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);" />
+</div>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO: CONVERTIDOR DE TEXTO A IMAGEN PURA
+    4. CONTROLADOR LÓGICO: MOTOR DE CAPTURA LOCAL EN PANTALLA
     ============================================================================ -->
 <script>
 window.scrollTo({top: 0, behavior: 'instant'});
@@ -75,63 +93,30 @@ if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-function abrirComoFoto() {
+function generarFotoAqui() {
     const elemento = document.getElementById('ticket');
     
-    // El factor scale: 3 triplica la densidad para que la foto salga en alta definición
+    // Multiplica por 3 la densidad de píxeles para que la foto no salga borrosa al hacer zoom
     html2canvas(elemento, { 
         scale: 3,
         backgroundColor: "#fffdf6",
         logging: false,
         useCORS: true
     }).then(canvas => {
-        // Convertimos el ticket de texto a una imagen PNG real en Base64
+        // Convierte el texto blanco a un archivo de imagen real PNG
         const fotoUrl = canvas.toDataURL('image/png');
         
-        # Abrimos una nueva pestaña limpia en el navegador
-        const nuevaVentana = window.open('', '_blank');
+        // Asigna la foto al elemento img que creamos arriba
+        const imgElemento = document.getElementById('foto-ticket');
+        imgElemento.src = fotoUrl;
         
-        # Inyectamos la imagen directamente para que el usuario la guarde con un toque
-        nuevaVentana.document.write(`
-            <html>
-            <head>
-                <title>Tu Boleta - El Gran Búfalo</title>
-                <style>
-                    body { 
-                        background-color: #0d0d0d; 
-                        margin: 0; 
-                        padding: 20px; 
-                        display: flex; 
-                        flex-direction: column;
-                        align-items: center; 
-                        justify-content: center;
-                        font-family: sans-serif;
-                    }
-                    .instrucciones {
-                        color: #ffffff;
-                        font-size: 16px;
-                        font-weight: bold;
-                        margin-bottom: 15px;
-                        text-align: center;
-                        background: rgba(255,255,255,0.1);
-                        padding: 10px 20px;
-                        border-radius: 20px;
-                    }
-                    img {
-                        max-width: 100%;
-                        height: auto;
-                        box-shadow: 0px 10px 30px rgba(0,0,0,0.7);
-                        border-radius: 4px;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="instrucciones">📱 Mantén presionado sobre la boleta para "Descargar imagen" o guardarla en tu galería</div>
-                <img src="${fotoUrl}" alt="Boleta El Gran Búfalo">
-            </body>
-            </html>
-        `);
-        nuevaVentana.document.close();
+        // Muestra el contenedor oculto con las instrucciones
+        document.getElementById('contenedor-foto').style.display = 'block';
+        
+        // Micro-scroll automático para enfocar la foto generada de inmediato
+        setTimeout(() => {
+            imgElemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
     });
 }
 </script>
