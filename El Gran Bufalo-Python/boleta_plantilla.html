@@ -1,10 +1,5 @@
 <!-- ============================================================================
-    1. CABECERA MULTIMEDIA E IMPORTACIÓN DE DEPENDENCIAS (CDN OFICIAL)
-    ============================================================================ -->
-<script src="https://cloudflare.com"></script>
-
-<!-- ============================================================================
-    2. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
+    1. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
     ============================================================================ -->
 <div id="ticket" style="
     background-color: #fffdf6; 
@@ -39,13 +34,13 @@ Forma de Pago: {{ METODO_PAGO }}
 ----------------------------------------------
 TOTAL A PAGAR:            S/{{ TOTAL_FINAL }}
 ==============================================
-Muchas gracias por su compra, vuelva pronto!😎
+Muchas gracias por su compra, vuelva pronto!
 </div>
 
 <!-- ============================================================================
-    3. PASARELA DIGITAL: BOTÓN DE CONVERSIÓN A FOTO EN PANTALLA
+    2. PASARELA DIGITAL: BOTÓN DE DESCARGA / IMPRESIÓN BLINDADO
     ============================================================================ -->
-<button onclick="generarFotoAqui()" style="
+<button onclick="descargarTicketPDF()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
@@ -63,59 +58,55 @@ Muchas gracias por su compra, vuelva pronto!😎
     display: block;
     box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
     transition: all 0.3s ease;
-">📸 CONVERTIR A FOTO PARA GUARDAR</button>
-
-<!-- Contenedor dinámico donde aparecerá la foto del ticket -->
-<div id="contenedor-foto" style="
-    display: none; 
-    text-align: center; 
-    margin-top: 25px; 
-    padding: 15px; 
-    background: rgba(255,255,255,0.05); 
-    border-radius: 8px;
-    max-width: 410px;
-    margin-left: auto;
-    margin-right: auto;
-">
-    <p style="color: #2ecc71; font-family: sans-serif; font-size: 14px; font-weight: bold; margin-bottom: 15px;">
-        📱 ¡FOTO GENERADA! Mantén presionado sobre la imagen de abajo para "Guardar en tu galería" o descargarla.
-    </p>
-    <img id="foto-ticket" style="max-width: 100%; height: auto; box-shadow: 0px 5px 15px rgba(0,0,0,0.5); border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);" />
-</div>
+">📥 DESCARGAR / IMPRIMIR COMPROBANTE</button>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO: MOTOR DE CAPTURA LOCAL EN PANTALLA
+    3. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO BLINDADO)
     ============================================================================ -->
 <script>
+// Forzado nativo de scroll superior al renderizar la boleta
 window.scrollTo({top: 0, behavior: 'instant'});
 if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-function generarFotoAqui() {
-    const elemento = document.getElementById('ticket');
+function descargarTicketPDF() {
+    // Captura el HTML exacto de la boleta blanca
+    const contenidoTicket = document.getElementById('ticket').outerHTML;
     
-    // Multiplica por 3 la densidad de píxeles para que la foto no salga borrosa al hacer zoom
-    html2canvas(elemento, { 
-        scale: 3,
-        backgroundColor: "#fffdf6",
-        logging: false,
-        useCORS: true
-    }).then(canvas => {
-        // Convierte el texto blanco a un archivo de imagen real PNG
-        const fotoUrl = canvas.toDataURL('image/png');
-        
-        // Asigna la foto al elemento img que creamos arriba
-        const imgElemento = document.getElementById('foto-ticket');
-        imgElemento.src = fotoUrl;
-        
-        // Muestra el contenedor oculto con las instrucciones
-        document.getElementById('contenedor-foto').style.display = 'block';
-        
-        // Micro-scroll automático para enfocar la foto generada de inmediato
-        setTimeout(() => {
-            imgElemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-    });
+    // Abre una ventana limpia temporal
+    const ventanaFantasma = window.open('', '_blank', 'width=450,height=700');
+    
+    ventanaFantasma.document.write(`
+        <html>
+        <head>
+            <title>Comprobante - El Gran Buffalo</title>
+            <style>
+                body { 
+                    background-color: #ffffff; 
+                    margin: 0; 
+                    padding: 20px; 
+                    display: flex; 
+                    justify-content: center; 
+                }
+                @media print {
+                    body { padding: 0; }
+                }
+            </style>
+        </head>
+        <body>
+            ${contenidoTicket}
+            <script>
+                // Dispara el menú oficial del sistema para guardar como PDF o Imagen
+                window.onload = function() { 
+                    window.print(); 
+                    // Cierra la pestaña automáticamente al terminar
+                    setTimeout(function() { window.close(); }, 300);
+                }
+            <\/script>
+        </body>
+        </html>
+    `);
+    ventanaFantasma.document.close();
 }
 </script>
