@@ -678,7 +678,7 @@ else:
             direccion_delivery = st.text_input("Ingrese su dirección de entrega (Ubicación):", placeholder="Ej. Av. Larco 123...").strip()
                 
         total_con_delivery = st.session_state.total_acumulado + costo_delivery
-        st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.1f}")
+        st.metric(label="Monto Total a Procesar", value=f"S/{total_con_delivery:.2f}")
 
         metodo_pago = st.selectbox("Seleccione método de pago:", ["Efectivo", "Yape", "Tarjeta"])
         

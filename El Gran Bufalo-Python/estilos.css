@@ -517,3 +517,26 @@ h3, [data-testid="stMarkdownContainer"] h3 {
     margin-top: -10px !important;
     padding-top: 0 !important;
 }
+/* ============================================================================
+    PARCHE DE REFINAMIENTO: FIJAR UN SOLO CUADRO PARA EL TOTALIZADOR NEÓN
+   ============================================================================ */
+
+/* 1. Removemos el borde repetido del sub-elemento interno */
+div[data-testid="stMetricValue"] > div,
+div[data-testid="stMetricValue"] span,
+div[data-testid="stMetricValue"] div {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 2. Aseguramos que solo la caja principal tenga el borde verde y el fondo oscuro */
+div[data-testid="stMetricValue"] {
+    border: 2px solid #2ecc71 !important;     /* El único borde verde oficial */
+    background-color: #0f0f0f !important;     /* Fondo negro profundo */
+    padding: 12px 25px !important;            /* Margen interno limpio */
+    border-radius: 8px !important;            /* Esquinas redondeadas */
+    display: inline-block !important;
+    box-shadow: 0px 4px 15px rgba(46, 204, 113, 0.15) !important;
+}
