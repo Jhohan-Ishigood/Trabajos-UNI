@@ -44,9 +44,9 @@ Muchas gracias por su compra, vuelva pronto!😎
 </div>
 
 <!-- ============================================================================
-    3. PASARELA DIGITAL: BOTÓN DE DESCARGA (BLINDADO CONTRA CENSURA DE IFRAME)
+    3. PASARELA DIGITAL: BOTÓN DE DESCARGA DIRECTA A FOTO (PNG)
     ============================================================================ -->
-<button onclick="imprimirTicket()" style="
+<button onclick="descargarComoFoto()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
@@ -64,49 +64,40 @@ Muchas gracias por su compra, vuelva pronto!😎
     display: block;
     box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
     transition: all 0.3s ease;
-">📥 GUARDAR / IMPRIMIR COMPROBANTE</button>
+">📥 DESCARGAR COMPROBANTE (FOTO PNG)</button>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO CORREGIDO)
+    4. CONTROLADOR LÓGICO: MOTOR DE CAPTURA GRÁFICA MASTER
     ============================================================================ -->
 <script>
+// Forzado nativo de scroll superior al renderizar la boleta
 window.scrollTo({top: 0, behavior: 'instant'});
 if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-function imprimirTicket() {
-    const contenidoTicket = document.getElementById('ticket').outerHTML;
-    const ventanaImpresion = window.open('', '_blank', 'width=450,height=700');
+function descargarComoFoto() {
+    const elemento = document.getElementById('ticket');
     
-    ventanaImpresion.document.write(`
-        <html>
-        <head>
-            <title>Imprimir Boleta - El Gran Búfalo</title>
-            <style>
-                body { 
-                    background-color: #000000; 
-                    margin: 0; 
-                    padding: 20px; 
-                    display: flex; 
-                    justify-content: center; 
-                }
-                @media print {
-                    body { background-color: #ffffff; padding: 0; }
-                }
-            </style>
-        </head>
-        <body>
-            \${contenidoTicket}
-            <script>
-                window.onload = function() { 
-                    window.print(); 
-                    setTimeout(function() { window.close(); }, 500);
-                }
-            <\/script>
-        </body>
-        </html>
-    `);
-    ventanaImpresion.document.close();
+    // El factor scale: 3 triplica la nitidez para que la foto no salga borrosa
+    html2canvas(elemento, { 
+        scale: 3,
+        backgroundColor: "#fffdf6",
+        logging: false,
+        useCORS: true
+    }).then(canvas => {
+        // Convertimos el canvas a una URL de datos binarios limpios
+        const imagenBase64 = canvas.toDataURL('image/png');
+        
+        // Creamos un elemento de descarga temporal invisible
+        const linkDescarga = document.createElement('a');
+        linkDescarga.download = 'Boleta_El_Gran_Buffalo.png';
+        linkDescarga.href = imagenBase64.replace("image/png", "image/octet-stream");
+        
+        // Empujamos el documento al árbol para simular el click físico del usuario
+        document.body.appendChild(linkDescarga);
+        linkDescarga.click();
+        document.body.removeChild(linkDescarga);
+    });
 }
 </script>
