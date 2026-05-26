@@ -628,9 +628,6 @@ else:
         
         st.html("<div style='height: 50px;'></div>")
         st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
-        st.markdown("### Resumen de artículos solicitados:")
-        st.subheader("📦 GESTIÓN DE ENTREGA Y PAGO")
-        st.markdown("### Resumen de artículos solicitados:")
         
         # INYECCIÓN DIRECTA: Convertimos el resumen Markdown en tarjetas premium oscuras con hilo dorado
         for item in st.session_state.carrito:
