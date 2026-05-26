@@ -554,7 +554,6 @@ else:
                 }}
                 </style>
             """, unsafe_allow_html=True)
-            
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<h2 class='titulo-principal'>SISTEMA DE PEDIDOS GRAN BÚFALO</h2>", unsafe_allow_html=True)
         st.markdown("<br><p style='text-align: center; font-size: 24px; font-weight: bold; color: #f39c12;'>🔥 Bienvenidos al templo de la buena carne 🔥</p>", unsafe_allow_html=True)
@@ -570,8 +569,6 @@ else:
         st.markdown("""
             <div class='social-footer'>
                 <p style='margin-bottom: 10px; font-size: 14px; letter-spacing: 2px; color: #888; font-weight: bold;'>SÍGUENOS EN REDES SOCIALES</p>
-                
-                <!-- REEMPLAZA LAS URLS DE ABAJO POR LOS ENLACES DE TU RESTAURANTE -->
                 <a href='https://facebook.com' target='_blank' class='social-icon'>📘 Facebook</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href='https://instagram.com' target='_blank' class='social-icon'>📸 Instagram</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href='https://wa.me' target='_blank' class='social-icon'>🟢 WhatsApp</a>
