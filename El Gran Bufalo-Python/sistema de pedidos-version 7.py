@@ -478,7 +478,7 @@ if es_admin:
     
     barras = alt.Chart(df_grafico).mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6).encode(
         x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(
-            labelAngle=-45,           # Inclina los nombres en diagonal para que entren todos
+            labelAngle=-85,           # Inclina los nombres en diagonal para que entren todos
             labelOverlap=False,       # OBLIGATORIO: Fuerza a Altair a mostrar el 100% de nombres
             labelColor='#ffffff',     
             titleColor='#f39c12', 
