@@ -44,9 +44,9 @@ Muchas gracias por su compra, vuelva pronto!😎
 </div>
 
 <!-- ============================================================================
-    3. PASARELA DIGITAL: BOTÓN DE DESCARGA DIRECTA A FOTO (PNG)
+    3. PASARELA DIGITAL: BOTÓN DE DESCARGA SEGURO A FOTO
     ============================================================================ -->
-<button onclick="descargarComoFoto()" style="
+<button onclick="abrirComoFoto()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
@@ -64,40 +64,74 @@ Muchas gracias por su compra, vuelva pronto!😎
     display: block;
     box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
     transition: all 0.3s ease;
-">📥 DESCARGAR COMPROBANTE (FOTO PNG)</button>
+">📸 ABRIR COMO FOTO PARA GUARDAR</button>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO: MOTOR DE CAPTURA GRÁFICA MASTER
+    4. CONTROLADOR LÓGICO: CONVERTIDOR DE TEXTO A IMAGEN PURA
     ============================================================================ -->
 <script>
-// Forzado nativo de scroll superior al renderizar la boleta
 window.scrollTo({top: 0, behavior: 'instant'});
 if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-function descargarComoFoto() {
+function abrirComoFoto() {
     const elemento = document.getElementById('ticket');
     
-    // El factor scale: 3 triplica la nitidez para que la foto no salga borrosa
+    // El factor scale: 3 triplica la densidad para que la foto salga en alta definición
     html2canvas(elemento, { 
         scale: 3,
         backgroundColor: "#fffdf6",
         logging: false,
         useCORS: true
     }).then(canvas => {
-        // Convertimos el canvas a una URL de datos binarios limpios
-        const imagenBase64 = canvas.toDataURL('image/png');
+        // Convertimos el ticket de texto a una imagen PNG real en Base64
+        const fotoUrl = canvas.toDataURL('image/png');
         
-        // Creamos un elemento de descarga temporal invisible
-        const linkDescarga = document.createElement('a');
-        linkDescarga.download = 'Boleta_El_Gran_Buffalo.png';
-        linkDescarga.href = imagenBase64.replace("image/png", "image/octet-stream");
+        # Abrimos una nueva pestaña limpia en el navegador
+        const nuevaVentana = window.open('', '_blank');
         
-        // Empujamos el documento al árbol para simular el click físico del usuario
-        document.body.appendChild(linkDescarga);
-        linkDescarga.click();
-        document.body.removeChild(linkDescarga);
+        # Inyectamos la imagen directamente para que el usuario la guarde con un toque
+        nuevaVentana.document.write(`
+            <html>
+            <head>
+                <title>Tu Boleta - El Gran Búfalo</title>
+                <style>
+                    body { 
+                        background-color: #0d0d0d; 
+                        margin: 0; 
+                        padding: 20px; 
+                        display: flex; 
+                        flex-direction: column;
+                        align-items: center; 
+                        justify-content: center;
+                        font-family: sans-serif;
+                    }
+                    .instrucciones {
+                        color: #ffffff;
+                        font-size: 16px;
+                        font-weight: bold;
+                        margin-bottom: 15px;
+                        text-align: center;
+                        background: rgba(255,255,255,0.1);
+                        padding: 10px 20px;
+                        border-radius: 20px;
+                    }
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        box-shadow: 0px 10px 30px rgba(0,0,0,0.7);
+                        border-radius: 4px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="instrucciones">📱 Mantén presionado sobre la boleta para "Descargar imagen" o guardarla en tu galería</div>
+                <img src="${fotoUrl}" alt="Boleta El Gran Búfalo">
+            </body>
+            </html>
+        `);
+        nuevaVentana.document.close();
     });
 }
 </script>
