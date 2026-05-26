@@ -14,17 +14,20 @@
     padding-top: 25px !important; 
 }
 
-/* Titulado principal con degradado de fuego premium y ajuste milimétrico */
+/* Titulado Principal con Degradado - Altura Corregida para No Tapar el Nombre */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
     font-family: 'Arial Black', Gadget, sans-serif;
     font-size: 38px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    margin-top: -15px !important;            
-    margin-bottom: 5px !important;            
-    transform: translateY(-10px) !important;  
+    
+    /* SOLUCCIÓN: Bajamos el título lo suficiente para liberar el nombre del creador */
+    margin-top: 15px !important;            /* Cambiado de negativo a positivo */
+    margin-bottom: 10px !important;           /* Espaciado inferior controlado */
+    transform: translateY(0px) !important;    /* Reseteado el desplazamiento vertical */
 }
+
 
 /* Ocultación absoluta del menú nativo de tres puntos de Streamlit */
 #MainMenu {
