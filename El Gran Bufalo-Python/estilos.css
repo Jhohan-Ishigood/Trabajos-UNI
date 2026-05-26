@@ -479,3 +479,36 @@ div[data-testid="stMetricValue"] span,
     border: 2px solid #2ecc71 !important;
     opacity: 1 !important;
 }
+/* DISEÑO CALIBRADO PARA LOS INVENTARIOS DEBAJO DE LAS TARJETAS */
+.mini-stock-alerta {
+    color: #e74c3c !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    margin-top: 5px !important;
+    margin-bottom: -5px !important;
+    margin-left: 5px !important;
+    text-transform: uppercase;
+}
+
+.mini-stock-normal {
+    color: #888888 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    margin-top: 5px !important;
+    margin-bottom: -5px !important;
+    margin-left: 5px !important;
+}
+
+.product-price {
+    font-size: 22px !important;               
+    font-weight: 900 !important;
+    color: #f39c12 !important;
+    font-family: 'Impact', Charcoal, sans-serif;
+    white-space: nowrap !important;           
+}
+
+.product-title {
+    font-size: 18px !important;               
+    font-weight: bold !important;
+    color: #ffffff !important;
+}

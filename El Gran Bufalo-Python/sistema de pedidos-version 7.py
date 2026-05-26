@@ -586,11 +586,8 @@ else:
             with target_col:
                 if esta_disponible:
                     url_imagen_plato = info.get("foto", "")
-                    st.markdown(f"""<img src="{url_imagen_plato}" style="width:100%; height:200px; object-fit:cover; border-radius:12px 12px 0px 0px; box-shadow: 0px 4px 12px rgba(0,0,0,0.6); display:block; margin:0; padding:0;">""", unsafe_allow_html=True)
-                    
+                    # CORREGIDO: El precio se queda siempre limpio a la derecha en su tamaño original
                     texto_precio = f"S/{info['precio']:.2f}"
-                    if stock_actual <= 3:
-                        texto_precio = f"🔥 ¡SOLO QUEDAN {stock_actual}! 🔥"
                     
                     st.markdown(f"""
                         <div class='product-card-bottom'>
@@ -598,6 +595,17 @@ else:
                             <span class='product-price'>{texto_precio}</span>
                         </div>
                     """, unsafe_allow_html=True)
+                    
+                    # CORREGIDO: El aviso de stock se despliega abajo de la tarjeta en tamaño pequeño
+                    if stock_actual <= 3:
+                        st.markdown(f"<p class='mini-stock-alerta'>🔥 ¡Solo quedan {stock_actual} unidades! 🔥</p>", unsafe_allow_html=True)
+                    else:
+                        st.markdown(f"<p class='mini-stock-normal'>📦 Stock disponible: {stock_actual} und.</p>", unsafe_allow_html=True)
+                    
+                    cantidades_ingresadas[prod] = st.number_input(
+                        f"Cantidad de {prod}:", min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
+                    )
+                    st.markdown("<br>", unsafe_allow_html=True)
                     
                     cantidades_ingresadas[prod] = st.number_input(
                         f"Cantidad de {prod}:", min_value=0, max_value=int(stock_actual), step=1, key=f"cat_{prod}", label_visibility="collapsed"
