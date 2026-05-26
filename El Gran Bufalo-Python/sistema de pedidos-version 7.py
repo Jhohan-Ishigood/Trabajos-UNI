@@ -476,15 +476,23 @@ if es_admin:
         'Cantidad': list(conteos_productos.values())
     })
     
+    # Generación de la gráfica forzando la visualización de todos los productos
     barras = alt.Chart(df_grafico).mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6).encode(
-        x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(labelAngle=0, labelColor='#ffffff', titleColor='#f39c12')),
-        y=alt.Y('Cantidad:Q', title='Unidades Vendidas', axis=alt.Axis(grid=True, gridColor='#2c2c2c', labelColor='#ffffff', titleColor='#f39c12')),
+        x=alt.X('Producto:N', title='Productos del Menú', sort=None, axis=alt.Axis(
+            labelAngle=-45,           # Inclina los nombres a -45° para que quepan todos
+            labelOverlap=False,       # OBLIGATORIO: Prohíbe a Altair ocultar nombres
+            labelColor='#ffffff',     # Mantiene los nombres en blanco nítido
+            titleColor='#f39c12', 
+            labelFontSize=11
+        )),
+        y=alt.Y('Cantidad:Q', title='Unidades Vendidas', axis=alt.Axis(
+            grid=True, 
+            gridColor='#2c2c2c', 
+            labelColor='#ffffff', 
+            titleColor='#f39c12'
+        )),
         color=alt.Color('Cantidad:Q', scale=alt.Scale(scheme='orangered'), legend=None)
     )
-    
-    texto_etiquetas = barras.mark_text(align='center', baseline='bottom', dy=-5, color='#ffffff', fontSize=13, fontWeight='bold').encode(text='Cantidad:Q')
-    grafico_final = (barras + texto_etiquetas).properties(width=600, height=320).configure_view(strokeWidth=0).configure_axis(domainWidth=1, domainColor='#444444')
-    st.altair_chart(grafico_final, use_container_width=True)
 
     # ============================================================================
     # 14. PANEL DE CONTROL DE ADMINISTRACIÓN - BITÁCORA HISTÓRICA DE PEDIDOS
