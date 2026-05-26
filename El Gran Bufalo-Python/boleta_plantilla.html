@@ -66,7 +66,7 @@ Muchas gracias por su compra, vuelva pronto!
 ">📥 DESCARGAR COMPROBANTE (FOTO PNG)</button>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO BLINDADO)
+    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO UNIFICADO)
     ============================================================================ -->
 <script>
 // Forzado nativo de scroll superior al renderizar la boleta
@@ -75,39 +75,41 @@ if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-// Variable global que guardará la imagen procesada en memoria
-let urlFotoPreparada = "";
-
-// PROCESAMIENTO EN SECRETO: Convierte el ticket a foto inmediatamente al cargar la página
-window.onload = function() {
-    setTimeout(function() {
-        const elemento = document.getElementById('ticket');
-        html2canvas(elemento, { 
-            scale: 3, // Triple densidad de píxeles para que no salga borrosa
-            backgroundColor: "#fffdf6",
-            logging: false,
-            useCORS: true
-        }).then(canvas => {
-            // Guardamos la URL de la imagen en la variable global
-            urlFotoPreparada = canvas.toDataURL('image/png');
-        });
-    }, 400); // Espera una fracción de segundo para asegurar que se rendericen los textos
-};
-
-// FUNCIÓN DE DESCARGA SÍNCRONA: Descarga el archivo de imagen al instante sin bloqueos
 function descargarTicketFoto() {
-    if (!urlFotoPreparada) {
-        alert("Procesando imagen... Por favor, presione el botón nuevamente en un segundo.");
-        return;
-    }
+    const elemento = document.getElementById('ticket');
     
-    // Creamos un disparador de descarga directo vinculando la foto que ya estaba lista
-    const enlaceDescarga = document.createElement('a');
-    enlaceDescarga.download = 'Boleta_Gran_Buffalo.png';
-    enlaceDescarga.href = urlFotoPreparada;
-    
-    document.body.appendChild(enlaceDescarga);
-    enlaceDescarga.click();
-    document.body.removeChild(enlaceDescarga);
+    // Cambiamos el texto del botón temporalmente para dar feedback al usuario
+    const boton = document.querySelector('button');
+    const textoOriginal = boton.innerHTML;
+    boton.innerHTML = "⏳ GENERANDO FOTO...";
+    boton.style.disabled = true;
+
+    // Ejecuta la conversión gráfica y la descarga de forma inmediata en un solo flujo
+    html2canvas(elemento, { 
+        scale: 3, // Calidad ultra nítida para la imagen
+        backgroundColor: "#fffdf6",
+        logging: false,
+        useCORS: true
+    }).then(canvas => {
+        // Convertimos el canvas a una URL de imagen real
+        const imagenBase64 = canvas.toDataURL('image/png');
+        
+        // Creamos el disparador de descarga automática
+        const enlaceDescarga = document.createElement('a');
+        enlaceDescarga.download = 'Boleta_Gran_Buffalo.png';
+        enlaceDescarga.href = imagenBase64;
+        
+        document.body.appendChild(enlaceDescarga);
+        enlaceDescarga.click();
+        document.body.removeChild(enlaceDescarga);
+        
+        // Restauramos el botón a su estado normal
+        boton.innerHTML = textoOriginal;
+        boton.style.disabled = false;
+    }).catch(err => {
+        boton.innerHTML = textoOriginal;
+        boton.style.disabled = false;
+        alert("Ocurrió un error al procesar la foto, por favor intente nuevamente.");
+    });
 }
 </script>
