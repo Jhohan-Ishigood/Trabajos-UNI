@@ -6,6 +6,7 @@
 <!-- ============================================================================
     2. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
     ============================================================================ -->
+<!-- CORREGIDO: Retiramos el emoji del texto final para evitar el bloqueo del motor gráfico -->
 <div id="ticket" style="
     background-color: #fffdf6; 
     color: #111111; 
@@ -66,10 +67,9 @@ Muchas gracias por su compra, vuelva pronto!
 ">📥 DESCARGAR COMPROBANTE (FOTO PNG)</button>
 
 <!-- ============================================================================
-    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO UNIFICADO)
+    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO REFORZADO)
     ============================================================================ -->
 <script>
-// Forzado nativo de scroll superior al renderizar la boleta
 window.scrollTo({top: 0, behavior: 'instant'});
 if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
@@ -77,24 +77,22 @@ if (window.parent) {
 
 function descargarTicketFoto() {
     const elemento = document.getElementById('ticket');
-    
-    // Cambiamos el texto del botón temporalmente para dar feedback al usuario
     const boton = document.querySelector('button');
     const textoOriginal = boton.innerHTML;
+    
     boton.innerHTML = "⏳ GENERANDO FOTO...";
-    boton.style.disabled = true;
+    boton.style.pointerEvents = "none"; // Desactiva clics repetidos
 
-    // Ejecuta la conversión gráfica y la descarga de forma inmediata en un solo flujo
+    // Configuración máster optimizada para ignorar fallos de renderizado
     html2canvas(elemento, { 
-        scale: 3, // Calidad ultra nítida para la imagen
+        scale: 3, 
         backgroundColor: "#fffdf6",
         logging: false,
-        useCORS: true
+        useCORS: false,         // Desactivamos CORS para que no busque servidores de emojis externos
+        allowTaint: true        // Permite capturar el lienzo aunque tenga caracteres del sistema
     }).then(canvas => {
-        // Convertimos el canvas a una URL de imagen real
         const imagenBase64 = canvas.toDataURL('image/png');
         
-        // Creamos el disparador de descarga automática
         const enlaceDescarga = document.createElement('a');
         enlaceDescarga.download = 'Boleta_Gran_Buffalo.png';
         enlaceDescarga.href = imagenBase64;
@@ -103,13 +101,12 @@ function descargarTicketFoto() {
         enlaceDescarga.click();
         document.body.removeChild(enlaceDescarga);
         
-        // Restauramos el botón a su estado normal
         boton.innerHTML = textoOriginal;
-        boton.style.disabled = false;
+        boton.style.pointerEvents = "auto";
     }).catch(err => {
         boton.innerHTML = textoOriginal;
-        boton.style.disabled = false;
-        alert("Ocurrió un error al procesar la foto, por favor intente nuevamente.");
+        boton.style.pointerEvents = "auto";
+        alert("Error al procesar. Intente nuevamente.");
     });
 }
 </script>
