@@ -394,6 +394,14 @@ if es_admin:
                 if foto_actual_izq:
                     st.markdown(f"""<img src="{foto_actual_izq}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
                 
+                # Selector dinámico de secciones para reasignar categorías en caliente
+                cats_izq = [c for c in st.session_state.lista_categorias if c != "Todos"]
+                cat_act_izq = st.session_state.menu_dinamico[p_izq].get("categoria", "Parrillas")
+                if cat_act_izq not in cats_izq and cats_izq: 
+                    cats_izq.append(cat_act_izq)
+                
+                nueva_cat_izq = st.selectbox(f"Sección de {p_izq}:", options=cats_izq, index=cats_izq.index(cat_act_izq) if cat_act_izq in cats_izq else 0, key=f"cat_edit_{p_izq}")
+                
                 p_izq_val = st.number_input(f"Precio (S/) - {p_izq}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_izq]["precio"]), step=0.5, key=f"p_{p_izq}")
                 p_izq_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_izq]["disponible"], key=f"d_{p_izq}")
                 p_izq_stock = st.number_input(f"Stock Disponible - {p_izq}:", min_value=0, value=int(st.session_state.menu_dinamico[p_izq].get("stock", 10)), step=1, key=f"s_{p_izq}")
@@ -405,8 +413,7 @@ if es_admin:
                     encoded_f = base64.b64encode(bytes_f).decode()
                     foto_existing_izq = f"data:image/png;base64,{encoded_f}"
                 
-                cat_actual_izq = st.session_state.menu_dinamico[p_izq].get("categoria", "Parrillas")
-                cambios_detectados[p_izq] = {"precio": p_izq_val, "icono": st.session_state.menu_dinamico[p_izq]["icono"], "disponible": p_izq_disp, "foto": foto_existing_izq, "stock": p_izq_stock, "categoria": cat_actual_izq}
+                cambios_detectados[p_izq] = {"precio": p_izq_val, "icono": st.session_state.menu_dinamico[p_izq]["icono"], "disponible": p_izq_disp, "foto": foto_existing_izq, "stock": p_izq_stock, "categoria": nueva_cat_izq}
                 
                 if st.button(f"❌ Eliminar {p_izq}", key=f"del_{p_izq}", use_container_width=True):
                     eliminar_producto = p_izq
@@ -421,6 +428,14 @@ if es_admin:
                     if foto_actual_der:
                         st.markdown(f"""<img src="{foto_actual_der}" style="width:100%; height:120px; object-fit:cover; border-radius:6px; margin-bottom:10px; border: 1px solid #444;">""", unsafe_allow_html=True)
                     
+                    # Selector dinámico de secciones para la columna derecha
+                    cats_der = [c for c in st.session_state.lista_categorias if c != "Todos"]
+                    cat_act_der = st.session_state.menu_dinamico[p_der].get("categoria", "Parrillas")
+                    if cat_act_der not in cats_der and cats_der: 
+                        cats_der.append(cat_act_der)
+                    
+                    nueva_cat_der = st.selectbox(f"Sección de {p_der}:", options=cats_der, index=cats_der.index(cat_act_der) if cat_act_der in cats_der else 0, key=f"cat_edit_{p_der}")
+                    
                     p_der_val = st.number_input(f"Precio (S/) - {p_der}:", min_value=1.0, value=float(st.session_state.menu_dinamico[p_der]["precio"]), step=0.5, key=f"p_{p_der}")
                     p_der_disp = st.checkbox("Disponible para venta", value=st.session_state.menu_dinamico[p_der]["disponible"], key=f"d_{p_der}")
                     p_der_stock = st.number_input(f"Stock Disponible - {p_der}:", min_value=0, value=int(st.session_state.menu_dinamico[p_der].get("stock", 10)), step=1, key=f"s_{p_der}")
@@ -432,12 +447,12 @@ if es_admin:
                         encoded_f = base64.b64encode(bytes_f).decode()
                         foto_existing_der = f"data:image/png;base64,{encoded_f}"
                     
-                    cat_actual_der = st.session_state.menu_dinamico[p_der].get("categoria", "Parrillas")
-                    cambios_detectados[p_der] = {"precio": p_der_val, "icono": st.session_state.menu_dinamico[p_der]["icono"], "disponible": p_der_disp, "foto": foto_existing_der, "stock": p_der_stock, "categoria": cat_actual_der}
+                    cambios_detectados[p_der] = {"precio": p_der_val, "icono": st.session_state.menu_dinamico[p_der]["icono"], "disponible": p_der_disp, "foto": foto_existing_der, "stock": p_der_stock, "categoria": nueva_cat_der}
                     
                     if st.button(f"❌ Eliminar {p_der}", key=f"del_{p_der}", use_container_width=True):
                         eliminar_producto = p_der
         st.markdown("---")
+
     # ============================================================================
     # 12. MANEJADOR OPERATIVO DE PERSISTENCIA SEGURA
     # ============================================================================
