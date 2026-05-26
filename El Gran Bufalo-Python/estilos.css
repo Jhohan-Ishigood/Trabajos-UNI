@@ -1,62 +1,37 @@
 /* ============================================================================
-    PARTE 1: ARQUITECTURA VISUAL GLOBAL Y TIPOGRAFÍA - EL GRAN BÚFALO
+    1. ARQUITECTURA VISUAL GLOBAL, TIPOGRAFÍA Y LIENZO PRINCIPAL
    ============================================================================ */
 
-/* Configuración de Fuentes Limpias y Nítidas */
-.stApp {
+/* Configuración unificada de fuentes nítidas para toda la aplicación */
+.stApp, :app {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Centrado Estructural de la Pantalla Principal */
+/* Centrado estructural optimizado de la pantalla principal (Remueve excesos negros) */
 .block-container {
     max-width: 800px !important;
     margin: 0 auto !important;
-    padding-top: 60px !important;
+    padding-top: 25px !important; 
 }
 
-/* Configuración de Fuentes Limpias y Nítidas */
-:app {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
-}
-
-/* Centrado Estructural de la Pantalla Principal */
-.block-container {
-    max-width: 800px !important;
-    margin: 0 auto !important;
-    padding-top: 25px !important; /* REDUCIDO: Quita el exceso de espacio negro de arriba */
-}
-
-/* Titulado Principal con Degradado de Fuego Premium - Altura Equilibrada */
+/* Titulado principal con degradado de fuego premium y ajuste milimétrico */
 .titulo-principal {
     text-align: center;
     color: #f39c12;
     font-family: 'Arial Black', Gadget, sans-serif;
     font-size: 38px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    
-    /* CORRECCIÓN DE ALTURA VERTICAL: */
-    margin-top: -15px !important;            /* Elimina margen y tira el texto hacia arriba */
-    margin-bottom: 5px !important;            /* Reduce el espacio con el texto de la fecha */
-    transform: translateY(-10px) !important;  /* Ajuste milimétrico final hacia arriba */
+    margin-top: -15px !important;            
+    margin-bottom: 5px !important;            
+    transform: translateY(-10px) !important;  
 }
 
-/* Ocultación Absoluta del Menú de Tres Puntos Nativo de Streamlit */
+/* Ocultación absoluta del menú nativo de tres puntos de Streamlit */
 #MainMenu {
     display: none !important;
 }
 
-/* Remoción de la Barra Superior Estándar del Servidor */
-div[data-testid="stHeader"] {
-    display: none !important;
-}
-
-
-/* Ocultación Absoluta del Menú de Tres Puntos Nativo de Streamlit */
-#MainMenu {
-    display: none !important;
-}
-
-/* Remoción de la Barra Superior Estándar del Servidor */
+/* Remoción estética de la barra superior estándar del servidor */
 div[data-testid="stHeader"] {
     background-color: transparent !important;
 }
@@ -64,10 +39,11 @@ div[data-testid="stHeader"] > div:first-child {
     display: none !important;
 }
 
-/* Reconfiguración Estética del Botón "☰ Menú de Opciones" (Esquina Superior Izquierda) */
-button[kind="headerNoPadding"] svg {
-    display: none !important;
-}
+/* ============================================================================
+    2. REDISEÑO TOTAL DEL BOTÓN DE CABECERA (MENÚ DE OPCIONES)
+   ============================================================================ */
+
+/* Transformación del botón hamburguesa nativo en un botón POS estilizado */
 button[kind="headerNoPadding"] {
     background-color: #1e1e1e !important;
     border: 1px solid #f39c12 !important;
@@ -78,6 +54,9 @@ button[kind="headerNoPadding"] {
     margin-left: 10px !important;
     margin-top: 5px !important;
 }
+button[kind="headerNoPadding"] svg {
+    display: none !important;
+}
 button[kind="headerNoPadding"]::after {
     content: " Menú de Opciones" !important;
     color: #f39c12 !important;
@@ -86,22 +65,22 @@ button[kind="headerNoPadding"]::after {
     font-family: 'Segoe UI', sans-serif !important;
 }
 
-/* Bloqueo de Duplicación del Botón de Cabecera en la Barra de Despliegue */
+/* Bloqueo de seguridad para evitar duplicaciones en el despliegue del Sidebar */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"]::after,
 .stAppDeployDropdown button::after {
     content: "" !important;
     display: none !important;
 }
 /* ============================================================================
-    PARTE 2: REDISEÑO DE LA BARRA LATERAL (SIDEBAR UNIFICADO Y LEGIBLE)
+    3. REDISEÑO PREMIUM DE LA BARRA LATERAL (SIDEBAR POS)
    ============================================================================ */
 
-/* Fondo general de la barra lateral */
+/* Configuración del fondo oscuro profundo de la barra lateral */
 section[data-testid="stSidebar"] {
     background-color: #111113 !important;
 }
 
-/* Botón rojo personalizado para replegar o cerrar la barra lateral */
+/* Botón personalizado carmesí para cerrar la barra de opciones */
 section[data-testid="stSidebar"] button[kind="headerNoPadding"] {
     background-color: #c0392b !important;
     border: none !important;
@@ -118,23 +97,23 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"]:hover {
     box-shadow: 0px 0px 8px rgba(231, 76, 60, 0.6) !important;
 }
 
-/* Reducimos el espacio exagerado entre las tarjetas del menú lateral */
+/* Optimización de espacios de los contenedores nativos del menú lateral */
 section[data-testid="stSidebar"] .element-container {
-    margin-bottom: 6px !important; /* Espaciado intermedio ideal */
+    margin-bottom: 6px !important; 
 }
 
-/* Tarjetas unificadas de la barra lateral: legibles, lindas y ordenadas */
+/* Tarjetas unificadas de información con hilo de acento Oro Búfalo */
 section[data-testid="stSidebar"] .element-container:has(p), 
 section[data-testid="stSidebar"] .element-container:has(h4) {
-    background-color: #1e1e24 !important; /* Gris oscuro moderno y vivo */
-    padding: 10px 14px !important; /* Un respiro limpio, ni muy ancho ni muy pegado */
-    border-radius: 12px !important; /* Bordes redondeados premium */
-    border-left: 4px solid #f39c12 !important; /* Acento dorado */
+    background-color: #1e1e24 !important; 
+    padding: 10px 14px !important; 
+    border-radius: 12px !important; 
+    border-left: 4px solid #f39c12 !important; 
     margin-bottom: 6px !important;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Títulos principales dentro de la barra lateral en blanco brillante */
+/* Títulos internos de la barra lateral en blanco puro destacado */
 section[data-testid="stSidebar"] h4, 
 section[data-testid="stSidebar"] b,
 section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong {
@@ -144,7 +123,7 @@ section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p strong {
     letter-spacing: 0.5px !important;
 }
 
-/* Textos informativos de la barra lateral en blanco suave para máxima nitidez */
+/* Textos planos informativos de la barra lateral en alta nitidez */
 section[data-testid="stSidebar"] p, 
 section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] caption {
@@ -153,20 +132,24 @@ section[data-testid="stSidebar"] caption {
     font-weight: 500 !important;
 }
 
-/* PEGAR GESTIÓN INTERNA CON SU BOTÓN: Forzamos proximidad entre el título y la llave */
+/* Proximidad compacta para el botón de login administrativo */
 section[data-testid="stSidebar"] .element-container:has(button[key*="btn_toggle_admin_login"]) {
-    margin-top: -4px !important; /* Lo acerca sutilmente a la caja de Gestión Interna */
+    margin-top: -4px !important; 
 }
 
-/* Rediseño completo y estilizado del botón de inicio de sesión administrativo */
+/* ============================================================================
+    4. COMPONENTES INTERACTIVOS DE ACCESO INTERNO (LOGIN SIDEBAR)
+   ============================================================================ */
+
+/* Botón con degradado de fuego corporativo para activar modo admin */
 section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"] {
-    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; /* Degradado de fuego */
-    color: #ffffff !important; /* Letras blancas nítidas */
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important; 
+    color: #ffffff !important; 
     font-size: 14px !important;
     font-weight: bold !important;
     border-radius: 8px !important;
-    border: 1px solid #ff9f43 !important; /* Micro borde iluminado */
-    padding: 8px !important; /* Botón más estilizado y esbelto */
+    border: 1px solid #ff9f43 !important; 
+    padding: 8px !important; 
     box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
     transition: transform 0.2s ease, filter 0.2s ease !important;
     text-transform: none !important;
@@ -177,7 +160,7 @@ section[data-testid="stSidebar"] button[key*="btn_toggle_admin_login"]:hover {
     color: #ffffff !important;
 }
 
-/* Iluminación interactiva para las cajas de login del administrador */
+/* Entradas de login con respuesta luminosa focalizada */
 section[data-testid="stSidebar"] input[type="text"], 
 section[data-testid="stSidebar"] input[type="password"] {
     background-color: #121212 !important;
@@ -190,8 +173,11 @@ section[data-testid="stSidebar"] input[type="password"]:focus {
     border-color: #f39c12 !important;
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
 }
+/* ============================================================================
+    5. BOTÓN DE SOPORTE Y DIVISORES DE LA BARRA LATERAL
+   ============================================================================ */
 
-/* Botón de WhatsApp de Soporte Técnico en el menú lateral */
+/* Botón interactivo de WhatsApp con degradado esmeralda */
 section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%) !important;
     color: #ffffff !important;
@@ -203,7 +189,7 @@ section[data-testid="stSidebar"] button:has(span:contains("Chatear")) {
     border: none !important;
 }
 
-/* SEPARADORES FINOS: Cambiamos las líneas grises gruesas por hilos Oro Búfalo discretos */
+/* Líneas divisorias refinadas con desvanecimiento lateral en Oro Búfalo */
 section[data-testid="stSidebar"] hr {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
@@ -211,11 +197,12 @@ section[data-testid="stSidebar"] hr {
     height: 1px !important;
     background: linear-gradient(to right, transparent, rgba(243, 156, 18, 0.3), transparent) !important;
 }
+
 /* ============================================================================
-    PARTE 3: CATÁLOGO DE PRODUCTOS (FOOD CARDS PREMIUM) Y FOOTER ORIGINAL
+    6. CATÁLOGO DE PRODUCTOS (FOOD CARDS PREMIUM)
    ============================================================================ */
 
-/* Estructura inferior de las tarjetas de platos en el catálogo */
+/* Bloque inferior de información para las tarjetas de los platos */
 .product-card-bottom {
     background-color: #1e1e1e !important;
     padding: 15px;
@@ -228,14 +215,14 @@ section[data-testid="stSidebar"] hr {
     box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
 }
 
-/* Títulos de los platos con tipografía gruesa e impactante */
+/* Títulos de comida con tipografía robusta e imponente */
 .product-title {
     font-size: 22px !important;
     font-weight: bold !important;
     color: #ffffff !important;
 }
 
-/* Precios gigantes en Oro Búfalo con tipografía de alto impacto */
+/* Precios destacados con tipografía Impact de alta conversión */
 .product-price {
     font-size: 24px !important;
     font-weight: 900 !important;
@@ -243,7 +230,11 @@ section[data-testid="stSidebar"] hr {
     font-family: 'Impact', Charcoal, sans-serif;
 }
 
-/* Pie de página de Redes Sociales (Footer Original) */
+/* ============================================================================
+    7. PIE DE PÁGINA CORPORATIVO (FOOTER ORIGINAL)
+   ============================================================================ */
+
+/* Contenedor centralizado traslúcido para enlaces oficiales */
 .social-footer {
     text-align: center !important;
     background-color: rgba(15, 15, 15, 0.85) !important;
@@ -255,7 +246,7 @@ section[data-testid="stSidebar"] hr {
     margin: 40px auto 0 auto !important;
 }
 
-/* Iconos y enlaces a las redes oficiales en color oro interactivo */
+/* Enlaces multimedia con transición interactiva */
 .social-icon, .social-footer a {
     font-size: 16px !important;
     color: #f39c12 !important;
@@ -263,57 +254,53 @@ section[data-testid="stSidebar"] hr {
     font-weight: bold !important;
 }
 /* ============================================================================
-    PARTE 4: BARRA DE EXPLORACIÓN HORIZONTAL ESTILO NETFLIX (SIN CAJAS OSCURAS)
+    8. BARRA DE NAVEGACIÓN HORIZONTAL MAESTRA (ESTILO NETFLIX)
    ============================================================================ */
 
-/* ============================================================================
-    EMPUJE MAESTRO DE LA BARRA DE NAVEGACIÓN PARA LIBERAR EL NOMBRE DEL CREADOR
-   ============================================================================ */
+/* Contenedor principal alineado con empuje estructural para liberar la cabecera */
 .netflix-navbar-master {
     background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    margin-top: 85px !important; /* CORRECCIÓN: Empuja TODA la barra 40 píxeles hacia abajo */
+    margin-top: 85px !important; 
     margin-bottom: 15px !important;
     display: block !important;
     width: 100% !important;
 }
 
-/* Aseguramos que el bloque horizontal interno herede el empuje sin restricciones */
+/* Alineación horizontal rígida para evitar desbordes en micro-columnas */
 .netflix-navbar-master div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
     flex-wrap: nowrap !important;
-    margin-top: 0 !important; /* Resetea márgenes internos */
+    margin-top: 0 !important; 
 }
 
-
-/* Forzamos a que las columnas de los botones siempre vayan alineadas horizontalmente al costado */
+/* Forzado de flujo en línea recta para pestañas de navegación activas */
 div[data-testid="stHorizontalBlock"]:has(button[key*="nav_cli_"]),
 div[data-testid="stHorizontalBlock"]:has(button[key*="nav_adm_"]) {
     display: flex !important;
-    flex-direction: row !important; /* Fuerza la posición uno al costado del otro */
+    flex-direction: row !important; 
     align-items: center !important;
     justify-content: flex-start !important;
-    flex-wrap: nowrap !important; /* Prohíbe por completo el salto de línea hacia abajo */
+    flex-wrap: nowrap !important; 
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    margin-top: 35px !important; /* CORRECCIÓN: Empuja la barra más abajo para no tapar tu nombre */
+    margin-top: 35px !important; 
     padding: 5px 0 !important;
     gap: 8px !important;
 }
 
-
-/* 3. Convertimos los botones nativos de Streamlit en texto plano minimalista de streaming */
+/* Transformación de botones nativos de Streamlit en texto plano minimalista */
 button[key*="nav_cli_"], button[key*="nav_adm_"] {
     background: transparent !important;
     background-color: transparent !important;
-    color: #aaaaaa !important; /* Gris elegante para pestañas inactivas */
+    color: #aaaaaa !important; 
     border: none !important;
     box-shadow: none !important;
     text-shadow: none !important;
@@ -327,17 +314,17 @@ button[key*="nav_cli_"], button[key*="nav_adm_"] {
     transition: color 0.2s ease-in-out, transform 0.2s ease !important;
 }
 
-/* Hover: Cambia suavemente a Oro Búfalo cuando pasas el mouse por encima */
+/* Efecto hover interactivo en color Oro Búfalo con micro-escala */
 button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
-    color: #f39c12 !important; /* Oro Búfalo interactivo */
+    color: #f39c12 !important; 
     background: transparent !important;
     background-color: transparent !important;
     transform: scale(1.05) !important;
 }
 
-/* Título premium integrado a la izquierda "✨ EXPLORAR:" / "⚙️ FILTRAR:" */
+/* Prefijos de control de sección en mayúscula sostenida */
 .nav-explorer-title, .explorer-prefix {
-    color: #f39c12 !important; /* Oro Búfalo corporativo */
+    color: #f39c12 !important; 
     font-family: 'Arial Black', Gadget, sans-serif !important;
     font-size: 14.5px !important;
     font-weight: 900 !important;
@@ -348,6 +335,10 @@ button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
     margin-right: 15px !important;
     display: inline-block !important;
 }
+
+/* ============================================================================
+    9. ENTRADAS DE TEXTO, SELECCIÓN Y FORMULARIOS DE NAVEGACIÓN
+   ============================================================================ */
 
 /* Rediseño estilizado para las cajas de búsqueda compactadas a la derecha */
 div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input {
@@ -361,11 +352,8 @@ div[data-testid="stTextInput"]:has(input[key*="search_bar_"]) input:focus {
     border-color: #f39c12 !important;
     box-shadow: 0px 0px 8px rgba(243, 156, 18, 0.4) !important;
 }
-/* ============================================================================
-    PARTE 5: ENTRADAS DE FORMULARIO, SELECTOR DE PAGO Y CAJAS DE ALERTA
-   ============================================================================ */
 
-/* Títulos en mayúscula para los selectores y cajas de entrada */
+/* Títulos de etiquetas unificados en mayúsculas tipo comanda */
 div[data-testid="stSelectbox"] label p,
 div[data-testid="stTextInput"] label p,
 div[data-testid="stNumberInput"] label p {
@@ -376,21 +364,24 @@ div[data-testid="stNumberInput"] label p {
     letter-spacing: 0.5px !important;
 }
 
-/* Diseño estilizado de la caja del selector de pagos (Efectivo/Yape/Tarjeta) */
+/* Rediseño del combobox selector de formas de pago */
 div[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #1e1e24 !important; /* Gris oscuro del menú lateral */
+    background-color: #1e1e24 !important; 
     border: 1px solid #333333 !important;
     border-radius: 8px !important;
     padding: 6px 12px !important;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Texto de la opción seleccionada dentro del combobox */
+/* Texto interno de la opción seleccionada en el combobox */
 div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #ffffff !important;
 }
+/* ============================================================================
+    10. ENTRADAS NUMÉRICAS, CAJAS DE ALERTA Y ESTADOS DE CONTROL
+   ============================================================================ */
 
 /* Entradas de texto de datos de cliente y tarjeta */
 div[data-testid="stTextInput"] input, 
@@ -411,11 +402,11 @@ div[data-testid="stNumberInput"] input:focus {
     box-shadow: 0px 0px 10px rgba(243, 156, 18, 0.4) !important;
 }
 
-/* Cuadros informativos de Yapeo o estados de procesamiento */
+/* Cuadros informativos de Yapeo o estados de procesamiento (Azul Premium) */
 div.stAlert {
-    background-color: #111a24 !important; /* Azul oscuro mate premium */
+    background-color: #111a24 !important; 
     border: 1px solid #1f3347 !important;
-    border-left: 5px solid #f39c12 !important; /* Hilo Oro Búfalo */
+    border-left: 5px solid #f39c12 !important; 
     border-radius: 10px !important;
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.6) !important;
 }
@@ -425,14 +416,15 @@ div.stAlert p {
     font-weight: 600 !important;
 }
 
-/* Variación exclusiva si la alerta en pantalla es un mensaje de error */
+/* Variación exclusiva si la alerta en pantalla es un mensaje de error (Carmesí) */
 div.stAlert:has(svg[data-testid="stNotificationIconError"]) {
-    border-left: 5px solid #c0392b !important; /* Línea carmesí */
+    border-left: 5px solid #c0392b !important; 
     background-color: #1a1111 !important;
     border-color: #471f1f !important;
 }
+
 /* ============================================================================
-    PARTE 6: TOTALIZADOR TRIDIMENSIONAL, EMISIÓN DE BOLETAS Y REJILLA MÓVIL
+    11. TOTALIZADOR NEÓN Y BOTÓN MAESTRO DE CONTROL POS
    ============================================================================ */
 
 /* Monto Total a Procesar (Metric Verde Esmeralda Neón Tridimensional) */
@@ -455,7 +447,7 @@ div[data-testid="stMetricLabel"] p {
     font-weight: bold !important;
 }
 
-/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Buffalo Corporativo */
+/* BOTÓN DE EMISIÓN DE BOLETA: Degradado de Fuego Búfalo Corporativo */
 .stButton > button {
     background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
     color: #ffffff !important;
@@ -476,7 +468,7 @@ div[data-testid="stMetricLabel"] p {
     filter: brightness(1.2) !important;
 }
 
-/* Exclusión para que el botón de nueva orden mantenga su color sobrio nativo */
+/* Exclusión para botones secundarios (Nueva orden, etc.) para mantener tono sobrio */
 div[data-testid="element-container"]:has(iframe) + div.stButton > button,
 .stButton:has(button[key*="btn_nueva_orden_final"]) > button {
     background: #222222 !important;
@@ -489,12 +481,12 @@ div[data-testid="element-container"]:has(iframe) + div.stButton > button,
     padding: 10px !important;
 }
 
-/* Aclara los textos generales de los labels de entrada del formulario */
+/* Textos generales de etiquetas de entrada */
 .stMarkdown p, label p, [data-testid="stMarkdownContainer"] p {
     color: #ffffff !important;
 }
 
-/* ESTILIZADO COMPACTO Y PREMIUM DEL GESTOR DE SECCIONES (ADMIN) */
+/* Estilizado compacto del gestor de secciones administrativas */
 div[data-testid="stExpander"]:has(input[key*="_cat_name"]) div[data-testid="stVerticalBlockBorderWrapper"] {
     background-color: #18181c !important;
     border-radius: 12px !important;
@@ -519,7 +511,7 @@ div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
 }
 
 /* ============================================================================
-    REFORZAMIENTO RESPONSIVO MÓVIL BLINDADO: CUADRÍCULA DE 2X2 CON LETRA GRANDE
+    12. MEDIA QUERIES - REFORZAMIENTO RESPONSIVO MÓVIL BLINDADO 2X2
    ============================================================================ */
 @media (max-width: 768px) {
     [data-testid="stHorizontalBlock"] {
@@ -554,29 +546,25 @@ div[data-testid="stExpander"]:has(input[key*="_cat_name"]) h5 {
 
     .product-card-bottom {
         padding: 10px 12px !important;
-        flex-direction: column !important; /* Título arriba y precio abajo sólo en celulares */
+        flex-direction: column !important; 
         align-items: flex-start !important;
         gap: 4px !important;
     }
 }
 
-/* ============================================================================
-    SELLO DE CREADOR INTERACTIVO EN VERDE NEÓN CON CAPAS PARA CELULAR
-   ============================================================================ */
+/* Sello de creador interactivo en la cabecera */
 .sello-creador {
     position: absolute !important;
-    top: 50px !important; /* Mantiene la altura perfecta en la cabecera */
-    left: 20px !important; /* Alineado al extremo izquierdo */
+    top: 50px !important; 
+    left: 20px !important; 
     right: auto !important;
-    color: rgba(46, 204, 113, 0.95) !important; /* Verde esmeralda brillante */
+    color: rgba(46, 204, 113, 0.95) !important; 
     font-size: 11.5px !important;
     font-weight: 700 !important;
     font-family: 'Segoe UI', system-ui, sans-serif !important;
     letter-spacing: 0.8px !important;
     text-transform: uppercase !important;
     text-shadow: 0px 0px 8px rgba(46, 204, 113, 0.4) !important;
-    
-    /* SOLUCCIÓN CORREGIDA: Le bajamos la prioridad para que la barra lateral lo cubra */
     z-index: 0 !important; 
     pointer-events: none !important;
 }

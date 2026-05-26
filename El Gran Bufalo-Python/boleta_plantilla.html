@@ -1,7 +1,12 @@
-<!-- CDN para capturar la pantalla y descargar como imagen -->
+<!-- ============================================================================
+    1. CABECERA MULTIMEDIA E IMPORTACIÓN DE DEPENDENCIAS (CDN OFICIAL)
+    ============================================================================ -->
+<!-- CORREGIDO: Librería oficial HTML2Canvas para capturar y renderizar el ticket gráfico nítido -->
 <script src="https://cloudflare.com"></script>
 
-<!-- Contenedor con diseño de ticket físico realista -->
+<!-- ============================================================================
+    2. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
+    ============================================================================ -->
 <div id="ticket" style="
     background-color: #fffdf6; 
     color: #111111; 
@@ -18,10 +23,10 @@
     margin: 10px auto 25px auto;
     border-radius: 2px;
 ">==============================================
-            EL GRAN BUFFALO E.I.R.L.
+            EL GRAN BÚFALO E.I.R.L.
             RUC: 20608247140
             ║█│█║▌│█║▌│║▌║▌█║│▌║█│
-    Av. La Revolucion Nro. 1821 P.J. Almirante Grau
+    Av. La Revolución Nro. 1821 P.J. Almirante Grau
             El Porvenir - Trujillo
 ==============================================
         BOLETA DE VENTA ELECTRÓNICA          
@@ -37,8 +42,9 @@ TOTAL A PAGAR:            S/{{ TOTAL_FINAL }}
 ==============================================
 Muchas gracias por su compra, vuelva pronto!😎
 </div>
-
-<!-- Botón de descarga premium en HTML -->
+<!-- ============================================================================
+    3. PASARELA DIGITAL: BOTÓN DE DESCARGA MULTIMEDIA PREMIUM
+    ============================================================================ -->
 <button onclick="descargarTicket()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
@@ -59,9 +65,25 @@ Muchas gracias por su compra, vuelva pronto!😎
     transition: all 0.3s ease;
 ">📥 DESCARGAR COMPROBANTE EMITIDO</button>
 
+<!-- ============================================================================
+    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO UNIFICADO)
+    ============================================================================ -->
 <script>
+// SEPARACIÓN LOGRADA: Forzado nativo de scroll superior al renderizar la boleta
+window.scrollTo({top: 0, behavior: 'instant'});
+if (window.parent) {
+    window.parent.scrollTo({top: 0, behavior: 'instant'});
+    var appContainer = window.parent.document.querySelector('.main') || window.parent.document.querySelector('.stApp');
+    if (appContainer) {
+        appContainer.scrollTo({top: 0, behavior: 'instant'});
+    }
+}
+
+// Motor de captura y exportación visual de la boleta electrónica
 function descargarTicket() {
     const elemento = document.getElementById('ticket');
+    
+    // El factor scale: 3 triplica los píxeles para que la imagen no salga borrosa
     html2canvas(elemento, { 
         scale: 3,
         backgroundColor: "#fffdf6",
