@@ -535,7 +535,7 @@ else:
         st.markdown("<p style='text-align: center; font-size: 18px; color: #ffffff;'>¿Desea registrar un nuevo pedido de nuestra deliciosa parrilla?</p>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         
-        if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True):
+        if st.button("🛒 EMPEZAR MI PEDIDO", use_container_width=True, key="btn_empezar_pedido_master"):
             st.session_state.pantalla_actual = "catalogo"
             st.rerun()
             
