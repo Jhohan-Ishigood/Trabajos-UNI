@@ -345,3 +345,18 @@ button[key*="nav_cli_"]:hover, button[key*="nav_adm_"]:hover {
     margin-right: 15px !important;
     display: inline-block !important;
 }
+/* Blindaje de color para el botón de login en la barra lateral */
+section[data-testid="stSidebar"] div.stButton > button[key*="btn_toggle_admin_login"] {
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    font-size: 13px !important;
+    border: 1px solid #ff9f43 !important;
+    box-shadow: 0px 4px 10px rgba(211, 84, 0, 0.4) !important;
+}
+/* Color oro destacado para los hipervínculos del pie de página */
+.social-footer a, .social-icon {
+    color: #f39c12 !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+}
