@@ -1,5 +1,10 @@
 <!-- ============================================================================
-    1. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
+    1. CABECERA MULTIMEDIA E IMPORTACIÓN DE DEPENDENCIAS (CDN MASTER OFICIAL)
+    ============================================================================ -->
+<script src="https://cloudflare.com"></script>
+
+<!-- ============================================================================
+    2. VISTA DE IMPRESIÓN: CONTENEDOR DE TICKET FÍSICO REALISTA POS
     ============================================================================ -->
 <div id="ticket" style="
     background-color: #fffdf6; 
@@ -38,9 +43,9 @@ Muchas gracias por su compra, vuelva pronto!
 </div>
 
 <!-- ============================================================================
-    2. PASARELA DIGITAL: BOTÓN DE DESCARGA / IMPRESIÓN BLINDADO
+    3. PASARELA DIGITAL: BOTÓN DE DESCARGA DIRECTA A FOTO (PNG)
     ============================================================================ -->
-<button onclick="descargarTicketPDF()" style="
+<button onclick="descargarTicketFoto()" style="
     background: linear-gradient(135deg, #27ae60, #1e8449);
     color: white; 
     border: none; 
@@ -58,10 +63,10 @@ Muchas gracias por su compra, vuelva pronto!
     display: block;
     box-shadow: 0px 5px 15px rgba(39, 174, 96, 0.3);
     transition: all 0.3s ease;
-">📥 DESCARGAR / IMPRIMIR COMPROBANTE</button>
+">📥 DESCARGAR COMPROBANTE (FOTO PNG)</button>
 
 <!-- ============================================================================
-    3. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO BLINDADO)
+    4. CONTROLADOR LÓGICO (JAVASCRIPT INTERNO BLINDADO)
     ============================================================================ -->
 <script>
 // Forzado nativo de scroll superior al renderizar la boleta
@@ -70,43 +75,39 @@ if (window.parent) {
     window.parent.scrollTo({top: 0, behavior: 'instant'});
 }
 
-function descargarTicketPDF() {
-    // Captura el HTML exacto de la boleta blanca
-    const contenidoTicket = document.getElementById('ticket').outerHTML;
+// Variable global que guardará la imagen procesada en memoria
+let urlFotoPreparada = "";
+
+// PROCESAMIENTO EN SECRETO: Convierte el ticket a foto inmediatamente al cargar la página
+window.onload = function() {
+    setTimeout(function() {
+        const elemento = document.getElementById('ticket');
+        html2canvas(elemento, { 
+            scale: 3, // Triple densidad de píxeles para que no salga borrosa
+            backgroundColor: "#fffdf6",
+            logging: false,
+            useCORS: true
+        }).then(canvas => {
+            // Guardamos la URL de la imagen en la variable global
+            urlFotoPreparada = canvas.toDataURL('image/png');
+        });
+    }, 400); // Espera una fracción de segundo para asegurar que se rendericen los textos
+};
+
+// FUNCIÓN DE DESCARGA SÍNCRONA: Descarga el archivo de imagen al instante sin bloqueos
+function descargarTicketFoto() {
+    if (!urlFotoPreparada) {
+        alert("Procesando imagen... Por favor, presione el botón nuevamente en un segundo.");
+        return;
+    }
     
-    // Abre una ventana limpia temporal
-    const ventanaFantasma = window.open('', '_blank', 'width=450,height=700');
+    // Creamos un disparador de descarga directo vinculando la foto que ya estaba lista
+    const enlaceDescarga = document.createElement('a');
+    enlaceDescarga.download = 'Boleta_Gran_Buffalo.png';
+    enlaceDescarga.href = urlFotoPreparada;
     
-    ventanaFantasma.document.write(`
-        <html>
-        <head>
-            <title>Comprobante - El Gran Buffalo</title>
-            <style>
-                body { 
-                    background-color: #ffffff; 
-                    margin: 0; 
-                    padding: 20px; 
-                    display: flex; 
-                    justify-content: center; 
-                }
-                @media print {
-                    body { padding: 0; }
-                }
-            </style>
-        </head>
-        <body>
-            ${contenidoTicket}
-            <script>
-                // Dispara el menú oficial del sistema para guardar como PDF o Imagen
-                window.onload = function() { 
-                    window.print(); 
-                    // Cierra la pestaña automáticamente al terminar
-                    setTimeout(function() { window.close(); }, 300);
-                }
-            <\/script>
-        </body>
-        </html>
-    `);
-    ventanaFantasma.document.close();
+    document.body.appendChild(enlaceDescarga);
+    enlaceDescarga.click();
+    document.body.removeChild(enlaceDescarga);
 }
 </script>
